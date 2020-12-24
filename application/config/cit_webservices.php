@@ -513,7 +513,6 @@ $config["user"] = array(
     ),
     "target" => ""
 );
-
 $config["user_guest"] = array(
     "title" => "User Guest",
     "folder" => "basic_appineers_master",
@@ -523,6 +522,25 @@ $config["user_guest"] = array(
         "device_model",
         "device_os",
         "device_token"
+    ),
+    "token" => "",
+    "payload" => array(
+    ),
+    "target" => ""
+);
+
+$config["game_level_master"] = array(
+    "title" => "Get game level master",
+    "folder" => "game_master",
+    "method" => $_SERVER['REQUEST_METHOD'],
+    "params" => array(
+        "user_access_token",
+        "game_level_id",
+        "level_name",
+        "description",
+        "max_word_length",
+        "max_round",
+        "round_to_unlock"
     ),
     "token" => "",
     "payload" => array(
