@@ -514,6 +514,22 @@ $config["user"] = array(
     "target" => ""
 );
 
+$config["user_guest"] = array(
+    "title" => "User Guest",
+    "folder" => "basic_appineers_master",
+    "method" => "GET_POST",
+    "params" => array(
+        "device_type",
+        "device_model",
+        "device_os",
+        "device_token"
+    ),
+    "token" => "",
+    "payload" => array(
+    ),
+    "target" => ""
+);
+
 #####GENERATED_CONFIG_SETTINGS_END#####
 
 /* End of file cit_webservices.php */
