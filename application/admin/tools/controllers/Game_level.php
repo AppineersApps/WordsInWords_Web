@@ -40,7 +40,7 @@ class Game_level extends Cit_Controller
         $this->folder_name = "tools";
         $this->module_name = "game_level";
         $this->mod_enc_url = $this->general->getGeneralEncryptList($this->folder_name, $this->module_name);
-        $this->mod_enc_mode = $this->general->getCustomEncryptMode(TRUE);
+        $this->mod_enc_mode = $this->general->getCustomEncryptMode(true);
         $this->_request_params();
         $this->module_config = array(
             'module_name' => $this->module_name,
@@ -57,24 +57,6 @@ class Game_level extends Cit_Controller
             "list_record_callback" => "",
         );
         $this->dropdown_arr = array(
-            "glm_description" => array(
-                "type" => "enum",
-                "default" => "Yes",
-                "values" => array(
-                    array(
-                        'id' => '7',
-                        'val' => $this->lang->line('GAME_LEVEL_7')
-                    ),
-                    array(
-                        'id' => '5',
-                        'val' => $this->lang->line('GAME_LEVEL_5')
-                    ),
-                    array(
-                        'id' => '3',
-                        'val' => $this->lang->line('GAME_LEVEL_3')
-                    )
-                )
-            ),
             "glm_status" => array(
                 "type" => "enum",
                 "default" => "Yes",
@@ -108,8 +90,8 @@ class Game_level extends Cit_Controller
      */
     public function _request_params()
     {
-        $this->get_arr = is_array($this->input->get(NULL, TRUE)) ? $this->input->get(NULL, TRUE) : array();
-        $this->post_arr = is_array($this->input->post(NULL, TRUE)) ? $this->input->post(NULL, TRUE) : array();
+        $this->get_arr = is_array($this->input->get(null, true)) ? $this->input->get(null, true) : array();
+        $this->post_arr = is_array($this->input->post(null, true)) ? $this->input->post(null, true) : array();
         $this->params_arr = array_merge($this->get_arr, $this->post_arr);
         return $this->params_arr;
     }
@@ -121,10 +103,8 @@ class Game_level extends Cit_Controller
     {
         $params_arr = $this->params_arr;
         $extra_qstr = $extra_hstr = '';
-        try
-        {
-            if ($this->config->item("ENABLE_ROLES_CAPABILITIES"))
-            {
+        try {
+            if ($this->config->item("ENABLE_ROLES_CAPABILITIES")) {
                 $access_list = array(
                     "game_level_list",
                     "game_level_view",
@@ -134,10 +114,8 @@ class Game_level extends Cit_Controller
                     "game_level_export",
                     "game_level_print",
                 );
-                list($list_access, $view_access, $add_access, $edit_access, $del_access, $expo_access, $print_access) = $this->filter->checkAccessCapability($access_list, TRUE);
-            }
-            else
-            {
+                list($list_access, $view_access, $add_access, $edit_access, $del_access, $expo_access, $print_access) = $this->filter->checkAccessCapability($access_list, true);
+            } else {
                 $access_list = array(
                     "List",
                     "View",
@@ -147,10 +125,9 @@ class Game_level extends Cit_Controller
                     "Export",
                     "Print",
                 );
-                list($list_access, $view_access, $add_access, $edit_access, $del_access, $expo_access, $print_access) = $this->filter->getModuleWiseAccess("game_level", $access_list, TRUE, TRUE);
+                list($list_access, $view_access, $add_access, $edit_access, $del_access, $expo_access, $print_access) = $this->filter->getModuleWiseAccess("game_level", $access_list, true, true);
             }
-            if (!$list_access)
-            {
+            if (!$list_access) {
                 throw new Exception($this->general->processMessageLabel('ACTION_YOU_ARE_NOT_AUTHORIZED_TO_VIEW_THIS_PAGE_C46_C46_C33'));
             }
             $enc_loc_module = $this->general->getMD5EncryptString("ListPrefer", "game_level");
@@ -165,10 +142,9 @@ class Game_level extends Cit_Controller
             );
 
             $list_config = $this->game_level_model->getListConfiguration();
-            $this->processConfiguration($list_config, $add_access, $edit_access, TRUE);
+            $this->processConfiguration($list_config, $add_access, $edit_access, true);
             $this->general->trackModuleNavigation("Module", "List", "Viewed", $this->mod_enc_url["index"], "game_level");
-            if (method_exists($this->filter, "setListFieldCapability"))
-            {
+            if (method_exists($this->filter, "setListFieldCapability")) {
                 $this->filter->setListFieldCapability($list_config);
             }
 
@@ -200,17 +176,12 @@ class Game_level extends Cit_Controller
                 'default_filters' => $this->game_level_model->default_filters,
             );
             $this->smarty->assign($render_arr);
-            if (!empty($render_arr['overwrite_view']))
-            {
+            if (!empty($render_arr['overwrite_view'])) {
                 $this->loadView($render_arr['overwrite_view']);
-            }
-            else
-            {
+            } else {
                 $this->loadView("game_level_index");
             }
-        }
-        catch(Exception $e)
-        {
+        } catch (Exception $e) {
             $render_arr['err_message'] = $e->getMessage();
             $this->smarty->assign($render_arr);
             $this->loadView($this->config->item('ADMIN_FORBIDDEN_TEMPLATE'));
@@ -229,11 +200,10 @@ class Game_level extends Cit_Controller
         $sord = $params_arr['sord'];
         $sdef = $params_arr['sdef'];
         $filters = $params_arr['filters'];
-        if (!trim($sidx) && !trim($sord))
-        {
+        if (!trim($sidx) && !trim($sord)) {
             $sdef = 'Yes';
         }
-        $filters = json_decode($filters, TRUE);
+        $filters = json_decode($filters, true);
         $list_config = $this->game_level_model->getListConfiguration();
         $form_config = $this->game_level_model->getFormConfiguration();
         $extra_cond = $this->game_level_model->extra_cond;
@@ -269,13 +239,10 @@ class Game_level extends Cit_Controller
      */
     public function export()
     {
-        if ($this->config->item("ENABLE_ROLES_CAPABILITIES"))
-        {
+        if ($this->config->item("ENABLE_ROLES_CAPABILITIES")) {
             $this->filter->checkAccessCapability("game_level_export");
-        }
-        else
-        {
-            $this->filter->getModuleWiseAccess("game_level", "Export", TRUE);
+        } else {
+            $this->filter->getModuleWiseAccess("game_level", "Export", true);
         }
         $params_arr = $this->params_arr;
         $page = $params_arr['page'];
@@ -283,8 +250,7 @@ class Game_level extends Cit_Controller
         $sidx = $params_arr['sidx'];
         $sord = $params_arr['sord'];
         $sdef = $params_arr['sdef'];
-        if (!trim($sidx) && !trim($sord))
-        {
+        if (!trim($sidx) && !trim($sord)) {
             $sdef = 'Yes';
         }
         $selected = $params_arr['selected'];
@@ -292,8 +258,8 @@ class Game_level extends Cit_Controller
         $export_type = $params_arr['export_type'];
         $export_mode = $params_arr['export_mode'];
         $filters = $params_arr['filters'];
-        $filters = json_decode(base64_decode($filters), TRUE);
-        $fields = json_decode(base64_decode($params_arr['fields']), TRUE);
+        $filters = json_decode(base64_decode($filters), true);
+        $fields = json_decode(base64_decode($params_arr['fields']), true);
         $list_config = $this->game_level_model->getListConfiguration();
         $form_config = $this->game_level_model->getFormConfiguration();
         $table_name = $this->game_level_model->table_name;
@@ -303,13 +269,11 @@ class Game_level extends Cit_Controller
         $groupby_cond = $this->game_level_model->groupby_cond;
         $having_cond = $this->game_level_model->having_cond;
         $orderby_cond = $this->game_level_model->orderby_cond;
-        if (method_exists($this->filter, "setListFieldCapability"))
-        {
+        if (method_exists($this->filter, "setListFieldCapability")) {
             $this->filter->setListFieldCapability($list_config);
         }
         $export_config = array();
-        if ($selected == "true")
-        {
+        if ($selected == "true") {
             $export_config['id'] = $id;
         }
         $export_config['page'] = $page;
@@ -333,46 +297,35 @@ class Game_level extends Cit_Controller
 
         $db_recs = $this->game_level_model->getExportData($export_config);
         $db_recs = $this->listing->getDataForList($db_recs, $export_config, "GExport", array());
-        if (!is_array($db_recs) || count($db_recs) == 0)
-        {
+        if (!is_array($db_recs) || count($db_recs) == 0) {
             $this->session->set_flashdata('failure', $this->general->processMessageLabel('GENERIC_GRID_NO_RECORDS_TO_PROCESS'));
             redirect($_SERVER['HTTP_REFERER']);
         }
 
-        require_once ($this->config->item('third_party').'Csv_export.php');
-        require_once ($this->config->item('third_party').'Pdf_export.php');
+        require_once($this->config->item('third_party').'Csv_export.php');
+        require_once($this->config->item('third_party').'Pdf_export.php');
 
         $tot_fields_arr = array_keys($db_recs[0]);
-        if ($export_mode == "all" && is_array($tot_fields_arr))
-        {
-            if (($pr_key = array_search($primary_key, $tot_fields_arr)) !== FALSE)
-            {
+        if ($export_mode == "all" && is_array($tot_fields_arr)) {
+            if (($pr_key = array_search($primary_key, $tot_fields_arr)) !== false) {
                 unset($tot_fields_arr[$pr_key]);
             }
             $fields = array();
-            if ($this->config->item("DISABLE_LIST_EXPORT_ALL"))
-            {
-                foreach ((array) $list_config as $key => $val)
-                {
-                    if (isset($val['export']) && $val['export'] == "Yes")
-                    {
-                        if (isset($val['hidecm']))
-                        {
-                            if (in_array($val['hidecm'], array("condition", "capability", "permanent")) && $val['hidden'] == "Yes")
-                            {
+            if ($this->config->item("DISABLE_LIST_EXPORT_ALL")) {
+                foreach ((array) $list_config as $key => $val) {
+                    if (isset($val['export']) && $val['export'] == "Yes") {
+                        if (isset($val['hidecm'])) {
+                            if (in_array($val['hidecm'], array("condition", "capability", "permanent")) && $val['hidden'] == "Yes") {
                                 continue;
                             }
-                            if ($val['hideme'] == "Yes")
-                            {
+                            if ($val['hideme'] == "Yes") {
                                 continue;
                             }
                         }
                         $fields[] = $key;
                     }
                 }
-            }
-            else
-            {
+            } else {
                 $fields = array_values($tot_fields_arr);
             }
         }
@@ -392,27 +345,20 @@ class Game_level extends Cit_Controller
         $heading = $misc_info['heading'];
         $filename = $misc_info['filename'];
         $numberOfColumns = count($fields);
-        if ($export_type == 'pdf')
-        {
+        if ($export_type == 'pdf') {
             $pdf_style = "TCPDF";
             $columns = $aligns = $widths = $data = array();
             //Table headers info
-            for ($i = 0; $i < $numberOfColumns; $i++)
-            {
+            for ($i = 0; $i < $numberOfColumns; $i++) {
                 $size = 10;
                 $position = '';
-                if (array_key_exists($fields[$i], $list_config))
-                {
+                if (array_key_exists($fields[$i], $list_config)) {
                     $label = $list_config[$fields[$i]]['label_lang'];
                     $position = $list_config[$fields[$i]]['align'];
                     $size = $list_config[$fields[$i]]['width'];
-                }
-                elseif (array_key_exists($fields[$i], $form_config))
-                {
+                } elseif (array_key_exists($fields[$i], $form_config)) {
                     $label = $form_config[$fields[$i]]['label_lang'];
-                }
-                else
-                {
+                } else {
                     $label = $fields[$i];
                 }
                 $columns[] = $label;
@@ -422,61 +368,44 @@ class Game_level extends Cit_Controller
 
             //Table data info
             $db_rec_cnt = count($db_recs);
-            for ($i = 0; $i < $db_rec_cnt; $i++)
-            {
-                foreach ((array) $db_recs[$i] as $key => $val)
-                {
-                    if (is_array($fields) && in_array($key, $fields))
-                    {
+            for ($i = 0; $i < $db_rec_cnt; $i++) {
+                foreach ((array) $db_recs[$i] as $key => $val) {
+                    if (is_array($fields) && in_array($key, $fields)) {
                         $data[$i][$key] = $this->listing->dataForExportMode($val, "pdf", $pdf_style);
                     }
                 }
             }
 
-            $pdf = new PDF_Export($misc_info['pdf_page_orientation'], $misc_info['pdf_unit'], $misc_info['pdf_page_format'], TRUE, 'UTF-8', FALSE);
-            if (method_exists($pdf, "setModule"))
-            {
+            $pdf = new PDF_Export($misc_info['pdf_page_orientation'], $misc_info['pdf_unit'], $misc_info['pdf_page_format'], true, 'UTF-8', false);
+            if (method_exists($pdf, "setModule")) {
                 $pdf->setModule("game_level_model");
             }
-            if (method_exists($pdf, "setContent"))
-            {
+            if (method_exists($pdf, "setContent")) {
                 $pdf->setContent($misc_info);
             }
-            if (method_exists($pdf, "setController"))
-            {
+            if (method_exists($pdf, "setController")) {
                 $pdf->setController($this);
             }
             $pdf->initialize($heading);
             $pdf->writeGridTable($columns, $data, $widths, $aligns);
             $pdf->Output($filename.".pdf", 'D');
-        }
-        elseif ($export_type == 'csv')
-        {
+        } elseif ($export_type == 'csv') {
             $columns = $data = array();
 
-            for ($i = 0; $i < $numberOfColumns; $i++)
-            {
-                if (array_key_exists($fields[$i], $list_config))
-                {
+            for ($i = 0; $i < $numberOfColumns; $i++) {
+                if (array_key_exists($fields[$i], $list_config)) {
                     $label = $list_config[$fields[$i]]['label_lang'];
-                }
-                elseif (array_key_exists($fields[$i], $form_config))
-                {
+                } elseif (array_key_exists($fields[$i], $form_config)) {
                     $label = $form_config[$fields[$i]]['label_lang'];
-                }
-                else
-                {
+                } else {
                     $label = $fields[$i];
                 }
                 $columns[] = $label;
             }
             $db_recs_cnt = count($db_recs);
-            for ($i = 0; $i < $db_recs_cnt; $i++)
-            {
-                foreach ((array) $db_recs[$i] as $key => $val)
-                {
-                    if (is_array($fields) && in_array($key, $fields))
-                    {
+            for ($i = 0; $i < $db_recs_cnt; $i++) {
+                foreach ((array) $db_recs[$i] as $key => $val) {
+                    if (is_array($fields) && in_array($key, $fields)) {
                         $data[$i][$key] = $this->listing->dataForExportMode($val, "csv");
                     }
                 }
@@ -499,16 +428,13 @@ class Game_level extends Cit_Controller
         $hideCtrl = $params_arr['hideCtrl'];
         $showDetail = $params_arr['showDetail'];
         $mode = (in_array($params_arr['mode'], array("Update", "View"))) ? "Update" : "Add";
-        $viewMode = ($params_arr['mode'] == "View") ? TRUE : FALSE;
+        $viewMode = ($params_arr['mode'] == "View") ? true : false;
         $id = $params_arr['id'];
         $enc_id = $this->general->getAdminEncodeURL($id);
-        try
-        {
+        try {
             $extra_cond = $this->game_level_model->extra_cond;
-            if ($mode == "Update")
-            {
-                if ($this->config->item("ENABLE_ROLES_CAPABILITIES"))
-                {
+            if ($mode == "Update") {
+                if ($this->config->item("ENABLE_ROLES_CAPABILITIES")) {
                     $access_list = array(
                         "game_level_list",
                         "game_level_view",
@@ -516,10 +442,8 @@ class Game_level extends Cit_Controller
                         "game_level_delete",
                         "game_level_print",
                     );
-                    list($list_access, $view_access, $edit_access, $del_access, $print_access) = $this->filter->checkAccessCapability($access_list, TRUE);
-                }
-                else
-                {
+                    list($list_access, $view_access, $edit_access, $del_access, $print_access) = $this->filter->checkAccessCapability($access_list, true);
+                } else {
                     $access_list = array(
                         "List",
                         "View",
@@ -527,45 +451,36 @@ class Game_level extends Cit_Controller
                         "Delete",
                         "Print",
                     );
-                    list($list_access, $view_access, $edit_access, $del_access, $print_access) = $this->filter->getModuleWiseAccess("game_level", $access_list, TRUE, TRUE);
+                    list($list_access, $view_access, $edit_access, $del_access, $print_access) = $this->filter->getModuleWiseAccess("game_level", $access_list, true, true);
                 }
-                if (!$edit_access && !$view_access)
-                {
+                if (!$edit_access && !$view_access) {
                     throw new Exception($this->general->processMessageLabel('ACTION_YOU_ARE_NOT_AUTHORIZED_TO_VIEW_THIS_PAGE_C46_C46_C33'));
                 }
-            }
-            else
-            {
-                if ($this->config->item("ENABLE_ROLES_CAPABILITIES"))
-                {
+            } else {
+                if ($this->config->item("ENABLE_ROLES_CAPABILITIES")) {
                     $access_list = array(
                         "game_level_list",
                         "game_level_add",
                     );
-                    list($list_access, $add_access) = $this->filter->checkAccessCapability($access_list, TRUE);
-                }
-                else
-                {
+                    list($list_access, $add_access) = $this->filter->checkAccessCapability($access_list, true);
+                } else {
                     $access_list = array(
                         "List",
                         "Add",
                     );
-                    list($list_access, $add_access) = $this->filter->getModuleWiseAccess("game_level", $access_list, TRUE, TRUE);
+                    list($list_access, $add_access) = $this->filter->getModuleWiseAccess("game_level", $access_list, true, true);
                 }
-                if (!$add_access)
-                {
+                if (!$add_access) {
                     throw new Exception($this->general->processMessageLabel('ACTION_YOU_ARE_NOT_AUTHORIZED_TO_ADD_THESE_DETAILS_C46_C46_C33'));
                 }
             }
 
             $data = $orgi = $func = $elem = array();
-            if ($mode == 'Update')
-            {
+            if ($mode == 'Update') {
                 $ctrl_flow = $this->ci_local->read($this->general->getMD5EncryptString("FlowEdit", "game_level"), $this->session->userdata('iAdminId'));
                 $data_arr = $this->game_level_model->getData(intval($id));
                 $data = $orgi = $data_arr[0];
-                if ((!is_array($data) || count($data) == 0) && $params_arr['rmPopup'] != "true")
-                {
+                if ((!is_array($data) || count($data) == 0) && $params_arr['rmPopup'] != "true") {
                     throw new Exception($this->general->processMessageLabel('ACTION_RECORDS_WHICH_YOU_ARE_TRYING_TO_ACCESS_ARE_NOT_AVAILABLE_C46_C46_C33'));
                 }
 
@@ -573,13 +488,11 @@ class Game_level extends Cit_Controller
 
                 $recName = $switch_combo[$id];
                 $switch_enc_combo = $this->filter->getSwitchEncryptRec($switch_combo, $switch_arr);
-                $this->dropdown->combo("array", "vSwitchPage", $switch_enc_combo, $enc_id, FALSE, "key_value", $switch_arr);
+                $this->dropdown->combo("array", "vSwitchPage", $switch_enc_combo, $enc_id, false, "key_value", $switch_arr);
                 $next_prev_records = $this->filter->getNextPrevRecords($id, $switch_arr);
 
                 $this->general->trackModuleNavigation("Module", "Form", "Viewed", $this->mod_enc_url["add"], "game_level", $recName);
-            }
-            else
-            {
+            } else {
                 $recName = '';
                 $ctrl_flow = $this->ci_local->read($this->general->getMD5EncryptString("FlowAdd", "game_level"), $this->session->userdata('iAdminId'));
                 $this->general->trackModuleNavigation("Module", "Form", "Viewed", $this->mod_enc_url["add"], "game_level");
@@ -588,111 +501,72 @@ class Game_level extends Cit_Controller
             $opt_arr = $img_html = $auto_arr = $config_arr = array();
 
             $form_config = $this->game_level_model->getFormConfiguration($config_arr);
-            if (is_array($form_config) && count($form_config) > 0)
-            {
-                foreach ($form_config as $key => $val)
-                {
-                    if ($params_arr['rmPopup'] == "true" && $params_arr[$key] != "")
-                    {
+            if (is_array($form_config) && count($form_config) > 0) {
+                foreach ($form_config as $key => $val) {
+                    if ($params_arr['rmPopup'] == "true" && $params_arr[$key] != "") {
                         $data[$key] = $params_arr[$key];
-                    }
-                    elseif ($val["dfapply"] != "")
-                    {
+                    } elseif ($val["dfapply"] != "") {
                         $val['default'] = (substr($val['default'], 0, 6) == "copy::") ? $orgi[substr($val['default'], 6)] : $val['default'];
-                        if ($val["dfapply"] == "forceApply" || $val["entry_type"] == "Custom")
-                        {
+                        if ($val["dfapply"] == "forceApply" || $val["entry_type"] == "Custom") {
                             $data[$key] = $val['default'];
-                        }
-                        elseif ($val["dfapply"] == "addOnly")
-                        {
-                            if ($mode == "Add")
-                            {
+                        } elseif ($val["dfapply"] == "addOnly") {
+                            if ($mode == "Add") {
                                 $data[$key] = $val['default'];
                             }
-                        }
-                        elseif ($val["dfapply"] == "everyUpdate")
-                        {
-                            if ($mode == "Update")
-                            {
+                        } elseif ($val["dfapply"] == "everyUpdate") {
+                            if ($mode == "Update") {
                                 $data[$key] = $val['default'];
                             }
-                        }
-                        else
-                        {
+                        } else {
                             $data[$key] = (trim($data[$key]) != "") ? $data[$key] : $val['default'];
                         }
                     }
-                    if ($val['encrypt'] == "Yes")
-                    {
+                    if ($val['encrypt'] == "Yes") {
                         $data[$key] = $this->general->decryptDataMethod($data[$key], $val["enctype"]);
                     }
-                    if ($val['function'] != "")
-                    {
+                    if ($val['function'] != "") {
                         $fnctype = $val['functype'];
                         $phpfunc = $val['function'];
                         $tmpdata = '';
-                        if (substr($phpfunc, 0, 12) == 'controller::' && substr($phpfunc, 12) !== FALSE)
-                        {
+                        if (substr($phpfunc, 0, 12) == 'controller::' && substr($phpfunc, 12) !== false) {
                             $phpfunc = substr($phpfunc, 12);
-                            if (method_exists($this, $phpfunc))
-                            {
+                            if (method_exists($this, $phpfunc)) {
                                 $tmpdata = $this->$phpfunc($mode, $data[$key], $data, $id, $key, $key, $this->module_name);
                             }
-                        }
-                        elseif (substr($phpfunc, 0, 7) == 'model::' && substr($phpfunc, 7) !== FALSE)
-                        {
+                        } elseif (substr($phpfunc, 0, 7) == 'model::' && substr($phpfunc, 7) !== false) {
                             $phpfunc = substr($phpfunc, 7);
-                            if (method_exists($this->game_level_model, $phpfunc))
-                            {
+                            if (method_exists($this->game_level_model, $phpfunc)) {
                                 $tmpdata = $this->game_level_model->$phpfunc($mode, $data[$key], $data, $id, $key, $key, $this->module_name);
                             }
-                        }
-                        elseif (method_exists($this->general, $phpfunc))
-                        {
+                        } elseif (method_exists($this->general, $phpfunc)) {
                             $tmpdata = $this->general->$phpfunc($mode, $data[$key], $data, $id, $key, $key, $this->module_name);
                         }
-                        if ($fnctype == "input")
-                        {
+                        if ($fnctype == "input") {
                             $elem[$key] = $tmpdata;
-                        }
-                        elseif ($fnctype == "status")
-                        {
+                        } elseif ($fnctype == "status") {
                             $func[$key] = $tmpdata;
-                        }
-                        else
-                        {
+                        } else {
                             $data[$key] = $tmpdata;
                         }
                     }
-                    if ($val['field_status'] != "")
-                    {
+                    if ($val['field_status'] != "") {
                         $status_type = $val['field_status'];
                         $fd_callback = $val['field_callback'];
-                        if ($status_type == "capability" && $fd_callback != "")
-                        {
+                        if ($status_type == "capability" && $fd_callback != "") {
                             $func[$key] = $this->filter->getFormFieldCapability($key, $this->module_name, $mode);
-                        }
-                        elseif ($status_type == "function")
-                        {
+                        } elseif ($status_type == "function") {
                             $fd_status = 0;
-                            if (substr($fd_callback, 0, 12) == 'controller::' && substr($fd_callback, 12) !== FALSE)
-                            {
+                            if (substr($fd_callback, 0, 12) == 'controller::' && substr($fd_callback, 12) !== false) {
                                 $fd_callback = substr($fd_callback, 12);
-                                if (method_exists($this, $fd_callback))
-                                {
+                                if (method_exists($this, $fd_callback)) {
                                     $fd_status = $this->$fd_callback($mode, $data[$key], $data, $id, $key, $key, $this->module_name);
                                 }
-                            }
-                            elseif (substr($fd_callback, 0, 7) == 'model::' && substr($fd_callback, 7) !== FALSE)
-                            {
+                            } elseif (substr($fd_callback, 0, 7) == 'model::' && substr($fd_callback, 7) !== false) {
                                 $fd_callback = substr($fd_callback, 7);
-                                if (method_exists($this->game_level_model, $fd_callback))
-                                {
+                                if (method_exists($this->game_level_model, $fd_callback)) {
                                     $fd_status = $this->game_level_model->$fd_callback($mode, $data[$key], $data, $id, $key, $key, $this->module_name);
                                 }
-                            }
-                            elseif (method_exists($this->general, $fd_callback))
-                            {
+                            } elseif (method_exists($this->general, $fd_callback)) {
                                 $fd_status = $this->general->$fd_callback($mode, $data[$key], $data, $id, $key, $key, $this->module_name);
                             }
                             $func[$key] = $fd_status;
@@ -700,24 +574,18 @@ class Game_level extends Cit_Controller
                     }
                     $source_field = $val['name'];
                     $combo_config = $this->dropdown_arr[$source_field];
-                    if (is_array($combo_config) && count($combo_config) > 0)
-                    {
-                        if ($combo_config['auto'] == "Yes")
-                        {
+                    if (is_array($combo_config) && count($combo_config) > 0) {
+                        if ($combo_config['auto'] == "Yes") {
                             $combo_count = $this->getSourceOptions($source_field, $mode, $id, $data, '', 'count');
-                            if ($combo_count[0]['tot'] > $this->dropdown_limit)
-                            {
+                            if ($combo_count[0]['tot'] > $this->dropdown_limit) {
                                 $auto_arr[$source_field] = "Yes";
                             }
                         }
                         $combo_arr = $this->getSourceOptions($source_field, $mode, $id, $data);
                         $final_arr = $this->filter->makeArrayDropdown($combo_arr);
-                        if ($combo_config['opt_group'] == "Yes")
-                        {
+                        if ($combo_config['opt_group'] == "Yes") {
                             $display_arr = $this->filter->makeOPTDropdown($combo_arr);
-                        }
-                        else
-                        {
+                        } else {
                             $display_arr = $final_arr;
                         }
                         $this->dropdown->combo("array", $source_field, $display_arr, $data[$key]);
@@ -725,38 +593,30 @@ class Game_level extends Cit_Controller
                     }
                 }
             }
-            if (method_exists($this->filter, "setFormFieldCapability"))
-            {
+            if (method_exists($this->filter, "setFormFieldCapability")) {
                 $this->filter->setFormFieldCapability($func, $this->module_name, $mode);
             }
             $extra_qstr .= $this->general->getRequestURLParams();
             $extra_hstr .= $this->general->getRequestHASHParams();
 
             /** access controls <<< **/
-            $controls_allow = $prev_link_allow = $next_link_allow = $update_allow = $delete_allow = $backlink_allow = $switchto_allow = $discard_allow = $tabing_allow = TRUE;
-            if ($mode == "Update")
-            {
-                if (!$del_access || $this->module_config["delete"] == "Yes")
-                {
-                    $delete_allow = FALSE;
+            $controls_allow = $prev_link_allow = $next_link_allow = $update_allow = $delete_allow = $backlink_allow = $switchto_allow = $discard_allow = $tabing_allow = true;
+            if ($mode == "Update") {
+                if (!$del_access || $this->module_config["delete"] == "Yes") {
+                    $delete_allow = false;
                 }
             }
-            if (is_array($switch_combo) && count($switch_combo) > 0)
-            {
-                $prev_link_allow = ($next_prev_records['prev']['id'] != '') ? TRUE : FALSE;
-                $next_link_allow = ($next_prev_records['next']['id'] != '') ? TRUE : FALSE;
+            if (is_array($switch_combo) && count($switch_combo) > 0) {
+                $prev_link_allow = ($next_prev_records['prev']['id'] != '') ? true : false;
+                $next_link_allow = ($next_prev_records['next']['id'] != '') ? true : false;
+            } else {
+                $prev_link_allow = $next_link_allow = $switchto_allow = false;
             }
-            else
-            {
-                $prev_link_allow = $next_link_allow = $switchto_allow = FALSE;
+            if (!$list_access) {
+                $backlink_allow = $discard_allow = false;
             }
-            if (!$list_access)
-            {
-                $backlink_allow = $discard_allow = FALSE;
-            }
-            if ($hideCtrl == "true")
-            {
-                $controls_allow = $prev_link_allow = $next_link_allow = $delete_allow = $backlink_allow = $switchto_allow = $tabing_allow = FALSE;
+            if ($hideCtrl == "true") {
+                $controls_allow = $prev_link_allow = $next_link_allow = $delete_allow = $backlink_allow = $switchto_allow = $tabing_allow = false;
                 $ctrl_flow = "Stay";
             }
             /** access controls >>> **/
@@ -798,31 +658,20 @@ class Game_level extends Cit_Controller
                 'capabilities' => array()
             );
             $this->smarty->assign($render_arr);
-            if (!empty($render_arr['overwrite_view']))
-            {
+            if (!empty($render_arr['overwrite_view'])) {
                 $this->loadView($render_arr['overwrite_view']);
-            }
-            else
-            {
-                if ($mode == "Update")
-                {
-                    if ($edit_access && $viewMode != TRUE)
-                    {
+            } else {
+                if ($mode == "Update") {
+                    if ($edit_access && $viewMode != true) {
                         $this->loadView("game_level_add");
-                    }
-                    else
-                    {
+                    } else {
                         $this->loadView("game_level_add_view");
                     }
-                }
-                else
-                {
+                } else {
                     $this->loadView("game_level_add");
                 }
             }
-        }
-        catch(Exception $e)
-        {
+        } catch (Exception $e) {
             $render_arr['err_message'] = $e->getMessage();
             $this->smarty->assign($render_arr);
             $this->loadView($this->config->item('ADMIN_FORBIDDEN_TEMPLATE'));
@@ -837,32 +686,21 @@ class Game_level extends Cit_Controller
         $params_arr = $this->params_arr;
         $mode = ($params_arr['mode'] == "Update") ? "Update" : "Add";
         $id = $params_arr['id'];
-        try
-        {
+        try {
             $ret_arr = array();
-            if ($this->config->item("ENABLE_ROLES_CAPABILITIES"))
-            {
-                if ($mode == "Update")
-                {
-                    $add_edit_access = $this->filter->checkAccessCapability("game_level_update", TRUE);
+            if ($this->config->item("ENABLE_ROLES_CAPABILITIES")) {
+                if ($mode == "Update") {
+                    $add_edit_access = $this->filter->checkAccessCapability("game_level_update", true);
+                } else {
+                    $add_edit_access = $this->filter->checkAccessCapability("game_level_add", true);
                 }
-                else
-                {
-                    $add_edit_access = $this->filter->checkAccessCapability("game_level_add", TRUE);
-                }
+            } else {
+                $add_edit_access = $this->filter->getModuleWiseAccess("game_level", $mode, true, true);
             }
-            else
-            {
-                $add_edit_access = $this->filter->getModuleWiseAccess("game_level", $mode, TRUE, TRUE);
-            }
-            if (!$add_edit_access)
-            {
-                if ($mode == "Update")
-                {
+            if (!$add_edit_access) {
+                if ($mode == "Update") {
                     throw new Exception($this->general->processMessageLabel('ACTION_YOU_ARE_NOT_AUTHORIZED_TO_MODIFY_THESE_DETAILS_C46_C46_C33'));
-                }
-                else
-                {
+                } else {
                     throw new Exception($this->general->processMessageLabel('ACTION_YOU_ARE_NOT_AUTHORIZED_TO_ADD_THESE_DETAILS_C46_C46_C33'));
                 }
             }
@@ -871,6 +709,9 @@ class Game_level extends Cit_Controller
             $params_arr = $this->_request_params();
             $glm_level_name = $params_arr["glm_level_name"];
             $glm_description = $params_arr["glm_description"];
+            $glm_max_word_length = $params_arr["glm_max_word_length"];
+            $glm_max_round = $params_arr["glm_max_round"];
+            $glm_round_to_unlock = $params_arr["glm_round_to_unlock"];
             $glm_status = $params_arr["glm_status"];
             $glm_added_at = $params_arr["glm_added_at"];
             $glm_updated_at = $params_arr["glm_updated_at"];
@@ -879,11 +720,9 @@ class Game_level extends Cit_Controller
             $unique_arr["vLevelName"] = $glm_level_name;
 
             $unique_exists = $this->game_level_model->checkRecordExists($this->game_level_model->unique_fields, $unique_arr, $id, $mode, $this->game_level_model->unique_type);
-            if ($unique_exists)
-            {
+            if ($unique_exists) {
                 $error_msg = $this->general->processMessageLabel('ACTION_RECORD_ALREADY_EXISTS_WITH_THESE_DETAILS_OF_LEVEL_NAME_C46_C46_C33');
-                if ($error_msg == "")
-                {
+                if ($error_msg == "") {
                     $error_msg = "Record already exists with these details of Level Name";
                 }
                 throw new Exception($error_msg);
@@ -891,42 +730,39 @@ class Game_level extends Cit_Controller
             $data = $save_data_arr = $file_data = array();
             $data["vLevelName"] = $glm_level_name;
             $data["tDescription"] = $glm_description;
+            $data["iMaxWordLength"] = $glm_max_word_length;
+            $data["iMaxRound"] = $glm_max_round;
+            $data["iRoundToUnlock"] = $glm_round_to_unlock;
             $data["eStatus"] = $glm_status;
             $data["dtAddedAt"] = $this->filter->formatActionData($glm_added_at, $form_config["glm_added_at"]);
             $data["dtUpdatedAt"] = $this->filter->formatActionData($glm_updated_at, $form_config["glm_updated_at"]);
 
             $save_data_arr["glm_level_name"] = $data["vLevelName"];
             $save_data_arr["glm_description"] = $data["tDescription"];
+            $save_data_arr["glm_max_word_length"] = $data["iMaxWordLength"];
+            $save_data_arr["glm_max_round"] = $data["iMaxRound"];
+            $save_data_arr["glm_round_to_unlock"] = $data["iRoundToUnlock"];
             $save_data_arr["glm_status"] = $data["eStatus"];
             $save_data_arr["glm_added_at"] = $data["dtAddedAt"];
             $save_data_arr["glm_updated_at"] = $data["dtUpdatedAt"];
-            if ($mode == 'Add')
-            {
+            if ($mode == 'Add') {
                 $id = $this->game_level_model->insert($data);
-                if (intval($id) > 0)
-                {
+                if (intval($id) > 0) {
                     $save_data_arr["iGameLevelId"] = $data["iGameLevelId"] = $id;
                     $msg = $this->general->processMessageLabel('ACTION_RECORD_ADDED_SUCCESSFULLY_C46_C46_C33');
-                }
-                else
-                {
+                } else {
                     throw new Exception($this->general->processMessageLabel('ACTION_FAILURE_IN_ADDING_RECORD_C46_C46_C33'));
                 }
                 $track_cond = $this->db->protect("glm.iGameLevelId")." = ".$this->db->escape($id);
                 $switch_combo = $this->game_level_model->getSwitchTo($track_cond);
                 $recName = $switch_combo[0]["val"];
                 $this->general->trackModuleNavigation("Module", "Form", "Added", $this->mod_enc_url["add"], "game_level", $recName, "mode|".$this->general->getAdminEncodeURL("Update")."|id|".$this->general->getAdminEncodeURL($id));
-            }
-            elseif ($mode == 'Update')
-            {
+            } elseif ($mode == 'Update') {
                 $res = $this->game_level_model->update($data, intval($id));
-                if (intval($res) > 0)
-                {
+                if (intval($res) > 0) {
                     $save_data_arr["iGameLevelId"] = $data["iGameLevelId"] = $id;
                     $msg = $this->general->processMessageLabel('ACTION_RECORD_SUCCESSFULLY_UPDATED_C46_C46_C33');
-                }
-                else
-                {
+                } else {
                     throw new Exception($this->general->processMessageLabel('ACTION_FAILURE_IN_UPDATING_OF_THIS_RECORD_C46_C46_C33'));
                 }
                 $track_cond = $this->db->protect("glm.iGameLevelId")." = ".$this->db->escape($id);
@@ -940,9 +776,7 @@ class Game_level extends Cit_Controller
             $ret_arr['success'] = 1;
 
             $params_arr = $this->_request_params();
-        }
-        catch(Exception $e)
-        {
+        } catch (Exception $e) {
             $ret_arr["message"] = $e->getMessage();
             $ret_arr["success"] = 0;
         }
@@ -968,11 +802,10 @@ class Game_level extends Cit_Controller
         $primary_ids = explode(",", $params_arr['id']);
         $primary_ids = count($primary_ids) > 1 ? $primary_ids : $primary_ids[0];
         $filters = $params_arr['filters'];
-        $filters = json_decode($filters, TRUE);
+        $filters = json_decode($filters, true);
         $extra_cond = '';
         $search_mode = $search_join = $search_alias = 'No';
-        if ($all_row_selected == "true" && in_array($operartor, array("del", "status")))
-        {
+        if ($all_row_selected == "true" && in_array($operartor, array("del", "status"))) {
             $search_mode = ($operartor == "del") ? "Delete" : "Update";
             $search_join = $search_alias = "Yes";
             $config_arr['module_name'] = $this->module_name;
@@ -983,87 +816,63 @@ class Game_level extends Cit_Controller
             $filter_main = $this->filter->applyFilter($filters, $config_arr, $search_mode);
             $filter_left = $this->filter->applyLeftFilter($filters, $config_arr, $search_mode);
             $filter_range = $this->filter->applyRangeFilter($filters, $config_arr, $search_mode);
-            if ($filter_main != "")
-            {
+            if ($filter_main != "") {
                 $extra_cond .= ($extra_cond != "") ? " AND (".$filter_main.")" : $filter_main;
             }
-            if ($filter_left != "")
-            {
+            if ($filter_left != "") {
                 $extra_cond .= ($extra_cond != "") ? " AND (".$filter_left.")" : $filter_left;
             }
-            if ($filter_range != "")
-            {
+            if ($filter_range != "") {
                 $extra_cond .= ($extra_cond != "") ? " AND (".$filter_range.")" : $filter_range;
             }
         }
-        if ($search_alias == "Yes")
-        {
+        if ($search_alias == "Yes") {
             $primary_field = $this->game_level_model->table_alias.".".$this->game_level_model->primary_key;
-        }
-        else
-        {
+        } else {
             $primary_field = $this->game_level_model->primary_key;
         }
-        if (is_array($primary_ids))
-        {
+        if (is_array($primary_ids)) {
             $pk_condition = $this->db->protect($primary_field)." IN ('".implode("','", $primary_ids)."')";
-        }
-        elseif (intval($primary_ids) > 0)
-        {
+        } elseif (intval($primary_ids) > 0) {
             $pk_condition = $this->db->protect($primary_field)." = ".$this->db->escape($primary_ids);
+        } else {
+            $pk_condition = false;
         }
-        else
-        {
-            $pk_condition = FALSE;
-        }
-        if ($pk_condition)
-        {
+        if ($pk_condition) {
             $extra_cond .= ($extra_cond != "") ? " AND (".$pk_condition.")" : $pk_condition;
         }
         $data_arr = $save_data_arr = array();
-        try
-        {
-            switch ($operartor)
-            {
+        try {
+            switch ($operartor) {
                 case 'del':
                     $mode = "Delete";
-                    if ($this->config->item("ENABLE_ROLES_CAPABILITIES"))
-                    {
-                        $del_access = $this->filter->checkAccessCapability("game_level_delete", TRUE);
+                    if ($this->config->item("ENABLE_ROLES_CAPABILITIES")) {
+                        $del_access = $this->filter->checkAccessCapability("game_level_delete", true);
+                    } else {
+                        $del_access = $this->filter->getModuleWiseAccess("game_level", "Delete", true, true);
                     }
-                    else
-                    {
-                        $del_access = $this->filter->getModuleWiseAccess("game_level", "Delete", TRUE, TRUE);
-                    }
-                    if (!$del_access)
-                    {
+                    if (!$del_access) {
                         throw new Exception($this->general->processMessageLabel('ACTION_YOU_ARE_NOT_AUTHORIZED_TO_DELETE_THESE_DETAILS_C46_C46_C33'));
                     }
-                    if ($search_mode == "No" && $pk_condition == FALSE)
-                    {
+                    if ($search_mode == "No" && $pk_condition == false) {
                         throw new Exception($this->general->processMessageLabel('ACTION_FAILURE_IN_DELETION_THIS_RECORD_C46_C46_C33'));
                     }
                     $params_arr = $this->_request_params();
 
                     $success = $this->game_level_model->delete($extra_cond, $search_alias, $search_join);
-                    if (!$success)
-                    {
+                    if (!$success) {
                         throw new Exception($this->general->processMessageLabel('ACTION_FAILURE_IN_DELETION_THIS_RECORD_C46_C46_C33'));
                     }
                     $message = $this->general->processMessageLabel('ACTION_RECORD_C40S_C41_DELETED_SUCCESSFULLY_C46_C46_C33');
                     break;
                 case 'edit':
                     $mode = "Update";
-                    if ($this->config->item("ENABLE_ROLES_CAPABILITIES"))
-                    {
-                        $edit_access = $this->filter->checkAccessCapability("game_level_update", TRUE);
+                    if ($this->config->item("ENABLE_ROLES_CAPABILITIES")) {
+                        $edit_access = $this->filter->checkAccessCapability("game_level_update", true);
+                    } else {
+                        $edit_access = $this->filter->getModuleWiseAccess("game_level", "Update", true, true);
                     }
-                    else
-                    {
-                        $edit_access = $this->filter->getModuleWiseAccess("game_level", "Update", TRUE, TRUE);
-                    }
-                    if (!$edit_access)
-                    {
+                    if (!$edit_access) {
                         throw new Exception($this->general->processMessageLabel('ACTION_YOU_ARE_NOT_AUTHORIZED_TO_MODIFY_THESE_DETAILS_C46_C46_C33'));
                     }
                     $post_name = $params_arr['name'];
@@ -1071,16 +880,13 @@ class Game_level extends Cit_Controller
 
                     $list_config = $this->game_level_model->getListConfiguration($post_name);
                     $form_config = $this->game_level_model->getFormConfiguration($list_config['source_field']);
-                    if (!is_array($form_config) || count($form_config) == 0)
-                    {
+                    if (!is_array($form_config) || count($form_config) == 0) {
                         throw new Exception($this->general->processMessageLabel('ACTION_FORM_CONFIGURING_NOT_DONE_C46_C46_C33'));
                     }
-                    if (in_array($form_config['type'], array("date", "date_and_time", "time", 'phone_number')))
-                    {
+                    if (in_array($form_config['type'], array("date", "date_and_time", "time", 'phone_number'))) {
                         $post_val = $this->filter->formatActionData($post_val, $form_config);
                     }
-                    if ($form_config["encrypt"] == "Yes")
-                    {
+                    if ($form_config["encrypt"] == "Yes") {
                         $post_val = $this->general->encryptDataMethod($post_val, $form_config["enctype"]);
                     }
                     $field_name = $form_config['field_name'];
@@ -1089,14 +895,11 @@ class Game_level extends Cit_Controller
                     $unique_arr = array();
 
                     $unique_arr[$field_name] = $post_val;
-                    if (in_array($field_name, $this->game_level_model->unique_fields))
-                    {
+                    if (in_array($field_name, $this->game_level_model->unique_fields)) {
                         $unique_exists = $this->game_level_model->checkRecordExists($this->game_level_model->unique_fields, $unique_arr, $primary_ids, "Update", $this->game_level_model->unique_type);
-                        if ($unique_exists)
-                        {
+                        if ($unique_exists) {
                             $error_msg = $this->general->processMessageLabel('ACTION_RECORD_ALREADY_EXISTS_WITH_THESE_DETAILS_OF_LEVEL_NAME_C46_C46_C33');
-                            if ($error_msg == "")
-                            {
+                            if ($error_msg == "") {
                                 $error_msg = "Record already exists with these details of Level Name";
                             }
                             throw new Exception($error_msg);
@@ -1106,46 +909,35 @@ class Game_level extends Cit_Controller
                     $data_arr[$field_name] = $post_val;
                     $success = $this->game_level_model->update($data_arr, intval($primary_ids));
                     $message = $this->general->processMessageLabel('ACTION_RECORD_SUCCESSFULLY_UPDATED_C46_C46_C33');
-                    if (!$success)
-                    {
+                    if (!$success) {
                         throw new Exception($this->general->processMessageLabel('ACTION_FAILURE_IN_UPDATING_OF_THIS_RECORD_C46_C46_C33'));
                     }
                     break;
                 case 'status':
                     $mode = "Status";
-                    if ($this->config->item("ENABLE_ROLES_CAPABILITIES"))
-                    {
-                        $edit_access = $this->filter->checkAccessCapability("game_level_update", TRUE);
+                    if ($this->config->item("ENABLE_ROLES_CAPABILITIES")) {
+                        $edit_access = $this->filter->checkAccessCapability("game_level_update", true);
+                    } else {
+                        $edit_access = $this->filter->getModuleWiseAccess("game_level", "Update", true, true);
                     }
-                    else
-                    {
-                        $edit_access = $this->filter->getModuleWiseAccess("game_level", "Update", TRUE, TRUE);
-                    }
-                    if (!$edit_access)
-                    {
+                    if (!$edit_access) {
                         throw new Exception($this->general->processMessageLabel('ACTION_YOU_ARE_NOT_AUTHORIZED_TO_MODIFY_THESE_DETAILS_C46_C46_C33'));
                     }
-                    if ($search_mode == "No" && $pk_condition == FALSE)
-                    {
+                    if ($search_mode == "No" && $pk_condition == false) {
                         throw new Exception($this->general->processMessageLabel('ACTION_FAILURE_IN_DELETION_THIS_RECORD_C46_C46_C33'));
                     }
                     $status_field = "eStatus";
-                    if ($status_field == "")
-                    {
+                    if ($status_field == "") {
                         throw new Exception($this->general->processMessageLabel('ACTION_FORM_CONFIGURING_NOT_DONE_C46_C46_C33'));
                     }
-                    if ($search_mode == "Yes" || $search_alias == "Yes")
-                    {
+                    if ($search_mode == "Yes" || $search_alias == "Yes") {
                         $field_name = $this->game_level_model->table_alias.".eStatus";
-                    }
-                    else
-                    {
+                    } else {
                         $field_name = $status_field;
                     }
                     $data_arr[$field_name] = $params_arr['status'];
                     $success = $this->game_level_model->update($data_arr, $extra_cond, $search_alias, $search_join);
-                    if (!$success)
-                    {
+                    if (!$success) {
                         throw new Exception($this->general->processMessageLabel('ACTION_FAILURE_IN_MODIFYING_THESE_RECORDS_C46_C46_C33'));
                     }
                     $message = $this->general->processMessageLabel('ACTION_RECORD_C40S_C41_MODIFIED_SUCCESSFULLY_C46_C46_C33');
@@ -1153,9 +945,7 @@ class Game_level extends Cit_Controller
             }
             $ret_arr['success'] = "true";
             $ret_arr['message'] = $message;
-        }
-        catch(Exception $e)
-        {
+        } catch (Exception $e) {
             $ret_arr["success"] = "false";
             $ret_arr["message"] = $e->getMessage();
         }
@@ -1167,59 +957,45 @@ class Game_level extends Cit_Controller
     /**
      * processConfiguration method is used to process add and edit permissions for grid intialization
      */
-    protected function processConfiguration(&$list_config = array(), $isAdd = TRUE, $isEdit = TRUE, $runCombo = FALSE)
+    protected function processConfiguration(&$list_config = array(), $isAdd = true, $isEdit = true, $runCombo = false)
     {
-        if (!is_array($list_config) || count($list_config) == 0)
-        {
+        if (!is_array($list_config) || count($list_config) == 0) {
             return $list_config;
         }
         $count_arr = array();
-        foreach ((array) $list_config as $key => $val)
-        {
-            if (!$isAdd)
-            {
+        foreach ((array) $list_config as $key => $val) {
+            if (!$isAdd) {
                 $list_config[$key]["addable"] = "No";
             }
-            if (!$isEdit)
-            {
+            if (!$isEdit) {
                 $list_config[$key]["editable"] = "No";
             }
 
             $source_field = $val['source_field'];
             $dropdown_arr = $this->dropdown_arr[$source_field];
-            if (is_array($dropdown_arr) && in_array($val['type'], array("dropdown", "radio_buttons", "checkboxes", "multi_select_dropdown")))
-            {
+            if (is_array($dropdown_arr) && in_array($val['type'], array("dropdown", "radio_buttons", "checkboxes", "multi_select_dropdown"))) {
                 $count_arr[$key]['ajax'] = "No";
                 $count_arr[$key]['json'] = "No";
                 $count_arr[$key]['data'] = array();
-                $combo_arr = FALSE;
-                if ($dropdown_arr['auto'] == "Yes")
-                {
+                $combo_arr = false;
+                if ($dropdown_arr['auto'] == "Yes") {
                     $combo_arr = $this->getSourceOptions($source_field, "Search", '', array(), '', 'count');
-                    if ($combo_arr[0]['tot'] > $this->dropdown_limit)
-                    {
+                    if ($combo_arr[0]['tot'] > $this->dropdown_limit) {
                         $count_arr[$key]['ajax'] = "Yes";
                     }
                 }
-                if ($runCombo == TRUE)
-                {
-                    if (in_array($dropdown_arr['type'], array("enum", "phpfn")))
-                    {
+                if ($runCombo == true) {
+                    if (in_array($dropdown_arr['type'], array("enum", "phpfn"))) {
                         $data_arr = $this->getSourceOptions($source_field, "Search");
                         $json_arr = $this->filter->makeArrayDropdown($data_arr);
                         $count_arr[$key]['json'] = "Yes";
                         $count_arr[$key]['data'] = json_encode($json_arr);
-                    }
-                    else
-                    {
-                        if ($dropdown_arr['opt_group'] != "Yes")
-                        {
-                            if ($combo_arr == FALSE)
-                            {
+                    } else {
+                        if ($dropdown_arr['opt_group'] != "Yes") {
+                            if ($combo_arr == false) {
                                 $combo_arr = $this->getSourceOptions($source_field, "Search", '', array(), '', 'count');
                             }
-                            if ($combo_arr[0]['tot'] < $this->search_combo_limit)
-                            {
+                            if ($combo_arr[0]['tot'] < $this->search_combo_limit) {
                                 $data_arr = $this->getSourceOptions($source_field, "Search");
                                 $json_arr = $this->filter->makeArrayDropdown($data_arr);
                                 $count_arr[$key]['json'] = "Yes";
@@ -1248,28 +1024,22 @@ class Game_level extends Cit_Controller
     {
         $combo_config = $this->dropdown_arr[$name];
         $data_arr = array();
-        if (!is_array($combo_config) || count($combo_config) == 0)
-        {
+        if (!is_array($combo_config) || count($combo_config) == 0) {
             return $data_arr;
         }
         $type = $combo_config['type'];
-        switch ($type)
-        {
+        switch ($type) {
             case 'enum':
                 $data_arr = is_array($combo_config['values']) ? $combo_config['values'] : array();
                 break;
             case 'token':
-                if ($combo_config['parent_src'] == "Yes" && in_array($mode, array("Add", "Update", "Auto")))
-                {
+                if ($combo_config['parent_src'] == "Yes" && in_array($mode, array("Add", "Update", "Auto"))) {
                     $source_field = $combo_config['source_field'];
                     $target_field = $combo_config['target_field'];
-                    if (in_array($mode, array("Update", "Auto")) || $data[$source_field] != "")
-                    {
+                    if (in_array($mode, array("Update", "Auto")) || $data[$source_field] != "") {
                         $parent_src = (is_array($data[$source_field])) ? $data[$source_field] : explode(",", $data[$source_field]);
                         $extra_cond = $this->db->protect($target_field)." IN ('".implode("','", $parent_src)."')";
-                    }
-                    elseif ($mode == "Add")
-                    {
+                    } elseif ($mode == "Add") {
                         $extra_cond = $this->db->protect($target_field)." = ''";
                     }
                     $extra = (trim($extra) != "") ? $extra." AND ".$extra_cond : $extra_cond;
@@ -1277,44 +1047,33 @@ class Game_level extends Cit_Controller
                 $data_arr = $this->filter->getTableLevelDropdown($combo_config, $id, $extra, $rtype);
                 break;
             case 'table':
-                if ($combo_config['auto'] == "Yes" && $mode == "Update")
-                {
-                    if (!empty($data[$name]))
-                    {
+                if ($combo_config['auto'] == "Yes" && $mode == "Update") {
+                    if (!empty($data[$name])) {
                         $selected_rec = (is_array($data[$name])) ? $data[$name] : explode(",", $data[$name]);
                         $selected_rec = $this->general->escape_str($selected_rec);
                         $selected_str = implode(",", $selected_rec);
                         $combo_config['order_by'] = "FIELD(".$combo_config['field_key'].", ".$selected_str.") DESC, ".$combo_config['order_by'];
                     }
                 }
-                if ($combo_config['parent_src'] == "Yes" && in_array($mode, array("Add", "Update", "Auto")))
-                {
+                if ($combo_config['parent_src'] == "Yes" && in_array($mode, array("Add", "Update", "Auto"))) {
                     $source_field = $combo_config['source_field'];
                     $target_field = $combo_config['target_field'];
-                    if (in_array($mode, array("Update", "Auto")) || $data[$source_field] != "")
-                    {
+                    if (in_array($mode, array("Update", "Auto")) || $data[$source_field] != "") {
                         $parent_src = (is_array($data[$source_field])) ? $data[$source_field] : explode(",", $data[$source_field]);
                         $extra_cond = $this->db->protect($target_field)." IN ('".implode("','", $parent_src)."')";
-                    }
-                    elseif ($mode == "Add")
-                    {
+                    } elseif ($mode == "Add") {
                         $extra_cond = $this->db->protect($target_field)." = ''";
                     }
                     $extra = (trim($extra) != "") ? $extra." AND ".$extra_cond : $extra_cond;
                 }
-                if ($combo_config['parent_child'] == "Yes" && $combo_config['nlevel_child'] == "Yes")
-                {
+                if ($combo_config['parent_child'] == "Yes" && $combo_config['nlevel_child'] == "Yes") {
                     $combo_config['main_table'] = $this->game_level_model->table_name;
                     $data_arr = $this->filter->getTreeLevelDropdown($combo_config, $id, $extra, $rtype);
-                }
-                else
-                {
-                    if ($combo_config['parent_child'] == "Yes" && $combo_config['parent_field'] != "")
-                    {
+                } else {
+                    if ($combo_config['parent_child'] == "Yes" && $combo_config['parent_field'] != "") {
                         $parent_field = $combo_config['parent_field'];
                         $extra_cond = "(".$this->db->protect($parent_field)." = '0' OR ".$this->db->protect($parent_field)." = '' OR ".$this->db->protect($parent_field)." IS NULL )";
-                        if ($mode == "Update" || ($mode == "Search" && $id > 0))
-                        {
+                        if ($mode == "Update" || ($mode == "Search" && $id > 0)) {
                             $extra_cond .= " AND ".$this->db->protect($combo_config['field_key'])." <> ".$this->db->escape($id);
                         }
                         $extra = (trim($extra) != "") ? $extra." AND ".$extra_cond : $extra_cond;
@@ -1325,32 +1084,23 @@ class Game_level extends Cit_Controller
             case 'phpfn':
                 $phpfunc = $combo_config['function'];
                 $parent_src = '';
-                if ($combo_config['parent_src'] == "Yes" && in_array($mode, array("Add", "Update", "Auto")))
-                {
+                if ($combo_config['parent_src'] == "Yes" && in_array($mode, array("Add", "Update", "Auto"))) {
                     $source_field = $combo_config['source_field'];
-                    if (in_array($mode, array("Update", "Auto")) || $data[$source_field] != "")
-                    {
+                    if (in_array($mode, array("Update", "Auto")) || $data[$source_field] != "") {
                         $parent_src = $data[$source_field];
                     }
                 }
-                if (substr($phpfunc, 0, 12) == 'controller::' && substr($phpfunc, 12) !== FALSE)
-                {
+                if (substr($phpfunc, 0, 12) == 'controller::' && substr($phpfunc, 12) !== false) {
                     $phpfunc = substr($phpfunc, 12);
-                    if (method_exists($this, $phpfunc))
-                    {
+                    if (method_exists($this, $phpfunc)) {
                         $data_arr = $this->$phpfunc($data[$name], $mode, $id, $data, $parent_src, $this->term);
                     }
-                }
-                elseif (substr($phpfunc, 0, 7) == 'model::' && substr($phpfunc, 7) !== FALSE)
-                {
+                } elseif (substr($phpfunc, 0, 7) == 'model::' && substr($phpfunc, 7) !== false) {
                     $phpfunc = substr($phpfunc, 7);
-                    if (method_exists($this->game_level_model, $phpfunc))
-                    {
+                    if (method_exists($this->game_level_model, $phpfunc)) {
                         $data_arr = $this->game_level_model->$phpfunc($data[$name], $mode, $id, $data, $parent_src, $this->term);
                     }
-                }
-                elseif (method_exists($this->general, $phpfunc))
-                {
+                } elseif (method_exists($this->general, $phpfunc)) {
                     $data_arr = $this->general->$phpfunc($data[$name], $mode, $id, $data, $parent_src, $this->term);
                 }
                 break;
@@ -1375,7 +1125,7 @@ class Game_level extends Cit_Controller
         $extra_cond = ($extra_cond == "") ? $search_cond : $extra_cond." AND ".$search_cond;
 
         $switch_arr = $this->game_level_model->getSwitchTo($extra_cond);
-        $html_arr = $this->filter->getChosenAutoJSON($switch_arr, array(), FALSE, "auto");
+        $html_arr = $this->filter->getChosenAutoJSON($switch_arr, array(), false, "auto");
 
         $json_array['q'] = $term;
         $json_array['results'] = $html_arr;
@@ -1399,23 +1149,16 @@ class Game_level extends Cit_Controller
         $source_field = $config_arr['source_field'];
         $combo_config = $this->dropdown_arr[$source_field];
         $data_arr = array();
-        if ($mode == "Update")
-        {
+        if ($mode == "Update") {
             $data_arr = $this->game_level_model->getData(intval($id));
         }
         $combo_arr = $this->getSourceOptions($source_field, $mode, $id, $data_arr[0]);
-        if ($rformat == "json")
-        {
-            $html_str = $this->filter->getChosenAutoJSON($combo_arr, $combo_config, TRUE, "grid");
-        }
-        else
-        {
-            if ($combo_config['opt_group'] == "Yes")
-            {
+        if ($rformat == "json") {
+            $html_str = $this->filter->getChosenAutoJSON($combo_arr, $combo_config, true, "grid");
+        } else {
+            if ($combo_config['opt_group'] == "Yes") {
                 $combo_arr = $this->filter->makeOPTDropdown($combo_arr);
-            }
-            else
-            {
+            } else {
                 $combo_arr = $this->filter->makeArrayDropdown($combo_arr);
             }
             $this->dropdown->combo("array", $source_field, $combo_arr, $id);

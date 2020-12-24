@@ -60,9 +60,9 @@
     el_grid_settings['status_arr'] = $.parseJSON('<%$status_array|@json_encode%>');
     el_grid_settings['status_lang_arr'] = $.parseJSON('<%$status_label|@json_encode%>');
                 
-    el_grid_settings['hide_add_btn'] = '';
+    el_grid_settings['hide_add_btn'] = '1';
     el_grid_settings['hide_del_btn'] = '';
-    el_grid_settings['hide_status_btn'] = '';
+    el_grid_settings['hide_status_btn'] = '1';
     el_grid_settings['hide_export_btn'] = '1';
     el_grid_settings['hide_columns_btn'] = 'No';
     

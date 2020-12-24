@@ -880,14 +880,14 @@ class Game_level_model extends CI_Model
                 "name" => "glm_description",
                 "table_name" => "game_level_master",
                 "table_alias" => "glm",
-                "field_name" => "tdescription",
+                "field_name" => "tDescription",
                 "entry_type" => "Table",
                 "data_type" => "enum",
                 "show_input" => "Both",
                 "type" => "dropdown",
-                "label" => "Time Duration",
-                "lang_code" => "GAME_LEVEL_DESCREPTION",
-                "label_lang" => $this->lang->line('GAME_LEVEL_DESCREPTION')
+                "label" => "Description",
+                "lang_code" => "GAME_LEVEL_DESCRIPTION",
+                "label_lang" => $this->lang->line('GAME_LEVEL_DESCRIPTION')
             ),
             "glm_max_word_length" => array(
                 "name" => "glm_max_word_length",
@@ -898,9 +898,35 @@ class Game_level_model extends CI_Model
                 "data_type" => "enum",
                 "show_input" => "Both",
                 "type" => "dropdown",
-                "label" => "Time Duration",
+                "label" => "Max Word Length",
                 "lang_code" => "GAME_LEVEL_MAX_WORD_LENGTH",
                 "label_lang" => $this->lang->line('GAME_LEVEL_MAX_WORD_LENGTH')
+            ),
+            "glm_max_round" => array(
+                "name" => "glm_max_round",
+                "table_name" => "game_level_master",
+                "table_alias" => "glm",
+                "field_name" => "iMaxRound",
+                "entry_type" => "Table",
+                "data_type" => "enum",
+                "show_input" => "Both",
+                "type" => "dropdown",
+                "label" => "Max Round",
+                "lang_code" => "GAME_LEVEL_ROUND_TO_UNLOCK",
+                "label_lang" => $this->lang->line('GAME_LEVEL_ROUND_TO_UNLOCK')
+            ),
+            "glm_round_to_unlock" => array(
+                "name" => "glm_round_to_unlock",
+                "table_name" => "game_level_master",
+                "table_alias" => "glm",
+                "field_name" => "iRoundToUnlock",
+                "entry_type" => "Table",
+                "data_type" => "enum",
+                "show_input" => "Both",
+                "type" => "dropdown",
+                "label" => "Round To Unlock",
+                "lang_code" => "GAME_LEVEL_MAX_ROUND",
+                "label_lang" => $this->lang->line('GAME_LEVEL_MAX_ROUND')
             ),
             "glm_status" => array(
                 "name" => "glm_status",
