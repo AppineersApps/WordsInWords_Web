@@ -931,9 +931,22 @@ class Users_guest_model extends CI_Model
             $result_arr = array();
 
             $this->db->from("users AS u");
-            //$this->db->join("mod_state AS ms", "u.iStateId = ms.iStateId", "left");
-
             $this->db->select("u.iUserId AS u_user_id");
+            $this->db->select("u.vFirstName AS u_first_name");
+            $this->db->select("u.vLastName AS u_last_name");
+            $this->db->select("u.vUserName AS u_user_name");
+            $this->db->select("u.vEmail AS u_email");
+            $this->db->select("u.vMobileNo AS u_mobile_no");
+            $this->db->select("u.vProfileImage AS u_profile_image");
+            $this->db->select("u.dDob AS u_dob");
+            $this->db->select("u.tAddress AS u_address");
+            $this->db->select("u.vCity AS u_city");
+            $this->db->select("u.dLatitude AS u_latitude");
+            $this->db->select("u.dLongitude AS u_longitude");
+            $this->db->select("u.iStateId AS u_state_id");
+            $this->db->select("u.vStateName AS u_state_name");
+            $this->db->select("u.vZipCode AS u_zip_code");
+            $this->db->select("u.eEmailVerified AS u_email_verified");
             $this->db->select("u.eDeviceType AS u_device_type");
             $this->db->select("u.vDeviceModel AS u_device_model");
             $this->db->select("u.vDeviceOS AS u_device_os");
@@ -941,7 +954,9 @@ class Users_guest_model extends CI_Model
             $this->db->select("u.eStatus AS u_status");
             $this->db->select("u.dtAddedAt AS u_added_at");
             $this->db->select("u.dtUpdatedAt AS u_updated_at");
-            $this->db->select("(".$this->db->escape("".$auth_token."").") AS auth_token1", false);
+            $this->db->select("(".$this->db->escape("".$auth_token."").") AS auth_token1", FALSE);
+            $this->db->select("u.eSocialLoginType AS u_social_login_type");
+            $this->db->select("u.vSocialLoginId AS u_social_login_id");
             $this->db->select("u.ePushNotify AS u_push_notify");
             //$this->db->select("ms.vState AS ms_state");
             $this->db->select("u.eOneTimeTransaction AS e_one_time_transaction");
@@ -950,6 +965,8 @@ class Users_guest_model extends CI_Model
             $this->db->select("u.vPrivacyPolicyVersion AS u_privacy_policy_version");
             $this->db->select("u.eLogStatus AS u_log_status_updated");
             $this->db->select("u.iGuestUserId AS u_guest_user_id");
+            $this->db->select("u.eGuestUser AS u_is_guest_user");
+
             $this->db->where("u.iUserId =", $where_clause);
 
             $this->db->limit(1);
