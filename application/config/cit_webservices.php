@@ -529,10 +529,10 @@ $config["user_guest"] = array(
     "target" => ""
 );
 
-$config["game_level_master"] = array(
+$config["game_level_config"] = array(
     "title" => "Get game level master",
     "folder" => "game_master",
-    "method" => $_SERVER['REQUEST_METHOD'],
+    "method" => "GET_POST",
     "params" => array(
         "user_access_token",
         "game_level_id",
@@ -541,6 +541,91 @@ $config["game_level_master"] = array(
         "max_word_length",
         "max_round",
         "round_to_unlock"
+    ),
+    "token" => "",
+    "payload" => array(
+    ),
+    "target" => ""
+);
+
+$config["player_activity"] = array(
+    "title" => "Get player activity",
+    "folder" => "player_activity",
+    "method" => $_SERVER['REQUEST_METHOD'],
+    "params" => array(
+        "user_access_token",
+        "activity_id",
+        "level_id",
+        "round_id",
+        "credit_coin",
+        "debit_coin",
+        "unlock_status"
+    ),
+    "token" => "",
+    "payload" => array(
+    ),
+    "target" => ""
+);
+
+$config["sync_level_round"] = array(
+    "title" => "Sync level round",
+    "folder" => "player_activity",
+    "method" => $_SERVER['REQUEST_METHOD'],
+    "params" => array(
+        "user_access_token",
+        "activity_id",
+        "level_id",
+        "round_id",
+        "credit_coin",
+        "debit_coin",
+        "unlock_status"
+    ),
+    "token" => "",
+    "payload" => array(
+    ),
+    "target" => ""
+);
+
+$config["purchase_coin"] = array(
+    "title" => "Purchase coin",
+    "folder" => "purchase_coin",
+    "method" => $_SERVER['REQUEST_METHOD'],
+    "params" => array(
+        "user_access_token",
+        "transaction_id",
+        "transaction_date",
+        "purchased_coin",
+        "transaction_amount"
+    ),
+    "token" => "",
+    "payload" => array(
+    ),
+    "target" => ""
+);
+
+$config["user_guest_connect"] = array(
+    "title" => "User guest connect",
+    "folder" => "basic_appineers_master",
+    "method" => "GET_POST",
+    "params" => array(
+        "device_type",
+        "device_model",
+        "device_os",
+        "device_token",
+        "first_name",
+        "last_name",
+        "user_name",
+        "email",
+        "mobile_number",
+        "user_profile",
+        "dob",
+        "password",
+        "address",
+        "city",
+        "latitude",
+        "longitude",
+        "state_id",
+        "zipcode"
     ),
     "token" => "",
     "payload" => array(
