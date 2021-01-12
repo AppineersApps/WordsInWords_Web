@@ -12,11 +12,8 @@
  * 
  * @author CIT Dev Team
  * 
-<<<<<<< HEAD
  * @date 25.10.2019
-=======
  * @date 06.02.2020
->>>>>>> messages changes
  */        
 
 if (!defined('BASEPATH')) {

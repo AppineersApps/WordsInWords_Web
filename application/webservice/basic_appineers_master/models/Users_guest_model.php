@@ -479,13 +479,13 @@ class Users_guest_model extends CI_Model
     }
 
     /**
-     * create_user_v1 method is used to execute database queries for User Sign Up Phone API.
+     * connect_guest_user_v1 method is used to execute database queries for User Sign Up Phone API.
      * @created CIT Dev Team
      * @modified priyanka chillakuru | 23.12.2019
      * @param array $params_arr params_arr array to process query block.
      * @return array $return_arr returns response of query block.
      */
-    public function create_user_v1($params_arr = array())
+    public function connect_guest_user_v1($params_arr = array())
     {
         try {
             $result_arr = array();
@@ -653,13 +653,13 @@ class Users_guest_model extends CI_Model
     }
 
     /**
-     * create_user_social method is used to execute database queries for Social Sign Up API.
+     * connect_guest_user_social method is used to execute database queries for Social Sign Up API.
      * @created CIT Dev Team
      * @modified priyanka chillakuru | 23.12.2019
      * @param array $params_arr params_arr array to process query block.
      * @return array $return_arr returns response of query block.
      */
-    public function create_user_social($params_arr = array())
+    public function connect_guest_user_social($params_arr = array())
     {
         try {
             $result_arr = array();
@@ -954,7 +954,7 @@ class Users_guest_model extends CI_Model
             $this->db->select("u.eStatus AS u_status");
             $this->db->select("u.dtAddedAt AS u_added_at");
             $this->db->select("u.dtUpdatedAt AS u_updated_at");
-            $this->db->select("(".$this->db->escape("".$auth_token."").") AS auth_token1", FALSE);
+            $this->db->select("(".$this->db->escape("".$auth_token."").") AS auth_token1", false);
             $this->db->select("u.eSocialLoginType AS u_social_login_type");
             $this->db->select("u.vSocialLoginId AS u_social_login_id");
             $this->db->select("u.ePushNotify AS u_push_notify");
@@ -1853,6 +1853,115 @@ class Users_guest_model extends CI_Model
         $return_arr["success"] = $success;
         $return_arr["message"] = $message;
         $return_arr["data"] = $result_arr;
+        return $return_arr;
+    }
+
+    /**
+     * connect_guest_user method is used to execute database queries for User Sign Up Email API.
+     * @created priyanka chillakuru | 12.09.2019
+     * @modified priyanka chillakuru | 23.12.2019
+     * @param array $params_arr params_arr array to process query block.
+     * @return array $return_arr returns response of query block.
+     */
+    public function connect_guest_user($params_arr = array(), $where_arr = array())
+    {
+        try {
+            $result_arr = array();
+            if (!is_array($params_arr) || count($params_arr) == 0) {
+                throw new Exception("Update data not found.");
+            }
+            $this->db->start_cache();
+            if (isset($where_arr["user_id"]) && $where_arr["user_id"] != "") {
+                $this->db->where("iUserId =", $where_arr["user_id"]);
+            }
+            $this->db->where_in("eStatus", array('Active'));
+            $this->db->stop_cache();
+
+            if (isset($params_arr["first_name"])) {
+                $this->db->set("vFirstName", $params_arr["first_name"]);
+            }
+            if (isset($params_arr["last_name"])) {
+                $this->db->set("vLastName", $params_arr["last_name"]);
+            }
+            if (isset($params_arr["user_name"])) {
+                $this->db->set("vUserName", $params_arr["user_name"]);
+            }
+            if (isset($params_arr["email"])) {
+                $this->db->set("vEmail", $params_arr["email"]);
+            }
+            if (isset($params_arr["mobile_number"])) {
+                $this->db->set("vMobileNo", $params_arr["mobile_number"]);
+            }
+            if (isset($params_arr["user_profile"]) && !empty($params_arr["user_profile"])) {
+                $this->db->set("vProfileImage", $params_arr["user_profile"]);
+            }
+            if (isset($params_arr["dob"])) {
+                $this->db->set("dDob", $params_arr["dob"]);
+            }
+            if (isset($params_arr["password"])) {
+                $this->db->set("vPassword", $params_arr["password"]);
+            }
+            if (isset($params_arr["address"])) {
+                $this->db->set("tAddress", $params_arr["address"]);
+            }
+            if (isset($params_arr["city"])) {
+                $this->db->set("vCity", $params_arr["city"]);
+            }
+            if (isset($params_arr["latitude"])) {
+                $this->db->set("dLatitude", $params_arr["latitude"]);
+            }
+            if (isset($params_arr["longitude"])) {
+                $this->db->set("dLongitude", $params_arr["longitude"]);
+            }
+            if (isset($params_arr["state_id"])) {
+                $this->db->set("iStateId", $params_arr["state_id"]);
+            }
+            if (isset($params_arr["state_name"])) {
+                $this->db->set("vStateName", $params_arr["state_name"]);
+            }
+            if (isset($params_arr["zipcode"])) {
+                $this->db->set("vZipCode", $params_arr["zipcode"]);
+            }
+            $this->db->set("eStatus", $params_arr["status"]);
+            $this->db->set($this->db->protect("dtAddedAt"), $params_arr["_dtaddedat"], false);
+            if (isset($params_arr["device_type"])) {
+                $this->db->set("eDeviceType", $params_arr["device_type"]);
+            }
+            if (isset($params_arr["device_model"])) {
+                $this->db->set("vDeviceModel", $params_arr["device_model"]);
+            }
+            if (isset($params_arr["device_os"])) {
+                $this->db->set("vDeviceOS", $params_arr["device_os"]);
+            }
+            if (isset($params_arr["device_token"])) {
+                $this->db->set("vDeviceToken", $params_arr["device_token"]);
+            }
+            $this->db->set("eEmailVerified", $params_arr["_eemailverified"]);
+            if (isset($params_arr["email_confirmation_code"])) {
+                $this->db->set("vEmailVerificationCode", $params_arr["email_confirmation_code"]);
+            }
+            $this->db->set("vTermsConditionsVersion", $params_arr["_vtermsconditionsversion"]);
+            $this->db->set("vPrivacyPolicyVersion", $params_arr["_vprivacypolicyversion"]);
+            $res = $this->db->update("users");
+
+            $affected_rows = $this->db->affected_rows();
+            if (!$res || $affected_rows == -1) {
+                throw new Exception("Failure in updation.");
+            }
+            $result_param = "affected_rows";
+            $result_arr[0][$result_param] = $affected_rows;
+            $success = 1;
+        } catch (Exception $e) {
+            $success = 0;
+            $message = $e->getMessage();
+        }
+        $this->db->flush_cache();
+        $this->db->_reset_all();
+        //echo $this->db->last_query();
+        $return_arr["success"] = $success;
+        $return_arr["message"] = $message;
+        $return_arr["data"] = $result_arr;
+
         return $return_arr;
     }
 }

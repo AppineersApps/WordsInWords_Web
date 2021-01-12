@@ -20,11 +20,8 @@ defined('BASEPATH') || exit('No direct script access allowed');
  *
  * @author CIT Dev Team
  *
-<<<<<<< HEAD
  * @since 07.11.2019
-=======
  * @since 06.02.2020
->>>>>>> messages changes
  */
 
 class Check_unique_user_model extends CI_Model

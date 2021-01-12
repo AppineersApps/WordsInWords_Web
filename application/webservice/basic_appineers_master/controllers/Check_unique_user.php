@@ -20,11 +20,8 @@ defined('BASEPATH') || exit('No direct script access allowed');
  *
  * @author CIT Dev Team
  *
-<<<<<<< HEAD
  * @since 07.11.2019
-=======
  * @since 06.02.2020
->>>>>>> messages changes
  */
 
 class Check_unique_user extends Cit_Controller
@@ -61,11 +58,8 @@ class Check_unique_user extends Cit_Controller
     /**
      * rules_check_unique_user method is used to validate api input params.
      * @created priyanka chillakuru | 12.09.2019
-<<<<<<< HEAD
      * @modified priyanka chillakuru | 07.11.2019
-=======
      * @modified Devangi Nirmal | 06.02.2020
->>>>>>> messages changes
      * @param array $request_arr request_arr array is used for api input.
      * @return array $valid_res returns output response of API.
      */
