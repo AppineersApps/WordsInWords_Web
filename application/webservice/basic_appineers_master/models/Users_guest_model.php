@@ -609,24 +609,25 @@ class Users_guest_model extends CI_Model
             $this->db->select("u.iStateId AS u_state_id");
             $this->db->select("u.vStateName AS u_state_name");
             $this->db->select("u.vZipCode AS u_zip_code");
-            $this->db->select("u.eStatus AS u_status");
-            $this->db->select("(concat(u.vFirstName,' ',u.vLastName)) AS email_user_name", false);
             $this->db->select("u.eEmailVerified AS u_email_verified");
-            $this->db->select("u.vAccessToken AS u_access_token");
             $this->db->select("u.eDeviceType AS u_device_type");
             $this->db->select("u.vDeviceModel AS u_device_model");
             $this->db->select("u.vDeviceOS AS u_device_os");
             $this->db->select("u.vDeviceToken AS u_device_token");
+            $this->db->select("u.eStatus AS u_status");
             $this->db->select("u.dtAddedAt AS u_added_at");
-            //$this->db->select("ms.vState AS ms_state");
-            $this->db->select("u.eOneTimeTransaction AS e_one_time_transaction");
-            $this->db->select("u.tOneTimeTransaction AS t_one_time_transaction");
+            $this->db->select("u.dtUpdatedAt AS u_updated_at");
             $this->db->select("u.eSocialLoginType AS u_social_login_type");
             $this->db->select("u.vSocialLoginId AS u_social_login_id");
             $this->db->select("u.ePushNotify AS u_push_notify");
+            //$this->db->select("ms.vState AS ms_state");
+            $this->db->select("u.eOneTimeTransaction AS e_one_time_transaction");
+            $this->db->select("u.tOneTimeTransaction AS t_one_time_transaction");
             $this->db->select("u.vTermsConditionsVersion AS u_terms_conditions_version");
             $this->db->select("u.vPrivacyPolicyVersion AS u_privacy_policy_version");
             $this->db->select("u.eLogStatus AS u_log_status_updated");
+            $this->db->select("u.iGuestUserId AS u_guest_user_id");
+            $this->db->select("u.eGuestUser AS u_is_guest_user");
             if (isset($insert_id) && $insert_id != "") {
                 $this->db->where("u.iUserId =", $insert_id);
             }
@@ -1942,6 +1943,8 @@ class Users_guest_model extends CI_Model
             }
             $this->db->set("vTermsConditionsVersion", $params_arr["_vtermsconditionsversion"]);
             $this->db->set("vPrivacyPolicyVersion", $params_arr["_vprivacypolicyversion"]);
+            $this->db->set("eGuestUser", $params_arr["is_guest_user"]);
+
             $res = $this->db->update("users");
 
             $affected_rows = $this->db->affected_rows();

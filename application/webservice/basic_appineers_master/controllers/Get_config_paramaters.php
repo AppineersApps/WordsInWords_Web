@@ -70,19 +70,14 @@ class Get_config_paramaters extends Cit_Controller
      * @param bool $inner_api inner_api flag is used to idetify whether it is inner api request or general request.
      * @return array $output_response returns output response of API.
      */
-    public function start_get_config_paramaters($request_arr = array(), $inner_api = FALSE)
+    public function start_get_config_paramaters($request_arr = array(), $inner_api = false)
     {
-        try
-        {
+        try {
             $validation_res = $this->rules_get_config_paramaters($request_arr);
-            if ($validation_res["success"] == "-5")
-            {
-                if ($inner_api === TRUE)
-                {
+            if ($validation_res["success"] == "-5") {
+                if ($inner_api === true) {
                     return $validation_res;
-                }
-                else
-                {
+                } else {
                     $this->wsresponse->sendValidationResponse($validation_res);
                 }
             }
@@ -94,9 +89,7 @@ class Get_config_paramaters extends Cit_Controller
 
             $output_response = $this->finish_success($input_params);
             return $output_response;
-        }
-        catch(Exception $e)
-        {
+        } catch (Exception $e) {
             $message = $e->getMessage();
         }
         return $output_response;
@@ -111,12 +104,9 @@ class Get_config_paramaters extends Cit_Controller
      */
     public function get_config_params($input_params = array())
     {
-        if (!method_exists($this, "returnConfigParams"))
-        {
+        if (!method_exists($this, "returnConfigParams")) {
             $result_arr["data"] = array();
-        }
-        else
-        {
+        } else {
             $result_arr["data"] = $this->returnConfigParams($input_params);
         }
         $format_arr = $result_arr;
@@ -137,7 +127,6 @@ class Get_config_paramaters extends Cit_Controller
      */
     public function finish_success($input_params = array())
     {
-
         $setting_fields = array(
             "success" => "1",
             "message" => "finish_success",
@@ -150,7 +139,20 @@ class Get_config_paramaters extends Cit_Controller
             'version_check_message',
             'privacy_policy_updated',
             'terms_conditions_updated',
-            'log_status_updated'
+            'log_status_updated',
+            'is_subscribed',
+            'expiry_date',
+            'ios_app_id',
+            'ios_banner_id',
+            'ios_interstitial_id',
+            'ios_native_id',
+            'ios_rewarded_id',
+            'android_app_id',
+            'android_banner_id',
+            'android_interstitial_id',
+            'android_native_id',
+            'android_rewarded_id',
+            'project_debug_level'
         );
         $output_keys = array(
             'get_config_params',

@@ -12,9 +12,9 @@ defined('BASEPATH') || exit('No direct script access allowed');
  *
  * @module User User guest connect
  *
- * @class User_guest_connect.php
+ * @class Connect_guest_user.php
  *
- * @path application\webservice\basic_appineers_master\controllers\User_guest_connect.php
+ * @path application\webservice\basic_appineers_master\controllers\Connect_guest_user.php
  *
  * @version 4.4
  *
@@ -23,7 +23,7 @@ defined('BASEPATH') || exit('No direct script access allowed');
  * @since 12.02.2020
  */
 
-class User_guest_connect extends Cit_Controller
+class Connect_guest_user extends Cit_Controller
 {
     public $settings_params;
     public $output_params;
@@ -56,13 +56,13 @@ class User_guest_connect extends Cit_Controller
     }
 
     /**
-     * rules_user_guest_connect method is used to validate api input params.
+     * rules_connect_guest_user method is used to validate api input params.
      * @created priyanka chillakuru | 12.09.2019
      * @modified priyanka chillakuru | 12.02.2020
      * @param array $request_arr request_arr array is used for api input.
      * @return array $valid_res returns output response of API.
      */
-    public function rules_user_guest_connect($request_arr = array())
+    public function rules_connect_guest_user($request_arr = array())
     {
         $valid_arr = array(
             "first_name" => array(
@@ -176,23 +176,23 @@ class User_guest_connect extends Cit_Controller
                 )
             )
         );
-        $valid_res = $this->wsresponse->validateInputParams($valid_arr, $request_arr, "user_guest_connect");
+        $valid_res = $this->wsresponse->validateInputParams($valid_arr, $request_arr, "connect_guest_user");
 
         return $valid_res;
     }
 
     /**
-     * start_user_guest_connect method is used to initiate api execution flow.
+     * start_connect_guest_user method is used to initiate api execution flow.
      * @created priyanka chillakuru | 12.09.2019
      * @modified priyanka chillakuru | 12.02.2020
      * @param array $request_arr request_arr array is used for api input.
      * @param bool $inner_api inner_api flag is used to idetify whether it is inner api request or general request.
      * @return array $output_response returns output response of API.
      */
-    public function start_user_guest_connect($request_arr = array(), $inner_api = false)
+    public function start_connect_guest_user($request_arr = array(), $inner_api = false)
     {
         try {
-            $validation_res = $this->rules_user_guest_connect($request_arr);
+            $validation_res = $this->rules_connect_guest_user($request_arr);
             if ($validation_res["success"] == "-5") {
                 if ($inner_api === true) {
                     return $validation_res;
@@ -444,6 +444,7 @@ class User_guest_connect extends Cit_Controller
             if (method_exists($this, "getPrivacyPolicyVersion")) {
                 $params_arr["_vprivacypolicyversion"] = $this->getPrivacyPolicyVersion($params_arr["_vprivacypolicyversion"], $input_params);
             }
+            $params_arr["is_guest_user"] = "No";
             $this->block_result = $this->users_guest_model->connect_guest_user($params_arr, $where_arr);
             if (!$this->block_result["success"]) {
                 throw new Exception("updation failed.");
@@ -451,7 +452,7 @@ class User_guest_connect extends Cit_Controller
             $data_arr = $this->block_result["array"];
             $upload_path = $this->config->item("upload_path");
             if (!empty($images_arr["user_profile"]["name"])) {
-                $folder_name = " words_n_Words/user_profile";
+                $folder_name = "words_n_Words/user_profile";
                 
                 $temp_file = $_FILES["user_profile"]["tmp_name"];
                 $res = $this->general->uploadAWSData($temp_file, $folder_name, $images_arr["user_profile"]["name"]);
@@ -509,8 +510,8 @@ class User_guest_connect extends Cit_Controller
     {
         $this->block_result = array();
         try {
-            $insert_id = isset($input_params["insert_id"]) ? $input_params["insert_id"] : "";
-            $this->block_result = $this->users_model->get_user_details($insert_id);
+            $insert_id = isset($input_params["user_id"]) ? $input_params["user_id"] : "";
+            $this->block_result = $this->users_guest_model->get_user_details_v1($insert_id);
             if (!$this->block_result["success"]) {
                 throw new Exception("No records found.");
             }
@@ -541,7 +542,7 @@ class User_guest_connect extends Cit_Controller
         }
         $input_params["get_user_details"] = $this->block_result["data"];
         $input_params = $this->wsresponse->assignSingleRecord($input_params, $this->block_result["data"]);
-
+        
         return $input_params;
     }
 
@@ -604,13 +605,89 @@ class User_guest_connect extends Cit_Controller
             "success" => "1",
             "message" => "users_finish_success",
         );
-        $output_fields = array();
+
+        $output_fields = array(
+            'u_user_id',
+            'u_first_name',
+            'u_last_name',
+            'u_user_name',
+            'u_email',
+            'u_mobile_no',
+            'u_profile_image',
+            'u_dob',
+            'u_address',
+            'u_city',
+            'u_latitude',
+            'u_longitude',
+            'u_state_id',
+            'u_state_name',
+            'u_zip_code',
+            'u_email_verified',
+            'u_device_type',
+            'u_device_model',
+            'u_device_os',
+            'u_device_token',
+            'u_status',
+            'u_added_at',
+            'u_updated_at',
+            'u_social_login_type',
+            'u_social_login_id',
+            'u_push_notify',
+            'e_one_time_transaction',
+            't_one_time_transaction',
+            'u_terms_conditions_version',
+            'u_privacy_policy_version',
+            'u_log_status_updated',
+            'u_guest_user_id',
+            'u_is_guest_user'
+        );
+        $output_keys = array(
+            'get_user_details',
+        );
+        $ouput_aliases = array(
+            "get_user_details" => "get_user_details",
+            "u_user_id" => "user_id",
+            "u_first_name" => "first_name",
+            "u_last_name" => "last_name",
+            "u_user_name" => "user_name",
+            "u_email" => "email",
+            "u_mobile_no" => "mobile_no",
+            "u_profile_image" => "profile_image",
+            "u_dob" => "dob",
+            "u_address" => "address",
+            "u_city" => "city",
+            "u_latitude" => "latitude",
+            "u_longitude" => "longitude",
+            "u_state_id" => "state_id",
+            "u_state_name" => "state_name",
+            "u_zip_code" => "zip_code",
+            "u_email_verified" => "email_verified",
+            "u_device_type" => "device_type",
+            "u_device_model" => "device_model",
+            "u_device_os" => "device_os",
+            "u_device_token" => "device_token",
+            "u_status" => "status",
+            "u_added_at" => "added_at",
+            "u_updated_at" => "updated_at",
+            "u_social_login_type" => "social_login_type",
+            "u_social_login_id" => "social_login_id",
+            "u_push_notify" => "push_notify",
+            "e_one_time_transaction" => "purchase_status",
+            "t_one_time_transaction" => "purchase_receipt_data",
+            "u_terms_conditions_version" => "terms_conditions_version",
+            "u_privacy_policy_version" => "privacy_policy_version",
+            "u_log_status_updated" => "log_status_updated",
+            "u_guest_user_id" => "guest_user_id",
+            "u_is_guest_user" => "is_guest_user",
+        );
 
         $output_array["settings"] = $setting_fields;
         $output_array["settings"]["fields"] = $output_fields;
         $output_array["data"] = $input_params;
 
-        $func_array["function"]["name"] = "user_guest_connect";
+        $func_array["function"]["name"] = "connect_guest_user";
+        $func_array["function"]["output_keys"] = $output_keys;
+        $func_array["function"]["output_alias"] = $ouput_aliases;
         $func_array["function"]["single_keys"] = $this->single_keys;
         $func_array["function"]["multiple_keys"] = $this->multiple_keys;
 
@@ -640,7 +717,7 @@ class User_guest_connect extends Cit_Controller
         $output_array["settings"]["fields"] = $output_fields;
         $output_array["data"] = $input_params;
 
-        $func_array["function"]["name"] = "user_guest_connect";
+        $func_array["function"]["name"] = "connect_guest_user";
         $func_array["function"]["single_keys"] = $this->single_keys;
         $func_array["function"]["multiple_keys"] = $this->multiple_keys;
 
@@ -670,7 +747,7 @@ class User_guest_connect extends Cit_Controller
         $output_array["settings"]["fields"] = $output_fields;
         $output_array["data"] = $input_params;
 
-        $func_array["function"]["name"] = "user_guest_connect";
+        $func_array["function"]["name"] = "connect_guest_user";
         $func_array["function"]["single_keys"] = $this->single_keys;
         $func_array["function"]["multiple_keys"] = $this->multiple_keys;
 

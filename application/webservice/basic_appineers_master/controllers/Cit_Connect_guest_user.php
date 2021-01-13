@@ -6,9 +6,9 @@
  * 
  * @module Extended User Sign Up Email
  * 
- * @class Cit_User_guest_connect.php
+ * @class Cit_Connect_guest_user.php
  * 
- * @path application\webservice\basic_appineers_master\controllers\Cit_User_guest_connect.php
+ * @path application\webservice\basic_appineers_master\controllers\Cit_Connect_guest_user.php
  * 
  * @author CIT Dev Team
  * 
@@ -19,7 +19,7 @@ if (!defined('BASEPATH')) {
     exit('No direct script access allowed');
 }
  
-Class Cit_User_guest_connect extends User_guest_connect {
+Class Cit_Connect_guest_user extends Connect_guest_user {
         public function __construct()
 {
     parent::__construct();

@@ -603,8 +603,8 @@ $config["purchase_coin"] = array(
     "target" => ""
 );
 
-$config["user_guest_connect"] = array(
-    "title" => "User guest connect",
+$config["connect_guest_user"] = array(
+    "title" => "Connect guest user",
     "folder" => "basic_appineers_master",
     "method" => "GET_POST",
     "params" => array(
