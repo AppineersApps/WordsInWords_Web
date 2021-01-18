@@ -124,24 +124,36 @@ class Sync_level_round extends Cit_Controller
             $wordCoinInfo = [];
             $newKey = 0;
             $newUpKey=0;
-            foreach ($this->block_result0['data'] as $configKey => $configValue) {
-                foreach ($this->block_result['data'] as $activityKey => $activityValue) {
-                    if ($configValue['iGameLevelId'] == $activityValue['iLevelId']) {
-                        $gameLevelInfo[$newKey]['level_id'] = $activityValue["iLevelId"];
-                        $gameLevelInfo[$newKey]['level_name'] = $configValue["vLevelName"];
-                        $gameLevelInfo[$newKey]['round_id'] = $activityValue["iRoundId"];
-                        $gameLevelInfo[$newKey]['gain_coin'] = $activityValue["iCreditCoin"];
-                        $gameLevelInfo[$newKey]['loss_coin'] = $activityValue["iDebitCoin"];
-                        $gameLevelInfo[$newKey]['unlock_status'] = $activityValue["iUnlockStatus"];
-                        ++$newKey;
-                    } else {
-                        $gameLevelInfo[$newKey]['level_name'] = $configValue["vLevelName"];
-                        $gameLevelInfo[$newKey]['level_id'] = $configValue["iGameLevelId"];
-                        $gameLevelInfo[$newKey]['round_id'] = 0;
-                        $gameLevelInfo[$newKey]['gain_coin'] = 0;
-                        $gameLevelInfo[$newKey]['loss_coin'] = 0;
-                        $gameLevelInfo[$newKey]['unlock_status'] = (bool)0;
-                        ++$newKey;
+            if (empty($this->block_result['data'])) {
+                foreach ($this->block_result0['data'] as $configKey => $configValue) {
+                    $gameLevelInfo[$newKey]['level_name'] = $configValue["vLevelName"];
+                    $gameLevelInfo[$newKey]['level_id'] = $configValue["iGameLevelId"];
+                    $gameLevelInfo[$newKey]['round_id'] = 0;
+                    $gameLevelInfo[$newKey]['gain_coin'] = 0;
+                    $gameLevelInfo[$newKey]['loss_coin'] = 0;
+                    $gameLevelInfo[$newKey]['unlock_status'] = (bool)0;
+                    ++$newKey;
+                }
+            } else {
+                foreach ($this->block_result0['data'] as $configKey => $configValue) {
+                    foreach ($this->block_result['data'] as $activityKey => $activityValue) {
+                        if ($configValue['iGameLevelId'] == $activityValue['iLevelId']) {
+                            $gameLevelInfo[$newKey]['level_id'] = $activityValue["iLevelId"];
+                            $gameLevelInfo[$newKey]['level_name'] = $configValue["vLevelName"];
+                            $gameLevelInfo[$newKey]['round_id'] = $activityValue["iRoundId"];
+                            $gameLevelInfo[$newKey]['gain_coin'] = $activityValue["iCreditCoin"];
+                            $gameLevelInfo[$newKey]['loss_coin'] = $activityValue["iDebitCoin"];
+                            $gameLevelInfo[$newKey]['unlock_status'] = $activityValue["iUnlockStatus"];
+                            ++$newKey;
+                        } else {
+                            $gameLevelInfo[$newKey]['level_name'] = $configValue["vLevelName"];
+                            $gameLevelInfo[$newKey]['level_id'] = $configValue["iGameLevelId"];
+                            $gameLevelInfo[$newKey]['round_id'] = 0;
+                            $gameLevelInfo[$newKey]['gain_coin'] = 0;
+                            $gameLevelInfo[$newKey]['loss_coin'] = 0;
+                            $gameLevelInfo[$newKey]['unlock_status'] = (bool)0;
+                            ++$newKey;
+                        }
                     }
                 }
             }

@@ -572,13 +572,7 @@ $config["sync_level_round"] = array(
     "folder" => "player_activity",
     "method" => $_SERVER['REQUEST_METHOD'],
     "params" => array(
-        "user_access_token",
-        "activity_id",
-        "level_id",
-        "round_id",
-        "credit_coin",
-        "debit_coin",
-        "unlock_status"
+        "user_access_token"
     ),
     "token" => "",
     "payload" => array(
