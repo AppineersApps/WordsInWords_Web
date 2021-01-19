@@ -709,6 +709,7 @@ class Game_level extends Cit_Controller
             $params_arr = $this->_request_params();
             $glm_level_name = $params_arr["glm_level_name"];
             $glm_description = $params_arr["glm_description"];
+            $glm_min_word_length = $params_arr["glm_min_word_length"];
             $glm_max_word_length = $params_arr["glm_max_word_length"];
             $glm_max_round = $params_arr["glm_max_round"];
             $glm_round_to_unlock = $params_arr["glm_round_to_unlock"];
@@ -730,6 +731,7 @@ class Game_level extends Cit_Controller
             $data = $save_data_arr = $file_data = array();
             $data["vLevelName"] = $glm_level_name;
             $data["tDescription"] = $glm_description;
+            $data["iMinWordLength"] = $glm_min_word_length;
             $data["iMaxWordLength"] = $glm_max_word_length;
             $data["iMaxRound"] = $glm_max_round;
             $data["iRoundToUnlock"] = $glm_round_to_unlock;
@@ -739,6 +741,7 @@ class Game_level extends Cit_Controller
 
             $save_data_arr["glm_level_name"] = $data["vLevelName"];
             $save_data_arr["glm_description"] = $data["tDescription"];
+            $save_data_arr["glm_min_word_length"] = $data["iMinWordLength"];
             $save_data_arr["glm_max_word_length"] = $data["iMaxWordLength"];
             $save_data_arr["glm_max_round"] = $data["iMaxRound"];
             $save_data_arr["glm_round_to_unlock"] = $data["iRoundToUnlock"];

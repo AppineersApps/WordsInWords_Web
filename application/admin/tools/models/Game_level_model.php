@@ -73,10 +73,12 @@ class Game_level_model extends CI_Model
         $this->grid_fields = array(
             "glm_level_name",
             "glm_description",
+            "glm_min_word_length",
             "glm_max_word_length",
             "glm_max_round",
             "glm_round_to_unlock",
             "glm_status",
+            "sys_custom_field_1"
         );
         $this->join_tables = array();
         $this->extra_cond = "";
@@ -84,8 +86,8 @@ class Game_level_model extends CI_Model
         $this->having_cond = "";
         $this->orderby_cond = array(
             array(
-                "field" => "glm.dtAddedAt",
-                "order" => "DESC",
+                "field" => "glm.iGameLevelId",
+                "order" => "ASC",
             )
         );
         $this->unique_type = "AND";
@@ -129,64 +131,41 @@ class Game_level_model extends CI_Model
      */
     public function update($data = array(), $where = '', $alias = "No", $join = "No")
     {
-        if ($alias == "Yes")
-        {
-            if ($join == "Yes")
-            {
+        if ($alias == "Yes") {
+            if ($join == "Yes") {
                 $join_tbls = $this->addJoinTables("NR");
             }
-            if (trim($join_tbls) != '')
-            {
+            if (trim($join_tbls) != '') {
                 $set_cond = array();
-                foreach ($data as $key => $val)
-                {
+                foreach ($data as $key => $val) {
                     $set_cond[] = $this->db->protect($key)." = ".$this->db->escape($val);
                 }
-                if (is_numeric($where))
-                {
+                if (is_numeric($where)) {
                     $extra_cond = " WHERE ".$this->db->protect($this->table_alias.".".$this->primary_key)." = ".$this->db->escape($where);
-                }
-                elseif ($where)
-                {
+                } elseif ($where) {
                     $extra_cond = " WHERE ".$where;
-                }
-                else
-                {
-                    return FALSE;
+                } else {
+                    return false;
                 }
                 $update_query = "UPDATE ".$this->db->protect($this->table_name)." AS ".$this->db->protect($this->table_alias)." ".$join_tbls." SET ".implode(", ", $set_cond)." ".$extra_cond;
                 $res = $this->db->query($update_query);
-            }
-            else
-            {
-                if (is_numeric($where))
-                {
+            } else {
+                if (is_numeric($where)) {
                     $this->db->where($this->table_alias.".".$this->primary_key, $where);
-                }
-                elseif ($where)
-                {
-                    $this->db->where($where, FALSE, FALSE);
-                }
-                else
-                {
-                    return FALSE;
+                } elseif ($where) {
+                    $this->db->where($where, false, false);
+                } else {
+                    return false;
                 }
                 $res = $this->db->update($this->table_name." AS ".$this->table_alias, $data);
             }
-        }
-        else
-        {
-            if (is_numeric($where))
-            {
+        } else {
+            if (is_numeric($where)) {
                 $this->db->where($this->primary_key, $where);
-            }
-            elseif ($where)
-            {
-                $this->db->where($where, FALSE, FALSE);
-            }
-            else
-            {
-                return FALSE;
+            } elseif ($where) {
+                $this->db->where($where, false, false);
+            } else {
+                return false;
             }
             $res = $this->db->update($this->table_name, $data);
         }
@@ -202,125 +181,79 @@ class Game_level_model extends CI_Model
      */
     public function delete($where = "", $alias = "No", $join = "No")
     {
-        if ($this->config->item('PHYSICAL_RECORD_DELETE') && $this->physical_data_remove == 'No')
-        {
-            if ($alias == "Yes")
-            {
-                if (is_array($join['joins']) && count($join['joins']))
-                {
+        if ($this->config->item('PHYSICAL_RECORD_DELETE') && $this->physical_data_remove == 'No') {
+            if ($alias == "Yes") {
+                if (is_array($join['joins']) && count($join['joins'])) {
                     $join_tbls = '';
-                    if ($join['list'] == "Yes")
-                    {
+                    if ($join['list'] == "Yes") {
                         $join_tbls = $this->addJoinTables("NR");
                     }
                     $join_tbls .= ' '.$this->listing->addJoinTables($join['joins'], "NR");
-                }
-                elseif ($join == "Yes")
-                {
+                } elseif ($join == "Yes") {
                     $join_tbls = $this->addJoinTables("NR");
                 }
                 $data = $this->general->getPhysicalRecordUpdate($this->table_alias);
-                if (trim($join_tbls) != '')
-                {
+                if (trim($join_tbls) != '') {
                     $set_cond = array();
-                    foreach ($data as $key => $val)
-                    {
+                    foreach ($data as $key => $val) {
                         $set_cond[] = $this->db->protect($key)." = ".$this->db->escape($val);
                     }
-                    if (is_numeric($where))
-                    {
+                    if (is_numeric($where)) {
                         $extra_cond = " WHERE ".$this->db->protect($this->table_alias.".".$this->primary_key)." = ".$this->db->escape($where);
-                    }
-                    elseif ($where)
-                    {
+                    } elseif ($where) {
                         $extra_cond = " WHERE ".$where;
-                    }
-                    else
-                    {
-                        return FALSE;
+                    } else {
+                        return false;
                     }
                     $update_query = "UPDATE ".$this->db->protect($this->table_name)." AS ".$this->db->protect($this->table_alias)." ".$join_tbls." SET ".implode(", ", $set_cond)." ".$extra_cond;
                     $res = $this->db->query($update_query);
-                }
-                else
-                {
-                    if (is_numeric($where))
-                    {
+                } else {
+                    if (is_numeric($where)) {
                         $this->db->where($this->table_alias.".".$this->primary_key, $where);
-                    }
-                    elseif ($where)
-                    {
-                        $this->db->where($where, FALSE, FALSE);
-                    }
-                    else
-                    {
-                        return FALSE;
+                    } elseif ($where) {
+                        $this->db->where($where, false, false);
+                    } else {
+                        return false;
                     }
                     $res = $this->db->update($this->table_name." AS ".$this->table_alias, $data);
                 }
-            }
-            else
-            {
-                if (is_numeric($where))
-                {
+            } else {
+                if (is_numeric($where)) {
                     $this->db->where($this->primary_key, $where);
-                }
-                elseif ($where)
-                {
-                    $this->db->where($where, FALSE, FALSE);
-                }
-                else
-                {
-                    return FALSE;
+                } elseif ($where) {
+                    $this->db->where($where, false, false);
+                } else {
+                    return false;
                 }
                 $data = $this->general->getPhysicalRecordUpdate();
                 $res = $this->db->update($this->table_name, $data);
             }
-        }
-        else
-        {
-            if ($alias == "Yes")
-            {
+        } else {
+            if ($alias == "Yes") {
                 $del_query = "DELETE ".$this->db->protect($this->table_alias).".* FROM ".$this->db->protect($this->table_name)." AS ".$this->db->protect($this->table_alias);
-                if (is_array($join['joins']) && count($join['joins']))
-                {
-                    if ($join['list'] == "Yes")
-                    {
+                if (is_array($join['joins']) && count($join['joins'])) {
+                    if ($join['list'] == "Yes") {
                         $del_query .= $this->addJoinTables("NR");
                     }
                     $del_query .= ' '.$this->listing->addJoinTables($join['joins'], "NR");
-                }
-                elseif ($join == "Yes")
-                {
+                } elseif ($join == "Yes") {
                     $del_query .= $this->addJoinTables("NR");
                 }
-                if (is_numeric($where))
-                {
+                if (is_numeric($where)) {
                     $del_query .= " WHERE ".$this->db->protect($this->table_alias).".".$this->db->protect($this->primary_key)." = ".$this->db->escape($where);
-                }
-                elseif ($where)
-                {
+                } elseif ($where) {
                     $del_query .= " WHERE ".$where;
-                }
-                else
-                {
-                    return FALSE;
+                } else {
+                    return false;
                 }
                 $res = $this->db->query($del_query);
-            }
-            else
-            {
-                if (is_numeric($where))
-                {
+            } else {
+                if (is_numeric($where)) {
                     $this->db->where($this->primary_key, $where);
-                }
-                elseif ($where)
-                {
-                    $this->db->where($where, FALSE, FALSE);
-                }
-                else
-                {
-                    return FALSE;
+                } elseif ($where) {
+                    $this->db->where($where, false, false);
+                } else {
+                    return false;
                 }
                 $res = $this->db->delete($this->table_name);
             }
@@ -340,36 +273,31 @@ class Game_level_model extends CI_Model
      * @param boolean $list list is to differ listing fields or form fields.
      * @return array $data_arr returns data records array.
      */
-    public function getData($extra_cond = "", $fields = "", $order_by = "", $group_by = "", $limit = "", $join = "No", $having_cond = '', $list = FALSE)
+    public function getData($extra_cond = "", $fields = "", $order_by = "", $group_by = "", $limit = "", $join = "No", $having_cond = '', $list = false)
     {
-        if (is_array($fields))
-        {
+        if (is_array($fields)) {
             $this->listing->addSelectFields($fields);
-        }
-        elseif ($fields != "")
-        {
+        } elseif ($fields != "") {
             $this->db->select($fields);
-        }
-        elseif ($list == TRUE)
-        {
+        } elseif ($list == true) {
             $this->db->select($this->table_alias.".".$this->primary_key." AS ".$this->primary_key);
-            if ($this->primary_alias != "")
-            {
+            if ($this->primary_alias != "") {
                 $this->db->select($this->table_alias.".".$this->primary_key." AS ".$this->primary_alias);
             }
             $this->db->select("glm.vLevelName AS glm_level_name");
             $this->db->select("glm.tDescription AS glm_description");
+            $this->db->select("glm.iMinWordLength AS glm_min_word_length");
             $this->db->select("glm.iMaxWordLength AS glm_max_word_length");
             $this->db->select("glm.iMaxRound AS glm_max_round");
             $this->db->select("glm.iRoundToUnlock AS glm_round_to_unlock");
             $this->db->select("glm.eStatus AS glm_status");
-        }
-        else
-        {
+            $this->db->select("('view') AS sys_custom_field_1", FALSE);
+        } else {
             $this->db->select("glm.iGameLevelId AS iGameLevelId");
             $this->db->select("glm.iGameLevelId AS glm_game_level_id");
             $this->db->select("glm.vLevelName AS glm_level_name");
             $this->db->select("glm.tDescription AS glm_description");
+            $this->db->select("glm.iMinWordLength AS glm_min_word_length");
             $this->db->select("glm.iMaxWordLength AS glm_max_word_length");
             $this->db->select("glm.iMaxRound AS glm_max_round");
             $this->db->select("glm.iRoundToUnlock AS glm_round_to_unlock");
@@ -379,48 +307,31 @@ class Game_level_model extends CI_Model
         }
 
         $this->db->from($this->table_name." AS ".$this->table_alias);
-        if (is_array($join) && is_array($join['joins']) && count($join['joins']) > 0)
-        {
+        if (is_array($join) && is_array($join['joins']) && count($join['joins']) > 0) {
             $this->listing->addJoinTables($join['joins']);
+        } else {
         }
-        else
-        {
-
-
-        }
-        if (is_array($extra_cond) && count($extra_cond) > 0)
-        {
+        if (is_array($extra_cond) && count($extra_cond) > 0) {
             $this->listing->addWhereFields($extra_cond);
-        }
-        elseif (is_numeric($extra_cond))
-        {
+        } elseif (is_numeric($extra_cond)) {
             $this->db->where($this->table_alias.".".$this->primary_key, intval($extra_cond));
-        }
-        elseif ($extra_cond)
-        {
-            $this->db->where($extra_cond, FALSE, FALSE);
+        } elseif ($extra_cond) {
+            $this->db->where($extra_cond, false, false);
         }
         $this->general->getPhysicalRecordWhere($this->table_name, $this->table_alias, "AR");
-        if ($group_by != "")
-        {
+        if ($group_by != "") {
             $this->db->group_by($group_by);
         }
-        if ($having_cond != "")
-        {
-            $this->db->having($having_cond, FALSE, FALSE);
+        if ($having_cond != "") {
+            $this->db->having($having_cond, false, false);
         }
-        if ($order_by != "")
-        {
+        if ($order_by != "") {
             $this->db->order_by($order_by);
         }
-        if ($limit != "")
-        {
-            if (is_numeric($limit))
-            {
+        if ($limit != "") {
+            if (is_numeric($limit)) {
                 $this->db->limit($limit);
-            }
-            else
-            {
+            } else {
                 list($offset, $limit) = explode(",", $limit);
                 $this->db->limit($offset, $limit);
             }
@@ -457,18 +368,15 @@ class Game_level_model extends CI_Model
         $this->db->start_cache();
         $this->db->from($this->table_name." AS ".$this->table_alias);
         $this->addJoinTables("AR");
-        if ($extra_cond != "")
-        {
-            $this->db->where($extra_cond, FALSE, FALSE);
+        if ($extra_cond != "") {
+            $this->db->where($extra_cond, false, false);
         }
         $this->general->getPhysicalRecordWhere($this->table_name, $this->table_alias, "AR");
-        if (is_array($group_by) && count($group_by) > 0)
-        {
+        if (is_array($group_by) && count($group_by) > 0) {
             $this->db->group_by($group_by);
         }
-        if ($having_cond != "")
-        {
-            $this->db->having($having_cond, FALSE, FALSE);
+        if ($having_cond != "") {
+            $this->db->having($having_cond, false, false);
         }
         $filter_config = array();
         $filter_config['module_config'] = $config_arr['module_config'];
@@ -485,61 +393,49 @@ class Game_level_model extends CI_Model
         $filter_main = $this->filter->applyFilter($filters, $filter_config, "Select");
         $filter_left = $this->filter->applyLeftFilter($filters, $filter_config, "Select");
         $filter_range = $this->filter->applyRangeFilter($filters, $filter_config, "Select");
-        if ($filter_main != "")
-        {
-            $this->db->where("(".$filter_main.")", FALSE, FALSE);
+        if ($filter_main != "") {
+            $this->db->where("(".$filter_main.")", false, false);
         }
-        if ($filter_left != "")
-        {
-            $this->db->where("(".$filter_left.")", FALSE, FALSE);
+        if ($filter_left != "") {
+            $this->db->where("(".$filter_left.")", false, false);
         }
-        if ($filter_range != "")
-        {
-            $this->db->where("(".$filter_range.")", FALSE, FALSE);
+        if ($filter_range != "") {
+            $this->db->where("(".$filter_range.")", false, false);
         }
 
         $this->db->stop_cache();
-        if ((is_array($group_by) && count($group_by) > 0) || trim($having_cond) != "")
-        {
+        if ((is_array($group_by) && count($group_by) > 0) || trim($having_cond) != "") {
             $total_records_arr = $this->db->get();
             $total_records = is_object($total_records_arr) ? $total_records_arr->num_rows() : 0;
-        }
-        else
-        {
+        } else {
             $total_records = $this->db->count_all_results();
         }
         $total_pages = $this->listing->getTotalPages($total_records, $rec_per_page);
 
         $this->db->select($this->table_alias.".".$this->primary_key." AS ".$this->primary_key);
-        if ($this->primary_alias != "")
-        {
+        if ($this->primary_alias != "") {
             $this->db->select($this->table_alias.".".$this->primary_key." AS ".$this->primary_alias);
         }
         $this->db->select("glm.vLevelName AS glm_level_name");
         $this->db->select("glm.tDescription AS glm_description");
+        $this->db->select("glm.iMinWordLength AS glm_min_word_length");
         $this->db->select("glm.iMaxWordLength AS glm_max_word_length");
         $this->db->select("glm.iMaxRound AS glm_max_round");
         $this->db->select("glm.iRoundToUnlock AS glm_round_to_unlock");
         $this->db->select("glm.eStatus AS glm_status");
-        if ($sdef == "Yes")
-        {
-            if (is_array($order_by) && count($order_by) > 0)
-            {
-                foreach ($order_by as $orK => $orV)
-                {
+        $this->db->select("('view') AS sys_custom_field_1", FALSE);
+        if ($sdef == "Yes") {
+            if (is_array($order_by) && count($order_by) > 0) {
+                foreach ($order_by as $orK => $orV) {
                     $sort_filed = $orV['field'];
                     $sort_order = (strtolower($orV['order']) == "desc") ? "DESC" : "ASC";
                     $this->db->order_by($sort_filed, $sort_order);
                 }
-            }
-            else
-            if (!empty($order_by) && is_string($order_by))
-            {
+            } elseif (!empty($order_by) && is_string($order_by)) {
                 $this->db->order_by($order_by);
             }
         }
-        if ($sidx != "")
-        {
+        if ($sidx != "") {
             $this->listing->addGridOrderBy($sidx, $sord, $config_arr['list_config']);
         }
         $limit_offset = $this->listing->getStartIndex($total_records, $page, $rec_per_page);
@@ -579,22 +475,18 @@ class Game_level_model extends CI_Model
 
         $this->db->from($this->table_name." AS ".$this->table_alias);
         $this->addJoinTables("AR");
-        if (is_array($id) && count($id) > 0)
-        {
+        if (is_array($id) && count($id) > 0) {
             $this->db->where_in($this->table_alias.".".$this->primary_key, $id);
         }
-        if ($extra_cond != "")
-        {
-            $this->db->where($extra_cond, FALSE, FALSE);
+        if ($extra_cond != "") {
+            $this->db->where($extra_cond, false, false);
         }
         $this->general->getPhysicalRecordWhere($this->table_name, $this->table_alias, "AR");
-        if (is_array($group_by) && count($group_by) > 0)
-        {
+        if (is_array($group_by) && count($group_by) > 0) {
             $this->db->group_by($group_by);
         }
-        if ($having_cond != "")
-        {
-            $this->db->having($having_cond, FALSE, FALSE);
+        if ($having_cond != "") {
+            $this->db->having($having_cond, false, false);
         }
         $filter_config = array();
         $filter_config['module_config'] = $config_arr['module_config'];
@@ -610,53 +502,43 @@ class Game_level_model extends CI_Model
         $filter_main = $this->filter->applyFilter($filters, $filter_config, "Select");
         $filter_left = $this->filter->applyLeftFilter($filters, $filter_config, "Select");
         $filter_range = $this->filter->applyRangeFilter($filters, $filter_config, "Select");
-        if ($filter_main != "")
-        {
-            $this->db->where("(".$filter_main.")", FALSE, FALSE);
+        if ($filter_main != "") {
+            $this->db->where("(".$filter_main.")", false, false);
         }
-        if ($filter_left != "")
-        {
-            $this->db->where("(".$filter_left.")", FALSE, FALSE);
+        if ($filter_left != "") {
+            $this->db->where("(".$filter_left.")", false, false);
         }
-        if ($filter_range != "")
-        {
-            $this->db->where("(".$filter_range.")", FALSE, FALSE);
+        if ($filter_range != "") {
+            $this->db->where("(".$filter_range.")", false, false);
         }
 
         $this->db->select($this->table_alias.".".$this->primary_key." AS ".$this->primary_key);
-        if ($this->primary_alias != "")
-        {
+        if ($this->primary_alias != "") {
             $this->db->select($this->table_alias.".".$this->primary_key." AS ".$this->primary_alias);
         }
         $this->db->select("glm.vLevelName AS glm_level_name");
         $this->db->select("glm.tDescription AS glm_description");
+        $this->db->select("glm.iMinWordLength AS glm_min_word_length");
         $this->db->select("glm.iMaxWordLength AS glm_max_word_length");
         $this->db->select("glm.iMaxRound AS glm_max_round");
         $this->db->select("glm.iRoundToUnlock AS glm_round_to_unlock");
         $this->db->select("glm.eStatus AS glm_status");
-        if ($sdef == "Yes")
-        {
-            if (is_array($order_by) && count($order_by) > 0)
-            {
-                foreach ($order_by as $orK => $orV)
-                {
+        $this->db->select("('view') AS sys_custom_field_1", FALSE);
+        if ($sdef == "Yes") {
+            if (is_array($order_by) && count($order_by) > 0) {
+                foreach ($order_by as $orK => $orV) {
                     $sort_filed = $orV['field'];
                     $sort_order = (strtolower($orV['order']) == "desc") ? "DESC" : "ASC";
                     $this->db->order_by($sort_filed, $sort_order);
                 }
-            }
-            else
-            if (!empty($order_by) && is_string($order_by))
-            {
+            } elseif (!empty($order_by) && is_string($order_by)) {
                 $this->db->order_by($order_by);
             }
         }
-        if ($sidx != "")
-        {
+        if ($sidx != "") {
             $this->listing->addGridOrderBy($sidx, $sord, $config_arr['list_config']);
         }
-        if ($rowlimit != "")
-        {
+        if ($rowlimit != "") {
             $offset = $rowlimit;
             $limit = ($rowlimit*$page-$rowlimit);
             $this->db->limit($offset, $limit);
@@ -673,11 +555,10 @@ class Game_level_model extends CI_Model
      * @param boolean $allow_tables allow_table is to restrict some set of tables.
      * @return string $ret_joins returns relation tables join string.
      */
-    public function addJoinTables($type = 'AR', $allow_tables = FALSE)
+    public function addJoinTables($type = 'AR', $allow_tables = false)
     {
         $join_tables = $this->join_tables;
-        if (!is_array($join_tables) || count($join_tables) == 0)
-        {
+        if (!is_array($join_tables) || count($join_tables) == 0) {
             return '';
         }
         $ret_joins = $this->listing->addJoinTables($join_tables, $type, $allow_tables);
@@ -730,6 +611,29 @@ class Game_level_model extends CI_Model
                 "label" => "Time Duration",
                 "lang_code" => "GAME_LEVEL_DESCRIPTION",
                 "label_lang" => $this->lang->line('GAME_LEVEL_DESCRIPTION'),
+                "width" => 50,
+                "search" => "Yes",
+                "export" => "Yes",
+                "sortable" => "Yes",
+                "addable" => "No",
+                "editable" => "No",
+                "viewedit" => "No",
+            ),
+            "glm_min_word_length" => array(
+                "name" => "glm_min_word_length",
+                "table_name" => "game_level_master",
+                "table_alias" => "glm",
+                "field_name" => "iMaxWordLength",
+                "source_field" => "glm_min_word_length",
+                "display_query" => "glm.iMinWordLength",
+                "entry_type" => "Table",
+                "data_type" => "enum",
+                "show_in" => "Both",
+                "type" => "dropdown",
+                "align" => "center",
+                "label" => "Min Word Length",
+                "lang_code" => "GAME_LEVEL_MAX_WORD_LENGTH",
+                "label_lang" => $this->lang->line('GAME_LEVEL_MAX_WORD_LENGTH'),
                 "width" => 50,
                 "search" => "Yes",
                 "export" => "Yes",
@@ -829,27 +733,47 @@ class Game_level_model extends CI_Model
                 "addable" => "No",
                 "editable" => "No",
                 "viewedit" => "No",
-                "default" => $this->filter->getDefaultValue("glm_status",
-                "Text",
-                "Active")
+                "default" => $this->filter->getDefaultValue(
+                    "glm_status",
+                    "Text",
+                    "Active"
+                )
+            ),
+            "sys_custom_field_1" => array(
+                "name" => "sys_custom_field_1",
+                "table_name" => "",
+                "table_alias" => "",
+                "field_name" => "",
+                "source_field" => "",
+                "display_query" => "view",
+                "entry_type" => "Custom",
+                "data_type" => "",
+                "show_in" => "Both",
+                "type" => "textbox",
+                "align" => "center",
+                "label" => "Edit",
+                "lang_code" => "GAME_LEVEL_EDIT",
+                "label_lang" => $this->lang->line('GAME_LEVEL_EDIT'),
+                "width" => 50,
+                "search" => "No",
+                "export" => "No",
+                "sortable" => "Yes",
+                "addable" => "No",
+                "editable" => "No",
+                "viewedit" => "No",
+                "php_func" => "controller::showStatusButton",
             )
         );
 
         $config_arr = array();
-        if (is_array($name) && count($name) > 0)
-        {
+        if (is_array($name) && count($name) > 0) {
             $name_cnt = count($name);
-            for ($i = 0; $i < $name_cnt; $i++)
-            {
+            for ($i = 0; $i < $name_cnt; $i++) {
                 $config_arr[$name[$i]] = $list_config[$name[$i]];
             }
-        }
-        elseif ($name != "" && is_string($name))
-        {
+        } elseif ($name != "" && is_string($name)) {
             $config_arr = $list_config[$name];
-        }
-        else
-        {
+        } else {
             $config_arr = $list_config;
         }
         return $config_arr;
@@ -888,6 +812,19 @@ class Game_level_model extends CI_Model
                 "label" => "Description",
                 "lang_code" => "GAME_LEVEL_DESCRIPTION",
                 "label_lang" => $this->lang->line('GAME_LEVEL_DESCRIPTION')
+            ),
+            "glm_min_word_length" => array(
+                "name" => "glm_min_word_length",
+                "table_name" => "game_level_master",
+                "table_alias" => "glm",
+                "field_name" => "iMinWordLength",
+                "entry_type" => "Table",
+                "data_type" => "enum",
+                "show_input" => "Both",
+                "type" => "dropdown",
+                "label" => "Min Word Length",
+                "lang_code" => "GAME_LEVEL_MIN_WORD_LENGTH",
+                "label_lang" => $this->lang->line('GAME_LEVEL_MIN_WORD_LENGTH')
             ),
             "glm_max_word_length" => array(
                 "name" => "glm_max_word_length",
@@ -940,9 +877,11 @@ class Game_level_model extends CI_Model
                 "label" => "Status",
                 "lang_code" => "GAME_LEVEL_STATUS",
                 "label_lang" => $this->lang->line('GAME_LEVEL_STATUS'),
-                "default" => $this->filter->getDefaultValue("glm_status",
-                "Text",
-                "Active"),
+                "default" => $this->filter->getDefaultValue(
+                    "glm_status",
+                    "Text",
+                    "Active"
+                ),
                 "dfapply" => "addOnly",
             ),
             "glm_added_at" => array(
@@ -957,9 +896,11 @@ class Game_level_model extends CI_Model
                 "label" => "Added At",
                 "lang_code" => "GAME_LEVEL_ADDED_AT",
                 "label_lang" => $this->lang->line('GAME_LEVEL_ADDED_AT'),
-                "default" => $this->filter->getDefaultValue("glm_added_at",
-                "MySQL",
-                "NOW()"),
+                "default" => $this->filter->getDefaultValue(
+                    "glm_added_at",
+                    "MySQL",
+                    "NOW()"
+                ),
                 "dfapply" => "addOnly",
                 "format" => $this->general->getAdminPHPFormats('date_and_time')
             ),
@@ -975,29 +916,25 @@ class Game_level_model extends CI_Model
                 "label" => "Updated At",
                 "lang_code" => "GAME_LEVEL_UPDATED_AT",
                 "label_lang" => $this->lang->line('GAME_LEVEL_UPDATED_AT'),
-                "default" => $this->filter->getDefaultValue("glm_updated_at",
-                "MySQL",
-                "NOW()"),
+                "default" => $this->filter->getDefaultValue(
+                    "glm_updated_at",
+                    "MySQL",
+                    "NOW()"
+                ),
                 "dfapply" => "everyUpdate",
                 "format" => $this->general->getAdminPHPFormats('date_and_time')
             )
         );
 
         $config_arr = array();
-        if (is_array($name) && count($name) > 0)
-        {
+        if (is_array($name) && count($name) > 0) {
             $name_cnt = count($name);
-            for ($i = 0; $i < $name_cnt; $i++)
-            {
+            for ($i = 0; $i < $name_cnt; $i++) {
                 $config_arr[$name[$i]] = $form_config[$name[$i]];
             }
-        }
-        elseif ($name != "" && is_string($name))
-        {
+        } elseif ($name != "" && is_string($name)) {
             $config_arr = $form_config[$name];
-        }
-        else
-        {
+        } else {
             $config_arr = $form_config;
         }
         return $config_arr;
@@ -1014,31 +951,24 @@ class Game_level_model extends CI_Model
      */
     public function checkRecordExists($field_arr = array(), $field_val = array(), $id = '', $mode = '', $con = 'AND')
     {
-        $exists = FALSE;
-        if (!is_array($field_arr) || count($field_arr) == 0)
-        {
+        $exists = false;
+        if (!is_array($field_arr) || count($field_arr) == 0) {
             return $exists;
         }
-        foreach ((array) $field_arr as $key => $val)
-        {
+        foreach ((array) $field_arr as $key => $val) {
             $extra_cond_arr[] = $this->db->protect($this->table_alias.".".$field_arr[$key])." =  ".$this->db->escape(trim($field_val[$val]));
         }
         $extra_cond = "(".implode(" ".$con." ", $extra_cond_arr).")";
-        if ($mode == "Add")
-        {
+        if ($mode == "Add") {
             $data = $this->getData($extra_cond, "COUNT(*) AS tot");
-            if ($data[0]['tot'] > 0)
-            {
-                $exists = TRUE;
+            if ($data[0]['tot'] > 0) {
+                $exists = true;
             }
-        }
-        elseif ($mode == "Update")
-        {
+        } elseif ($mode == "Update") {
             $extra_cond = $this->db->protect($this->table_alias.".".$this->primary_key)." <> ".$this->db->escape($id)." AND ".$extra_cond;
             $data = $this->getData($extra_cond, "COUNT(*) AS tot");
-            if ($data[0]['tot'] > 0)
-            {
-                $exists = TRUE;
+            if ($data[0]['tot'] > 0) {
+                $exists = true;
             }
         }
         return $exists;
@@ -1053,14 +983,10 @@ class Game_level_model extends CI_Model
     {
         $switchto_fields = $this->switchto_fields;
         $switch_data = array();
-        if (!is_array($switchto_fields) || count($switchto_fields) == 0)
-        {
-            if ($type == "count")
-            {
+        if (!is_array($switchto_fields) || count($switchto_fields) == 0) {
+            if ($type == "count") {
                 return count($switch_data);
-            }
-            else
-            {
+            } else {
                 return $switch_data;
             }
         }
@@ -1070,30 +996,24 @@ class Game_level_model extends CI_Model
         );
         $fields_arr[] = array(
             "field" => $this->db->concat($switchto_fields)." AS val",
-            "escape" => TRUE,
+            "escape" => true,
         );
-        if (is_array($this->switchto_options) && count($this->switchto_options) > 0)
-        {
-            foreach ($this->switchto_options as $option)
-            {
+        if (is_array($this->switchto_options) && count($this->switchto_options) > 0) {
+            foreach ($this->switchto_options as $option) {
                 $fields_arr[] = array(
                     "field" => $option,
-                    "escape" => TRUE,
+                    "escape" => true,
                 );
             }
         }
-        if (trim($this->extra_cond) != "")
-        {
+        if (trim($this->extra_cond) != "") {
             $extra_cond = (trim($extra_cond) != "") ? $extra_cond." AND ".$this->extra_cond : $this->extra_cond;
         }
         $switch_data = $this->getData($extra_cond, $fields_arr, "val ASC", "", $limit, "Yes");
         #echo $this->db->last_query();
-        if ($type == "count")
-        {
+        if ($type == "count") {
             return count($switch_data);
-        }
-        else
-        {
+        } else {
             return $switch_data;
         }
     }

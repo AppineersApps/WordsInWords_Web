@@ -50,6 +50,15 @@
                                             </div>
                                             <div class="error-msg-form "><label class='error' id='glm_descriptionErr'></label></div>
                                         </div>
+                                        <div class="form-row row-fluid " id="cc_sh_glm_min_word_length">
+                                            <label class="form-label span3 ">
+                                                <%$form_config['glm_min_word_length']['label_lang']%> <em>*</em> 
+                                            </label> 
+                                            <div class="form-right-div  ">
+                                                <input type="text" placeholder="" value="<%$data['glm_min_word_length']|@htmlentities%>" name="glm_min_word_length" id="glm_min_word_length" title="<%$this->lang->line('GAME_LEVEL_MIN_WORD_LENGTH')%>"  data-ctrl-type='textbox'  class='frm-size-medium'  />
+                                            </div>
+                                            <div class="error-msg-form "><label class='error' id='glm_min_word_lengthErr'></label></div>
+                                        </div>                                                                                      
                                         <div class="form-row row-fluid " id="cc_sh_glm_max_word_length">
                                             <label class="form-label span3 ">
                                                 <%$form_config['glm_max_word_length']['label_lang']%> <em>*</em> 

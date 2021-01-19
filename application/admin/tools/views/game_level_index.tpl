@@ -128,6 +128,10 @@
         "label": "<%$list_config['glm_description']['label_lang']%>"
     },
     {
+        "name": "glm_min_word_length",
+        "label": "<%$list_config['glm_min_word_length']['label_lang']%>"
+    },
+    {
         "name": "glm_max_word_length",
         "label": "<%$list_config['glm_max_word_length']['label_lang']%>"
     },
@@ -142,6 +146,10 @@
     {
         "name": "glm_status",
         "label": "<%$list_config['glm_status']['label_lang']%>"
+    },
+    {
+        "name": "sys_custom_field_1",
+        "label": "<%$list_config['sys_custom_field_1']['label_lang']%>"
     }];
     
     js_col_model_json = [{
@@ -209,7 +217,7 @@
             "required": true,
             "infoArr": {
                 "required": {
-                    "message": ci_js_validation_message(js_lang_label.GENERIC_PLEASE_ENTER_A_VALUE_FOR_THE__C35FIELD_C35_FIELD_C46 ,"#FIELD#",js_lang_label.GAME_LEVEL_description)
+                    "message": ci_js_validation_message(js_lang_label.GENERIC_PLEASE_ENTER_A_VALUE_FOR_THE__C35FIELD_C35_FIELD_C46 ,"#FIELD#",js_lang_label.GAME_LEVEL_DESCRIPTION)
                 }
             }
         },
@@ -238,11 +246,68 @@
             "dataUrl": '<%$admin_url%><%$mod_enc_url["get_list_options"]%>?alias_name=glm_description&mode=<%$mod_enc_mode["Update"]%>&rformat=html<%$extra_qstr%>',
             "dataInit": <%if $count_arr['glm_description']['ajax'] eq 'Yes' %>initEditGridAjaxChosenEvent<%else%>initGridChosenEvent<%/if%>,
             "ajaxCall": '<%if $count_arr["glm_description"] eq "Yes" %>ajax-call<%/if%>',
-            "data-placeholder": "<%$this->general->parseLabelMessage('GENERIC_PLEASE_SELECT__C35FIELD_C35' ,'#FIELD#', 'GAME_LEVEL_description')%>",
+            "data-placeholder": "<%$this->general->parseLabelMessage('GENERIC_PLEASE_SELECT__C35FIELD_C35' ,'#FIELD#', 'GAME_LEVEL_DESCRIPTION')%>",
             "class": "inline-edit-row chosen-select"
         },
         "ctrl_type": "dropdown",
         "default_value": "<%$list_config['glm_description']['default']%>",
+        "filterSopt": "in",
+        "stype": "select"
+    },
+    {
+        "name": "glm_min_word_length",
+        "index": "glm_min_word_length",
+        "label": "<%$list_config['glm_min_word_length']['label_lang']%>",
+        "labelClass": "header-align-center",
+        "resizable": true,
+        "width": "<%$list_config['glm_min_word_length']['width']%>",
+        "search": <%if $list_config['glm_min_word_length']['search'] eq 'No' %>false<%else%>true<%/if%>,
+        "export": <%if $list_config['glm_min_word_length']['export'] eq 'No' %>false<%else%>true<%/if%>,
+        "sortable": <%if $list_config['glm_min_word_length']['sortable'] eq 'No' %>false<%else%>true<%/if%>,
+        "hidden": <%if $list_config['glm_min_word_length']['hidden'] eq 'Yes' %>true<%else%>false<%/if%>,
+        "hideme": <%if $list_config['glm_min_word_length']['hideme'] eq 'Yes' %>true<%else%>false<%/if%>,
+        "addable": <%if $list_config['glm_min_word_length']['addable'] eq 'Yes' %>true<%else%>false<%/if%>,
+        "editable": <%if $list_config['glm_min_word_length']['editable'] eq 'Yes' %>true<%else%>false<%/if%>,
+        "align": "center",
+        "edittype": "select",
+        "editrules": {
+            "required": true,
+            "infoArr": {
+                "required": {
+                    "message": ci_js_validation_message(js_lang_label.GENERIC_PLEASE_ENTER_A_VALUE_FOR_THE__C35FIELD_C35_FIELD_C46 ,"#FIELD#",js_lang_label.GAME_LEVEL_MIN_WORD_LENGTH)
+                }
+            }
+        },
+        "searchoptions": {
+            "attr": {
+                "aria-grid-id": el_tpl_settings.main_grid_id,
+                "aria-module-name": "game_level",
+                "aria-unique-name": "glm_min_word_length",
+                "autocomplete": "off",
+                "data-placeholder": " ",
+                "class": "search-chosen-select",
+                "multiple": "multiple"
+            },
+            "sopt": intSearchOpts,
+            "searchhidden": <%if $list_config['glm_min_word_length']['search'] eq 'Yes' %>true<%else%>false<%/if%>,
+            "dataUrl": <%if $count_arr["glm_min_word_length"]["json"] eq "Yes" %>false<%else%>'<%$admin_url%><%$mod_enc_url["get_list_options"]%>?alias_name=glm_min_word_length&mode=<%$mod_enc_mode["Search"]%>&rformat=html<%$extra_qstr%>'<%/if%>,
+            "value": <%if $count_arr["glm_min_word_length"]["json"] eq "Yes" %>$.parseJSON('<%$count_arr["glm_min_word_length"]["data"]|@addslashes%>')<%else%>null<%/if%>,
+            "dataInit": <%if $count_arr['glm_min_word_length']['ajax'] eq 'Yes' %>initSearchGridAjaxChosenEvent<%else%>initGridChosenEvent<%/if%>,
+            "ajaxCall": '<%if $count_arr["glm_min_word_length"]["ajax"] eq "Yes" %>ajax-call<%/if%>',
+            "multiple": true
+        },
+        "editoptions": {
+            "aria-grid-id": el_tpl_settings.main_grid_id,
+            "aria-module-name": "game_level",
+            "aria-unique-name": "glm_min_word_length",
+            "dataUrl": '<%$admin_url%><%$mod_enc_url["get_list_options"]%>?alias_name=glm_min_word_length&mode=<%$mod_enc_mode["Update"]%>&rformat=html<%$extra_qstr%>',
+            "dataInit": <%if $count_arr['glm_min_word_length']['ajax'] eq 'Yes' %>initEditGridAjaxChosenEvent<%else%>initGridChosenEvent<%/if%>,
+            "ajaxCall": '<%if $count_arr["glm_min_word_length"] eq "Yes" %>ajax-call<%/if%>',
+            "data-placeholder": "<%$this->general->parseLabelMessage('GENERIC_PLEASE_SELECT__C35FIELD_C35' ,'#FIELD#', 'GAME_LEVEL_MIN_WORD_LENGTH')%>",
+            "class": "inline-edit-row chosen-select"
+        },
+        "ctrl_type": "dropdown",
+        "default_value": "<%$list_config['glm_min_word_length']['default']%>",
         "filterSopt": "in",
         "stype": "select"
     },
@@ -266,7 +331,7 @@
             "required": true,
             "infoArr": {
                 "required": {
-                    "message": ci_js_validation_message(js_lang_label.GENERIC_PLEASE_ENTER_A_VALUE_FOR_THE__C35FIELD_C35_FIELD_C46 ,"#FIELD#",js_lang_label.GAME_LEVEL_description)
+                    "message": ci_js_validation_message(js_lang_label.GENERIC_PLEASE_ENTER_A_VALUE_FOR_THE__C35FIELD_C35_FIELD_C46 ,"#FIELD#",js_lang_label.GAME_LEVEL_MAX_WORD_LENGTH)
                 }
             }
         },
@@ -295,7 +360,7 @@
             "dataUrl": '<%$admin_url%><%$mod_enc_url["get_list_options"]%>?alias_name=glm_max_word_length&mode=<%$mod_enc_mode["Update"]%>&rformat=html<%$extra_qstr%>',
             "dataInit": <%if $count_arr['glm_max_word_length']['ajax'] eq 'Yes' %>initEditGridAjaxChosenEvent<%else%>initGridChosenEvent<%/if%>,
             "ajaxCall": '<%if $count_arr["glm_max_word_length"] eq "Yes" %>ajax-call<%/if%>',
-            "data-placeholder": "<%$this->general->parseLabelMessage('GENERIC_PLEASE_SELECT__C35FIELD_C35' ,'#FIELD#', 'GAME_LEVEL_description')%>",
+            "data-placeholder": "<%$this->general->parseLabelMessage('GENERIC_PLEASE_SELECT__C35FIELD_C35' ,'#FIELD#', 'GAME_LEVEL_MAX_WORD_LENGTH')%>",
             "class": "inline-edit-row chosen-select"
         },
         "ctrl_type": "dropdown",
@@ -323,7 +388,7 @@
             "required": true,
             "infoArr": {
                 "required": {
-                    "message": ci_js_validation_message(js_lang_label.GENERIC_PLEASE_ENTER_A_VALUE_FOR_THE__C35FIELD_C35_FIELD_C46 ,"#FIELD#",js_lang_label.GAME_LEVEL_description)
+                    "message": ci_js_validation_message(js_lang_label.GENERIC_PLEASE_ENTER_A_VALUE_FOR_THE__C35FIELD_C35_FIELD_C46 ,"#FIELD#",js_lang_label.GAME_LEVEL_DESCRIPTION)
                 }
             }
         },
@@ -352,7 +417,7 @@
             "dataUrl": '<%$admin_url%><%$mod_enc_url["get_list_options"]%>?alias_name=glm_max_round&mode=<%$mod_enc_mode["Update"]%>&rformat=html<%$extra_qstr%>',
             "dataInit": <%if $count_arr['glm_max_round']['ajax'] eq 'Yes' %>initEditGridAjaxChosenEvent<%else%>initGridChosenEvent<%/if%>,
             "ajaxCall": '<%if $count_arr["glm_max_round"] eq "Yes" %>ajax-call<%/if%>',
-            "data-placeholder": "<%$this->general->parseLabelMessage('GENERIC_PLEASE_SELECT__C35FIELD_C35' ,'#FIELD#', 'GAME_LEVEL_description')%>",
+            "data-placeholder": "<%$this->general->parseLabelMessage('GENERIC_PLEASE_SELECT__C35FIELD_C35' ,'#FIELD#', 'GAME_LEVEL_DESCRIPTION')%>",
             "class": "inline-edit-row chosen-select"
         },
         "ctrl_type": "dropdown",
@@ -380,7 +445,7 @@
             "required": true,
             "infoArr": {
                 "required": {
-                    "message": ci_js_validation_message(js_lang_label.GENERIC_PLEASE_ENTER_A_VALUE_FOR_THE__C35FIELD_C35_FIELD_C46 ,"#FIELD#",js_lang_label.GAME_LEVEL_description)
+                    "message": ci_js_validation_message(js_lang_label.GENERIC_PLEASE_ENTER_A_VALUE_FOR_THE__C35FIELD_C35_FIELD_C46 ,"#FIELD#",js_lang_label.GAME_LEVEL_DESCRIPTION)
                 }
             }
         },
@@ -409,7 +474,7 @@
             "dataUrl": '<%$admin_url%><%$mod_enc_url["get_list_options"]%>?alias_name=glm_round_to_unlock&mode=<%$mod_enc_mode["Update"]%>&rformat=html<%$extra_qstr%>',
             "dataInit": <%if $count_arr['glm_round_to_unlock']['ajax'] eq 'Yes' %>initEditGridAjaxChosenEvent<%else%>initGridChosenEvent<%/if%>,
             "ajaxCall": '<%if $count_arr["glm_round_to_unlock"] eq "Yes" %>ajax-call<%/if%>',
-            "data-placeholder": "<%$this->general->parseLabelMessage('GENERIC_PLEASE_SELECT__C35FIELD_C35' ,'#FIELD#', 'GAME_LEVEL_description')%>",
+            "data-placeholder": "<%$this->general->parseLabelMessage('GENERIC_PLEASE_SELECT__C35FIELD_C35' ,'#FIELD#', 'GAME_LEVEL_DESCRIPTION')%>",
             "class": "inline-edit-row chosen-select"
         },
         "ctrl_type": "dropdown",
@@ -473,13 +538,53 @@
         "default_value": "<%$list_config['glm_status']['default']%>",
         "filterSopt": "in",
         "stype": "select"
+    },
+    {
+        "name": "sys_custom_field_1",
+        "index": "sys_custom_field_1",
+        "label": "<%$list_config['sys_custom_field_1']['label_lang']%>",
+        "labelClass": "header-align-center",
+        "resizable": true,
+        "width": "<%$list_config['sys_custom_field_1']['width']%>",
+        "search": <%if $list_config['sys_custom_field_1']['search'] eq 'No' %>false<%else%>true<%/if%>,
+        "export": <%if $list_config['sys_custom_field_1']['export'] eq 'No' %>false<%else%>true<%/if%>,
+        "sortable": <%if $list_config['sys_custom_field_1']['sortable'] eq 'No' %>false<%else%>true<%/if%>,
+        "hidden": <%if $list_config['sys_custom_field_1']['hidden'] eq 'Yes' %>true<%else%>false<%/if%>,
+        "hideme": <%if $list_config['sys_custom_field_1']['hideme'] eq 'Yes' %>true<%else%>false<%/if%>,
+        "addable": <%if $list_config['sys_custom_field_1']['addable'] eq 'Yes' %>true<%else%>false<%/if%>,
+        "editable": <%if $list_config['sys_custom_field_1']['editable'] eq 'Yes' %>true<%else%>false<%/if%>,
+        "align": "center",
+        "edittype": "select",
+        "editrules": {
+            "infoArr": []
+        },
+        "searchoptions": {
+            "attr": {
+                "aria-grid-id": el_tpl_settings.main_grid_id,
+                "aria-module-name": "game_level",
+                "aria-unique-name": null,
+                "autocomplete": "off"
+            },
+            "sopt": strSearchOpts,
+            "searchhidden": <%if $list_config['sys_custom_field_1']['search'] eq 'Yes' %>true<%else%>false<%/if%>
+        },
+        "editoptions": {
+            "aria-grid-id": el_tpl_settings.main_grid_id,
+            "aria-module-name": "game_level",
+            "aria-unique-name": null,
+            "placeholder": null,
+            "class": "inline-edit-row "
+        },
+        "ctrl_type": "textbox",
+        "default_value": "<%$list_config['sys_custom_field_1']['default']%>",
+        "filterSopt": "bw"
     }];
          
     initMainGridListing();
     createTooltipHeading();
     callSwitchToParent();
 <%/javascript%>
-
+<%$this->js->add_js("admin/custom/feedbackManagement.js")%>
 <%if $this->input->is_ajax_request()%>
     <%$this->js->js_src()%>
 <%/if%> 
