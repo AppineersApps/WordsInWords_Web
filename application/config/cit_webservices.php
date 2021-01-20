@@ -1,6 +1,6 @@
 <?php
 
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') or exit('No direct script access allowed');
 
 #####GENERATED_CONFIG_SETTINGS_START#####
 
@@ -513,6 +513,15 @@ $config["user"] = array(
     ),
     "target" => ""
 );
+
+$config["delete_api_log"] = array(
+    "title" => "delete_api_log",
+    "folder" => "misc",
+    "method" => "GET_POST",
+    "params" => array(
+    )
+);
+
 $config["user_guest"] = array(
     "title" => "User Guest",
     "folder" => "basic_appineers_master",
@@ -631,4 +640,3 @@ $config["connect_guest_user"] = array(
 
 /* End of file cit_webservices.php */
 /* Location: ./application/config/cit_webservices.php */
-    

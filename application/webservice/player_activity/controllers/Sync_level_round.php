@@ -52,7 +52,7 @@ class Sync_level_round extends Cit_Controller
 
     /**
      * start_sync_level_round_add method is used to initiate api execution flow.
-     * @created  | 28.01.2016
+     * @created  | 20.01.2020
      * @modified ---
      * @param array $request_arr request_arr array is used for api input.
      * @param bool $inner_api inner_api flag is used to idetify whether it is inner api request or general request.
@@ -107,8 +107,8 @@ class Sync_level_round extends Cit_Controller
 
     /**
      * get_sync_level_round method is used to process query block.
-     * @created priyanka chillakuru | 18.09.2019
-     * @modified priyanka chillakuru | 18.09.2019
+     * @created shri | 20.01.2020
+     * @modified shri | 20.01.2020
      * @param array $input_params input_params array to process loop flow.
      * @return array $input_params returns modfied input_params array.
      */
@@ -128,9 +128,9 @@ class Sync_level_round extends Cit_Controller
                 foreach ($this->block_result0['data'] as $configKey => $configValue) {
                     $gameLevelInfo[$newKey]['level_name'] = $configValue["vLevelName"];
                     $gameLevelInfo[$newKey]['level_id'] = $configValue["iGameLevelId"];
-                    $gameLevelInfo[$newKey]['round_id'] = 0;
-                    $gameLevelInfo[$newKey]['gain_coin'] = 0;
-                    $gameLevelInfo[$newKey]['loss_coin'] = 0;
+                    $gameLevelInfo[$newKey]['round_no'] = 0;
+                    $gameLevelInfo[$newKey]['gain_coins'] = 0;
+                    $gameLevelInfo[$newKey]['loss_coins'] = 0;
                     $gameLevelInfo[$newKey]['unlock_status'] = (bool)0;
                     ++$newKey;
                 }
@@ -138,19 +138,19 @@ class Sync_level_round extends Cit_Controller
                 foreach ($this->block_result0['data'] as $configKey => $configValue) {
                     foreach ($this->block_result['data'] as $activityKey => $activityValue) {
                         if ($configValue['iGameLevelId'] == $activityValue['iLevelId']) {
-                            $gameLevelInfo[$newKey]['level_id'] = $activityValue["iLevelId"];
                             $gameLevelInfo[$newKey]['level_name'] = $configValue["vLevelName"];
-                            $gameLevelInfo[$newKey]['round_id'] = $activityValue["iRoundId"];
-                            $gameLevelInfo[$newKey]['gain_coin'] = $activityValue["iCreditCoin"];
-                            $gameLevelInfo[$newKey]['loss_coin'] = $activityValue["iDebitCoin"];
+                            $gameLevelInfo[$newKey]['level_id'] = $activityValue["iLevelId"];
+                            $gameLevelInfo[$newKey]['round_no'] = $activityValue["iRoundId"];
+                            $gameLevelInfo[$newKey]['gain_coins'] = $activityValue["iCreditCoin"];
+                            $gameLevelInfo[$newKey]['loss_coins'] = $activityValue["iDebitCoin"];
                             $gameLevelInfo[$newKey]['unlock_status'] = $activityValue["iUnlockStatus"];
                             ++$newKey;
                         } else {
                             $gameLevelInfo[$newKey]['level_name'] = $configValue["vLevelName"];
                             $gameLevelInfo[$newKey]['level_id'] = $configValue["iGameLevelId"];
-                            $gameLevelInfo[$newKey]['round_id'] = 0;
-                            $gameLevelInfo[$newKey]['gain_coin'] = 0;
-                            $gameLevelInfo[$newKey]['loss_coin'] = 0;
+                            $gameLevelInfo[$newKey]['round_no'] = 0;
+                            $gameLevelInfo[$newKey]['gain_coins'] = 0;
+                            $gameLevelInfo[$newKey]['loss_coins'] = 0;
                             $gameLevelInfo[$newKey]['unlock_status'] = (bool)0;
                             ++$newKey;
                         }
@@ -161,11 +161,11 @@ class Sync_level_round extends Cit_Controller
             $this->block_result = $this->player_coin_model->get_player_coins($input_params);
             if ($this->block_result["success"]) {
                 foreach ($this->block_result['data'] as $configKey => $configValue) {
-                    $coinInfo[$newUpKey]['total_coin'] = $configValue["iTotalCoin"];
+                    $coinInfo[$newUpKey]['total_coins'] = $configValue["iTotalCoin"];
                     ++$newUpKey;
                 }
             } else {
-                $coinInfo[$newUpKey]['total_coin'] = 0;
+                $coinInfo[$newUpKey]['total_coins'] = 0;
             }
 
             $this->block_result['data']=null;
@@ -185,8 +185,8 @@ class Sync_level_round extends Cit_Controller
 
     /**
      * condition method is used to process conditions.
-     * @created priyanka chillakuru | 18.09.2019
-     * @modified priyanka chillakuru | 18.09.2019
+     * @created shri | 20.01.2020
+     * @modified shri | 20.01.2020
      * @param array $input_params input_params array to process condition flow.
      * @return array $block_result returns result of condition block as array.
      */
@@ -214,8 +214,8 @@ class Sync_level_round extends Cit_Controller
 
     /**
      * get_sync_level_round_list_finish_success method is used to process finish flow.
-     * @created priyanka chillakuru | 18.09.2019
-     * @modified priyanka chillakuru | 18.09.2019
+     * @created shri | 20.01.2020
+     * @modified shri | 20.01.2020
      * @param array $input_params input_params array to process loop flow.
      * @return array $responce_arr returns responce array of api.
      */
@@ -256,8 +256,8 @@ class Sync_level_round extends Cit_Controller
 
     /**
      * get_sync_level_round_finish_success_1 method is used to process finish flow.
-     * @created priyanka chillakuru | 18.09.2019
-     * @modified priyanka chillakuru | 18.09.2019
+     * @created shri | 20.01.2020
+     * @modified shri | 20.01.2020
      * @param array $input_params input_params array to process loop flow.
      * @return array $responce_arr returns responce array of api.
      */

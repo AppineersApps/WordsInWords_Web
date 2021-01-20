@@ -71,7 +71,7 @@ class Users_management_model extends CI_Model
         $this->primary_key = "iUserId";
         $this->primary_alias = "u_user_id";
         $this->physical_data_remove = "Yes";
-        $this->grid_fields = array("u_profile_image", "u_first_name", "u_email", "u_mobile_no", "u_added_at", "u_status", "u_updated_at");
+        $this->grid_fields = array("u_profile_image", "u_first_name", "u_user_name", "u_email", "u_mobile_no", "u_added_at", "u_status", "u_updated_at");
         $this->join_tables = array();
         $this->extra_cond = "";
         $this->groupby_cond = array();
@@ -275,12 +275,11 @@ class Users_management_model extends CI_Model
             }
             $this->db->select("u.vProfileImage AS u_profile_image");
         $this->db->select("concat(u.vFirstName,\"\",u.vLastName) AS u_first_name");
-        //$this->db->select("u.vUserName AS u_user_name");
+        $this->db->select("u.vUserName AS u_user_name");
         $this->db->select("u.vEmail AS u_email");
         $this->db->select("u.vMobileNo AS u_mobile_no");
         $this->db->select("u.dtAddedAt AS u_added_at");
         $this->db->select("u.eStatus AS u_status");
-        $this->db->select("u.eLogStatus AS u_log_status_updated");
         $this->db->select("u.dtUpdatedAt AS u_updated_at");
         
         } else {
@@ -295,14 +294,12 @@ class Users_management_model extends CI_Model
             $this->db->select("u.dDob AS u_dob");
             $this->db->select("u.tAddress AS u_address");
             $this->db->select("u.vCity AS u_city");
-            $this->db->select("u.iStateId AS u_state_id");
             $this->db->select("u.vStateName AS u_state_name");
             $this->db->select("u.vZipCode AS u_zip_code");
             $this->db->select("u.vTermsConditionsVersion AS u_terms_conditions_version");
             $this->db->select("u.vPrivacyPolicyVersion AS u_privacy_policy_version");
             $this->db->select("u.dtDeletedAt AS u_deleted_at");
             $this->db->select("u.eStatus AS u_status");
-            $this->db->select("u.eLogStatus AS u_log_status_updated");
             $this->db->select("u.vPassword AS u_password");
             $this->db->select("u.dLatitude AS u_latitude");
             $this->db->select("u.dLongitude AS u_longitude");
@@ -321,6 +318,7 @@ class Users_management_model extends CI_Model
             $this->db->select("u.eOneTimeTransaction AS u_one_time_transaction");
             $this->db->select("u.vDeviceModel AS u_device_model");
             $this->db->select("u.vDeviceOS AS u_device_os");
+            $this->db->select("u.eLogStatus AS u_log_status_updated");
             
         }
         
@@ -444,12 +442,11 @@ class Users_management_model extends CI_Model
         }
         $this->db->select("u.vProfileImage AS u_profile_image");
         $this->db->select("concat(u.vFirstName,\"\",u.vLastName) AS u_first_name");
-        //$this->db->select("u.vUserName AS u_user_name");
+        $this->db->select("u.vUserName AS u_user_name");
         $this->db->select("u.vEmail AS u_email");
         $this->db->select("u.vMobileNo AS u_mobile_no");
         $this->db->select("u.dtAddedAt AS u_added_at");
         $this->db->select("u.eStatus AS u_status");
-        $this->db->select("u.eLogStatus AS u_log_status_updated");
         $this->db->select("u.dtUpdatedAt AS u_updated_at");
         
         
@@ -547,12 +544,11 @@ class Users_management_model extends CI_Model
         }
         $this->db->select("u.vProfileImage AS u_profile_image");
         $this->db->select("concat(u.vFirstName,\"\",u.vLastName) AS u_first_name");
-        //$this->db->select("u.vUserName AS u_user_name");
+        $this->db->select("u.vUserName AS u_user_name");
         $this->db->select("u.vEmail AS u_email");
         $this->db->select("u.vMobileNo AS u_mobile_no");
         $this->db->select("u.dtAddedAt AS u_added_at");
         $this->db->select("u.eStatus AS u_status");
-        $this->db->select("u.eLogStatus AS u_log_status_updated");
         $this->db->select("u.dtUpdatedAt AS u_updated_at");
         
         
@@ -633,7 +629,7 @@ class Users_management_model extends CI_Model
                 "file_upload" => "Yes",
                 "file_inline" => "Yes",
                 "file_server" => "amazon",
-                "file_folder" => "monkey_sphere/user_profile",
+                "file_folder" => "side_jobs/user_profile",
                 "file_width" => "80",
                 "file_height" => "80"
             ),
@@ -661,7 +657,30 @@ class Users_management_model extends CI_Model
                 "viewedit" => "No",
                 "edit_link" => "Yes"
             ),
-                
+                "u_user_name" => array(
+                "name" => "u_user_name",
+                "table_name" => "users",
+                "table_alias" => "u",
+                "field_name" => "vUserName",
+                "source_field" => "u_user_name",
+                "display_query" => "u.vUserName",
+                "entry_type" => "Table",
+                "data_type" => "varchar",
+                "show_in" => "Both",
+                "type" => "textbox",
+                "align" => "left",
+                "label" => "Username",
+                "lang_code" => "USERS_MANAGEMENT_USERNAME",
+                "label_lang" => $this->lang->line('USERS_MANAGEMENT_USERNAME'),
+                "width" => 50,
+                "search" => "Yes",
+                "export" => "Yes",
+                "sortable" => "Yes",
+                "addable" => "No",
+                "editable" => "No",
+                "viewedit" => "No",
+                "edit_link" => "Yes"
+            ),
                 "u_email" => array(
                 "name" => "u_email",
                 "table_name" => "users",
@@ -820,7 +839,7 @@ class Users_management_model extends CI_Model
                 "label_lang" => $this->lang->line('USERS_MANAGEMENT_PROFILE_IMAGE'),
                 "file_upload" => "Yes",
                 "file_server" => "amazon",
-                "file_folder" => "fern/user_profile",
+                "file_folder" => "side_jobs/user_profile",
                 "file_width" => "80",
                 "file_height" => "80",
                 "file_format" => "gif,png,jpg,jpeg,jpe,bmp,ico",
@@ -932,29 +951,15 @@ class Users_management_model extends CI_Model
                 "lang_code" => "USERS_MANAGEMENT_CITY",
                 "label_lang" => $this->lang->line('USERS_MANAGEMENT_CITY')
             ),
-                "u_state_id" => array(
-                "name" => "u_state_id",
-                "table_name" => "users",
-                "table_alias" => "u",
-                "field_name" => "iStateId",
-                "entry_type" => "Table",
-                "data_type" => "int",
-                "show_input" => "Both",
-                "type" => "dropdown",
-                "label" => "State",
-                "lang_code" => "USERS_MANAGEMENT_STATE",
-                "label_lang" => $this->lang->line('USERS_MANAGEMENT_STATE')
-            ),
-
                 "u_state_name" => array(
                 "name" => "u_state_name",
                 "table_name" => "users",
                 "table_alias" => "u",
-                "field_name" => "vStateName",
+                "field_name" => "vStateName", 
                 "entry_type" => "Table",
-                "data_type" => "int",
+                "data_type" => "varchar",
                 "show_input" => "Both",
-                "type" => "text",
+                "type" => "dropdown",
                 "label" => "State",
                 "lang_code" => "USERS_MANAGEMENT_STATE",
                 "label_lang" => $this->lang->line('USERS_MANAGEMENT_STATE')
@@ -1024,19 +1029,6 @@ class Users_management_model extends CI_Model
                 "label" => "Status",
                 "lang_code" => "USERS_MANAGEMENT_STATUS",
                 "label_lang" => $this->lang->line('USERS_MANAGEMENT_STATUS')
-            ),
-                "u_log_status_updated" => array(
-                "name" => "u_log_status_updated",
-                "table_name" => "users",
-                "table_alias" => "u",
-                "field_name" => "eLogStatus",
-                "entry_type" => "Table",
-                "data_type" => "enum",
-                "show_input" => "Both",
-                "type" => "dropdown",
-                "label" => "Log Status",
-                "lang_code" => "USERS_MANAGEMENT_LOG_STATUS",
-                "label_lang" => $this->lang->line('USERS_MANAGEMENT_LOG_STATUS')
             ),
                 "u_password" => array(
                 "name" => "u_password",
@@ -1279,6 +1271,19 @@ class Users_management_model extends CI_Model
                 "label" => "Device Os",
                 "lang_code" => "USERS_MANAGEMENT_DEVICE_OS",
                 "label_lang" => $this->lang->line('USERS_MANAGEMENT_DEVICE_OS')
+            ),
+                 "u_log_status_updated" => array(
+                "name" => "u_log_status_updated",
+                "table_name" => "users",
+                "table_alias" => "u",
+                "field_name" => "eLogStatus",
+                "entry_type" => "Table",
+                "data_type" => "enum",
+                "show_input" => "Both",
+                "type" => "dropdown",
+                "label" => "Log Status",
+                "lang_code" => "USERS_MANAGEMENT_LOG_STATUS",
+                "label_lang" => $this->lang->line('USERS_MANAGEMENT_LOG_STATUS')
             )
         );
         
@@ -1367,6 +1372,20 @@ class Users_management_model extends CI_Model
         } else {
             return $switch_data;
         }
-    }  
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     
 }

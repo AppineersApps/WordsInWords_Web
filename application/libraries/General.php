@@ -12,24 +12,23 @@ use Pushok\Payload\Alert;
  * Description of General Library
  *
  * @category libraries
- * 
+ *
  * @package libraries
  *
  * @module General
- * 
+ *
  * @class General.php
- * 
+ *
  * @path application\libraries\General.php
- * 
+ *
  * @version 4.0
- * 
+ *
  * @author CIT Dev Team
- * 
+ *
  * @since 01.08.2016
  */
-Class General
+class General
 {
-
     protected $CI;
     protected $_email_subject;
     protected $_email_content;
@@ -48,16 +47,16 @@ Class General
 
     public function logOutChecking()
     {
-        $ret = FALSE;
+        $ret = false;
         if (!$this->CI->session->userdata("isLoggedIn")) {
-            $ret = TRUE;
+            $ret = true;
         } elseif ($this->CI->session->userdata("timeOut") > 0) {
             $diffTime = (time() - ($this->CI->session->userdata('loggedAt'))) / 60;
             if ($diffTime > ($this->CI->session->userdata('timeOut'))) {
-                $ret = TRUE;
+                $ret = true;
             }
         }
-        if ($ret === TRUE) {
+        if ($ret === true) {
             $currArr['hashVal'] = $_REQUEST['hashValue'];
             $this->logInOutEntry($this->CI->session->userdata("iAdminId"), 'Admin', $currArr);
             $this->CI->session->sess_destroy();
@@ -115,7 +114,7 @@ Class General
     /** Generalized functions :: START */
     public function getRandomNumber($len = 15)
     {
-        $better_token = strtoupper(md5(uniqid(rand(), TRUE)));
+        $better_token = strtoupper(md5(uniqid(rand(), true)));
         $better_token = substr($better_token, 1, $len);
         return $better_token;
     }
@@ -188,7 +187,7 @@ Class General
         }
     }
 
-    public function getDateTime($date, $format, $top = FALSE)
+    public function getDateTime($date, $format, $top = false)
     {
         if ($date != '0000-00-00' && $date != '0000-00-00 00:00:00' && trim($date) != '') {
             return ($top) ? date($format, $date) : date($format, strtotime($date));
@@ -307,11 +306,11 @@ Class General
 
     public function isExternalURL($url = '')
     {
-        $flag = FALSE;
+        $flag = false;
         if ($url != "") {
             $url = strtolower(trim($url));
             if (substr($url, 0, 8) == 'https://' || substr($url, 0, 7) == 'http://') {
-                $flag = TRUE;
+                $flag = true;
             }
         }
         return $flag;
@@ -320,9 +319,9 @@ Class General
     public function isJson($string = '')
     {
         if (empty($string)) {
-            return FALSE;
+            return false;
         }
-        json_decode($string, TRUE);
+        json_decode($string, true);
         return (json_last_error() == JSON_ERROR_NONE);
     }
 
@@ -334,7 +333,7 @@ Class General
     public function forbidden_message($err_message = '')
     {
         $render_arr['err_message'] = $err_message;
-        echo $this->CI->parser->parse($this->CI->config->item('ADMIN_FORBIDDEN_TEMPLATE') . ".tpl", $render_arr, TRUE);
+        echo $this->CI->parser->parse($this->CI->config->item('ADMIN_FORBIDDEN_TEMPLATE') . ".tpl", $render_arr, true);
         exit;
     }
 
@@ -533,7 +532,7 @@ Class General
         }
         $file_name = $params['image_name'];
         $ext = $params['ext'];
-        $no_img = isset($params['no_img']) ? $params['no_img'] : TRUE;
+        $no_img = isset($params['no_img']) ? $params['no_img'] : true;
         $default_image = $final_image_url = '';
         if ($no_img) {
             $default_arr = $this->CI->config->item('IMAGE_EXTENSION_ARR');
@@ -584,7 +583,7 @@ Class General
     {
         $folder_arr = $this->getServerUploadPathURL($params['path']);
         $ext = $params['ext'];
-        $no_img = isset($params['no_img']) ? $params['no_img'] : TRUE;
+        $no_img = isset($params['no_img']) ? $params['no_img'] : true;
         $default_image = $final_image_url = '';
         if ($no_img) {
             $default_arr = $this->CI->config->item('IMAGE_EXTENSION_ARR');
@@ -632,7 +631,7 @@ Class General
     {
         $folder_arr = $this->getAWSServerUploadPathURL($params['path']);
         $ext = $params['ext'];
-        $no_img = isset($params['no_img']) ? $params['no_img'] : TRUE;
+        $no_img = isset($params['no_img']) ? $params['no_img'] : true;
         $default_image = $final_image_url = '';
         if ($no_img) {
             $default_arr = $this->CI->config->item('IMAGE_EXTENSION_ARR');
@@ -734,7 +733,6 @@ Class General
         } catch (Exception $e) {
             $vphotofile = '';
             $message = $e->getMessage();
-            log_message('error', $e->getMessage());
         }
         $ret = array();
         $ret[0] = $vphotofile;
@@ -763,7 +761,6 @@ Class General
         } catch (Exception $e) {
             $filename = '';
             $message = $e->getMessage();
-            log_message('error', $e->getMessage());
         }
         return $filename;
     }
@@ -789,7 +786,6 @@ Class General
         } catch (Exception $e) {
             $filename = '';
             $message = $e->getMessage();
-            log_message('error', $e->getMessage());
         }
         $result = array();
         $result[0] = $filename;
@@ -815,7 +811,7 @@ Class General
         $file = str_replace(" ", "_", $file);
         $file = preg_replace('/[^A-Za-z0-9@.-_]/', '', $file);
         $extension = $file_arr[count($file_arr) - 1];
-        $file_name = $file . "-" . uniqid() . "." . $extension;
+        $file_name = $file."_".uniqid().".". $extension;
         return array($file_name, $extension);
     }
 
@@ -861,15 +857,15 @@ Class General
         $upload_url = $this->CI->config->item('upload_url');
         $folder_name = trim($folder_name);
         $folder_orgi = $this->getImageNestedFolders($folder_name);
-        $ret_arr['status'] = FALSE;
+        $ret_arr['status'] = false;
         if ($folder_name == "") {
-            $ret_arr['status'] = FALSE;
+            $ret_arr['status'] = false;
         } else {
             $folder_path = $upload_path . $folder_orgi;
             if (is_dir($folder_path)) {
                 $original_path = $upload_path . $folder_orgi . DS;
                 $original_url = $upload_url . $folder_name . "/";
-                $ret_arr['status'] = TRUE;
+                $ret_arr['status'] = true;
                 $ret_arr['folder_path'] = $original_path;
                 $ret_arr['folder_url'] = $original_url;
             }
@@ -881,13 +877,13 @@ Class General
     {
         $custom_file_path = $this->CI->config->item('CIS_FILE_PATH');
         $folder_name = trim($folder_name);
-        $ret_arr['status'] = FALSE;
+        $ret_arr['status'] = false;
         if ($folder_name == "") {
-            $ret_arr['status'] = FALSE;
+            $ret_arr['status'] = false;
         } else {
             $original_path = $custom_file_path . $folder_name . '/';
             $original_url = $this->CI->config->item('CIS_BASE_URL');
-            $ret_arr['status'] = TRUE;
+            $ret_arr['status'] = true;
             $ret_arr['folder_path'] = $original_path;
             $ret_arr['folder_url'] = $original_url;
         }
@@ -897,10 +893,10 @@ Class General
     public function getAWSServerUploadPathURL($folder_name = '')
     {
         $folder_name = trim($folder_name);
-        $ret_arr['status'] = FALSE;
+        $ret_arr['status'] = false;
         $this->_aws_avail_buckets = "";
         if ($folder_name == "") {
-            $ret_arr['status'] = FALSE;
+            $ret_arr['status'] = false;
         } else {
             $bucket_name = $this->CI->config->item('AWS_BUCKET_NAME');
             if (is_array($this->_aws_avail_buckets) && array_key_exists($bucket_name, $this->_aws_avail_buckets)) {
@@ -912,7 +908,7 @@ Class General
                     $available_bucket = array();
                 }
             }
-            if ($available_bucket !== FALSE) {
+            if ($available_bucket !== false) {
                 $this->_aws_avail_buckets[$bucket_name] = $available_bucket;
                 $ret_arr = $this->getAWSServerAccessPathURL($folder_name);
                 $ret_arr['bucket_name'] = $bucket_name;
@@ -927,20 +923,20 @@ Class General
     {
         $bucket_name = $this->CI->config->item('AWS_BUCKET_NAME');
         $folder_name = trim($folder_name);
-        $ret_arr['status'] = FALSE;
+        $ret_arr['status'] = false;
         if ($folder_name == "") {
-            $ret_arr['status'] = FALSE;
+            $ret_arr['status'] = false;
         } else {
             $aws_cdn_enable = $this->CI->config->item('AWS_CDN_ENABLE');
             $aws_cdn_domain = $this->CI->config->item('AWS_CDN_DOMAIN');
             $original_path = "";
-            $aws_protocal = 'https';
+            $aws_protocal = (is_https()) ? 'https' : 'http';
             if ($aws_cdn_enable == 'Y') {
                 $original_url = $aws_protocal . "://" . $aws_cdn_domain . "/" . $folder_name . "/";
             } else {
                 $original_url = $aws_protocal . "://" . $bucket_name . ".s3.amazonaws.com/" . $folder_name . "/";
             }
-            $ret_arr['status'] = TRUE;
+            $ret_arr['status'] = true;
             $ret_arr['folder_path'] = $original_path;
             $ret_arr['folder_url'] = $original_url;
         }
@@ -950,8 +946,7 @@ Class General
     public function isAWSBucketAvailable($bucket_name = '', $folder_name = '')
     {
         $bucket_available = array();
-        $folder_name = (trim($folder_name) != "") ? $folder_name . "/" : NULL;
-
+        $folder_name = (trim($folder_name) != "") ? $folder_name . "/" : null;
         try {
             $s3 = $this->getAWSConnectionObject();
             if (version_compare(PHP_VERSION, '5.5', '>=')) {
@@ -965,7 +960,6 @@ Class General
                         'Prefix' => $folder_name
                     );
                     $result = $s3->listObjects($list_objects_config);
-                    //print_r($result);exit;
                     if (!empty($result['Contents'])) {
                         $contents = $result['Contents'];
                         if (is_array($contents) && count($contents) > 0) {
@@ -988,31 +982,24 @@ Class General
                             );
                             $result = $s3->createBucket($set_bucket_config);
                         } catch (\Aws\S3\Exception\S3Exception $e) {
-                            $bucket_available = FALSE;
-                            log_message('error', $e->getMessage());
+                            $bucket_available = false;
                         } catch (Exception $e) {
-                            log_message('error', $e->getMessage());
-                            
                         }
                     }
                 } catch (Exception $e) {
-                    log_message('error', $e->getMessage());
-                    
                 }
             } else {
                 $res = $s3->getBucket($bucket_name, $folder_name);
                 if (!is_array($res)) {
                     $created = $s3->putBucket($bucket_name, S3::ACL_PUBLIC_READ, $this->CI->config->item('AWS_END_POINT'));
                     if (!$created) {
-                        $bucket_available = FALSE;
+                        $bucket_available = false;
                     }
                 } else {
                     $bucket_available = array_keys($res);
                 }
             }
         } catch (Exception $e) {
-            log_message('error', $e->getMessage());
-            
         }
         return $bucket_available;
     }
@@ -1031,19 +1018,40 @@ Class General
                     //$result = $s3->getObject($object_config);
                     $res = $s3->headObject($object_config);
                 } catch (\Aws\S3\Exception\S3Exception $e) {
-                    $res = FALSE;
-                    log_message('error', $e->getMessage());
+                    $res = false;
                 } catch (Exception $e) {
-                    log_message('error', $e->getMessage());
-                    
                 }
             } else {
                 $object_fodler = $bucket_name . "/" . $folder_name;
                 $res = $s3->getObjectInfo($object_fodler, $file_name);
             }
         } catch (Exception $e) {
-            log_message('error', $e->getMessage());
-            
+        }
+        return $res;
+    }
+
+    public function getFileFromAWS($bucket_name='', $folder_name = '', $file_name = '')
+    {
+        $bucket_name = $this->CI->config->item('AWS_BUCKET_NAME');
+        try {
+            $s3 = $this->getAWSConnectionObject();
+            if (version_compare(PHP_VERSION, '5.5', '>=')) {
+                try {
+                    $object_config = array(
+                        'Bucket' => $bucket_name,
+                        'Key' => $folder_name . "/" . $file_name
+                    );
+                    $res = $s3->getObject($object_config);
+                    //$res = $s3->headObject($object_config);
+                } catch (\Aws\S3\Exception\S3Exception $e) {
+                    $res = false;
+                } catch (Exception $e) {
+                }
+            } else {
+                $object_fodler = $bucket_name . "/" . $folder_name;
+                $res = $s3->getObjectInfo($object_fodler, $file_name);
+            }
+        } catch (Exception $e) {
         }
         return $res;
     }
@@ -1051,19 +1059,16 @@ Class General
     public function checkFileExistsOnAWSObject($object_arr = array(), $file_name = '', $bucket_name = '', $folder_name = '')
     {
         if (!$this->CI->config->item('AWS_CHECK_BUCKET_STATUS')) {
-         
-            return TRUE;
+            return true;
         }
-        $res = FALSE;
+        $res = false;
         if (!is_array($object_arr) || count($object_arr) == 0 || $folder_name == '') {
-          
             return $res;
         }
         $final_file = $folder_name . "/" . $file_name;
         if (in_array($final_file, $object_arr)) {
-            return TRUE;
+            return true;
         }
-       
         return $res;
     }
 
@@ -1072,7 +1077,7 @@ Class General
         $folder_name = rtrim(trim($folder_name), "/");
         $bucket_name = $this->CI->config->item('AWS_BUCKET_NAME');
         try {
-            $response = FALSE;
+            $response = false;
             if (trim($file_name) == "" || trim($bucket_name) == "" || trim($folder_name) == "") {
                 return $response;
             }
@@ -1081,25 +1086,33 @@ Class General
                 try {
                     $arrExp = explode('.', $file_name);
                     $ext = strtolower(end($arrExp));
-                    if($ext == 'jpg' || $ext == 'jpeg'){
+                    if ($ext == 'jpg' || $ext == 'jpeg') {
                         $content_type = "image/jpeg";
                     }
-                    if($ext == 'png'){
-                         $content_type = "image/png";
+                    if ($ext == 'png') {
+                        $content_type = "image/png";
                     }
-                    if($ext == 'log'){
-                         $content_type = "text/plain";
+                    if ($ext == 'log') {
+                        $content_type = "text/plain";
                     }
-                    if($ext == 'zip'){
-                         $content_type = "application/zip";
+                    if ($ext == 'zip') {
+                        $content_type = "application/zip";
                     }
-                    if($ext == 'pdf'){
-                         $content_type = "application/pdf";
+                    if ($ext == 'mp3') {
+                        $content_type = "audio/mpeg";
                     }
-                    if($ext == 'doc'){
-                         $content_type = "application/msword";
+                    if ($ext == 'mp4') {
+                        $content_type = "audio/mp4";
                     }
-                    //echo $content_type; exit;
+                    if ($ext == 'wav') {
+                        $content_type = "audio/wav";
+                    }
+                    if ($ext == 'webm') {
+                        $content_type = "audio/webm";
+                    }
+                    if ($ext == 'pdf') {
+                        $content_type = "application/pdf";
+                    }
                     $object_config = array(
                         'ACL' => 'public-read',
                         'Bucket' => $bucket_name,
@@ -1107,10 +1120,30 @@ Class General
                         'SourceFile' => $temp_file,
                         'ContentType'=>$content_type
                     );
+                    //prepare the API log data => start
+                    $log_data = array();
+                    $log_data['accessed_time'] = microtime();
+                    $log_data['request_func']  = "S3 Fileupload";
+                    $log_data['request_url']   = "S3 Fileupload";
+                    $object_config_log = $object_config;
+                    $object_config_log['user_id'] = $this->session->userdata['iUserId'];
+                    $log_data['input_params']  = $object_config_log;
                     $response = $s3->putObject($object_config);
+                    //prepare the API log data => continue
+                    
+                    $log_data['executed_time']   = microtime();
+                    $log_data['output_response'] = (array)$response;
+                   
+                    $this->insertApiLogger($log_data);
+                    //prepare the API log data => end
                 } catch (\Aws\S3\Exception\S3Exception $e) {
                     log_message('error', $e->getMessage());
+                    //prepare the API log data => continue
+                    $log_data['executed_time']   = microtime();
+                    $log_data['output_response'] = $e->getMessage();
                     
+                    $this->insertApiLogger($log_data);
+                    //prepare the API log data => end
                 } catch (Exception $e) {
                     log_message('error', $e->getMessage());
                 }
@@ -1119,7 +1152,7 @@ Class General
                 $response = $s3->putObjectFile($temp_file, $object_folder, $file_name, S3::ACL_PUBLIC_READ);
             }
         } catch (Exception $e) {
-           log_message('error', $e->getMessage()); 
+            log_message('error', $e->getMessage());
         }
         return $response;
     }
@@ -1129,7 +1162,7 @@ Class General
         $folder_name = rtrim(trim($folder_name), "/");
         $bucket_name = $this->CI->config->item('AWS_BUCKET_NAME');
         try {
-            $response = FALSE;
+            $response = false;
             if (trim($file_name) == "" || trim($bucket_name) == "" || trim($folder_name) == "") {
                 return $response;
             }
@@ -1142,19 +1175,13 @@ Class General
                     );
                     $response = $s3->deleteObject($object_config);
                 } catch (\Aws\S3\Exception\S3Exception $e) {
-                    log_message('error', $e->getMessage());
-                    
                 } catch (Exception $e) {
-                    log_message('error', $e->getMessage());
-                    
                 }
             } else {
                 $object_fodler = $bucket_name . "/" . $folder_name;
                 $response = $s3->deleteObject($object_fodler, $file_name);
             }
         } catch (Exception $e) {
-            log_message('error', $e->getMessage());
-            
         }
         return $response;
     }
@@ -1166,12 +1193,12 @@ Class General
         }
         $AWS_ACCESSKEY = $this->CI->config->item('AWS_ACCESSKEY');
         $AWS_SECRECTKEY = $this->CI->config->item('AWS_SECRECTKEY');
-        $AWS_SSL_VERIFY = ($this->CI->config->item('AWS_SSL_VERIFY') == "Yes") ? TRUE : FALSE;
+        $AWS_SSL_VERIFY = ($this->CI->config->item('AWS_SSL_VERIFY') == "Yes") ? true : false;
         $AWS_END_POINT = $this->CI->config->item('AWS_END_POINT');
         try {
             if (version_compare(PHP_VERSION, '5.5', '>=')) {
                 $AWS_SERVER_REGION = (trim($AWS_END_POINT)) ? trim($AWS_END_POINT) : "us-east-1";
-                require_once ($this->CI->config->item('third_party') . "aws_s3/vendor/autoload.php");
+                require_once($this->CI->config->item('third_party') . "aws_s3/vendor/autoload.php");
                 $aws_config = array(
                     'version' => 'latest',
                     'region' => $AWS_SERVER_REGION,
@@ -1183,8 +1210,8 @@ Class General
                 );
                 $this->_aws_avial_obj = new S3Client($aws_config);
             } else {
-                $AWS_SERVER_REGION = (trim($AWS_END_POINT)) ? "s3-" . trim($AWS_END_POINT) . ".amazonaws.com" : FALSE;
-                require_once ($this->CI->config->item('third_party') . "aws_s3/S3.php");
+                $AWS_SERVER_REGION = (trim($AWS_END_POINT)) ? "s3-" . trim($AWS_END_POINT) . ".amazonaws.com" : false;
+                require_once($this->CI->config->item('third_party') . "aws_s3/S3.php");
                 if ($AWS_SERVER_REGION) {
                     $this->_aws_avial_obj = new S3($AWS_ACCESSKEY, $AWS_SECRECTKEY, $AWS_SSL_VERIFY, $AWS_SERVER_REGION);
                 } else {
@@ -1192,22 +1219,20 @@ Class General
                 }
             }
         } catch (Exception $e) {
-            log_message('error', $e->getMessage());
-            
         }
         return $this->_aws_avial_obj;
     }
 
     public function checkFileExistsOnServer($server_url = '')
     {
-        $return_val = FALSE;
+        $return_val = false;
         $ch = curl_init($server_url);
-        curl_setopt($ch, CURLOPT_NOBODY, TRUE);
+        curl_setopt($ch, CURLOPT_NOBODY, true);
         curl_exec($ch);
         $retcode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
         curl_close($ch);
         if ($retcode == 200) {
-            $return_val = TRUE;
+            $return_val = true;
         }
         return $return_val;
     }
@@ -1219,9 +1244,9 @@ Class General
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_HEADER, 0);
         curl_setopt($ch, CURLOPT_VERBOSE, 0);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_USERAGENT, "Mozilla/4.0 (compatible;)");
-        curl_setopt($ch, CURLOPT_POST, TRUE);
+        curl_setopt($ch, CURLOPT_POST, true);
         curl_setopt($ch, CURLOPT_URL, $post_url);
         $post_array = array(
             "folder_name" => $path,
@@ -1234,7 +1259,7 @@ Class General
         $auth = hash_hmac('md5', http_build_query($post_array), $auth_code);
         if ((version_compare(PHP_VERSION, '5.5') >= 0)) {
             $post_array['file'] = new CURLFile($file_src);
-            curl_setopt($ch, CURLOPT_SAFE_UPLOAD, TRUE);
+            curl_setopt($ch, CURLOPT_SAFE_UPLOAD, true);
         } else {
             $post_array['file'] = "@" . $file_src;
         }
@@ -1271,20 +1296,20 @@ Class General
         if (is_file($file_name)) {
             chmod($file_name, 0777);
             chown($file_name, get_current_user());
-            return TRUE;
+            return true;
         } else {
-            return FALSE;
+            return false;
         }
     }
 
     public function createUploadFolderIfNotExists($folder_name = '')
     {
         if ($folder_name == "") {
-            return FALSE;
+            return false;
         }
         $upload_folder = $this->CI->config->item('upload_path') . $folder_name . DS;
         $this->createFolder($upload_folder);
-        return TRUE;
+        return true;
     }
 
     public function uploadFilesOnSaveForm($file_arr = array(), $id = '')
@@ -1320,7 +1345,7 @@ Class General
 
     public function getImageNestedFolders($folder_name = '')
     {
-        if (strpos($folder_name, '/') !== FALSE) {
+        if (strpos($folder_name, '/') !== false) {
             $folder_name_arr = explode("/", $folder_name);
             $folder_name = implode(DS, $folder_name_arr);
         }
@@ -1422,20 +1447,32 @@ Class General
         return $txt;
     }
 
-    public function pushTestNotification($device_id = '', $notify_arr = array(), $device_type = '')
+    public function pushTestNotification($device_id = '', $sound = '', $notify_arr = array(), $device_type = '')
     {
         if (empty($device_id)) {
-            return FALSE;
+            return false;
         }
-        // if ($device_type == "android" || strlen($device_id) > 70) {
-        //     $success = $this->fcmNotification($device_id, $notify_arr['message'], $notify_arr);
-        // } else {
-        //     $success = $this->iOSNotification($device_id, $notify_arr);
-        // }
-        $success = $this->fcmNotification($device_id, $notify_arr['message'], $notify_arr);
-        
+        /* if ($device_type == "android" || strlen($device_id) > 70) {
+             $success = $this->androidNotification($device_id, $notify_arr['message'], $notify_arr);
+         } else {
+             $success = $this->iOSNotification($device_id, $notify_arr);
+         }*/
+        $success = $this->fcmNotification($device_id, $sound, $notify_arr['message'], $notify_arr);
         return $success;
     }
+
+    // public function pushTestNotification($device_id = '', $notify_arr = array(), $device_type = '')
+    // {
+    //     if (empty($device_id)) {
+    //         return FALSE;
+    //     }
+    //     if ($device_type == "android" || strlen($device_id) > 70) {
+    //         $success = $this->androidNotification($device_id, $notify_arr['message'], $notify_arr);
+    //     } else {
+    //         $success = $this->iOSNotification($device_id, $notify_arr);
+    //     }
+    //     return $success;
+    // }
 
     public function iOSNotification($device_id = '', $notify_arr = array())
     {
@@ -1448,9 +1485,9 @@ Class General
             $protocal = $this->CI->config->item('PUSH_NOTIFY_IOS_PROTOCAL');
             //hb-1153
             $push_notify_sending_mode=$this->CI->config->item('PUSH_NOTIFY_SENDING_MODE');
-            if($push_notify_sending_mode == "live"){
+            if ($push_notify_sending_mode == "live") {
                 $upload_pem_file = $this->CI->config->item('PUSH_NOTIFY_PEM_FILE_LIVE');
-            }else{
+            } else {
                 $upload_pem_file = $this->CI->config->item('PUSH_NOTIFY_PEM_FILE');
             }
             //hb-1153
@@ -1459,7 +1496,7 @@ Class General
             $badge = 0;
             $sound = 'received.caf';
             if ($protocal == "http2") {
-                require_once ($this->CI->config->item('third_party') . "pushok/vendor/autoload.php");
+                require_once($this->CI->config->item('third_party') . "pushok/vendor/autoload.php");
                 if ($upload_pem_file == "" || !is_file($upload_settings_path . $upload_pem_file)) {
                     $pem_file = $this->CI->config->item('site_path') . 'apns-dev.p8';
                 }
@@ -1467,9 +1504,9 @@ Class General
                     throw new Exception("Certificates(.p8) file not found..!");
                 }
                 if ($this->CI->config->item('PUSH_NOTIFY_SENDING_MODE') == "sandbox") {
-                    $production = FALSE;
+                    $production = false;
                 } else {
-                    $production = TRUE;
+                    $production = true;
                 }
                 $options = array(
                     'key_id' => $this->CI->config->item('PUSH_NOTIFY_IOS_KEY_ID'), // The Key ID obtained from Apple developer account
@@ -1622,17 +1659,17 @@ Class General
             if ($f) {
                 fwrite($f, '<br/>');
                 fwrite($f, 'Date : ' . date('Y-m-d H:i:s') . '<br/>');
-                fwrite($f, print_r("Device Token : " . $device_id, TRUE) . '<br/>');
-                fwrite($f, print_r("Payload : " . $this->_push_content, TRUE) . '<br/>');
-                fwrite($f, print_r("Status : " . $success, TRUE) . '<br/>');
-                fwrite($f, print_r("Message : " . $message, TRUE) . '<br/>');
+                fwrite($f, print_r("Device Token : " . $device_id, true) . '<br/>');
+                fwrite($f, print_r("Payload : " . $this->_push_content, true) . '<br/>');
+                fwrite($f, print_r("Status : " . $success, true) . '<br/>');
+                fwrite($f, print_r("Message : " . $message, true) . '<br/>');
                 fclose($f);
             }
         }
         return $success;
     }
 
-    public function fcmNotification($device_id = '', $message = '', $extra = array())
+    public function androidNotification($device_id = '', $message = '', $extra = array())
     {
         $result = '';
         try {
@@ -1714,10 +1751,10 @@ Class General
                 throw new Exception("CURL intialization fails..!");
             }
             curl_setopt($ch, CURLOPT_URL, $url);
-            curl_setopt($ch, CURLOPT_POST, TRUE);
+            curl_setopt($ch, CURLOPT_POST, true);
             curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
-            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
             curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($fields));
             $result = curl_exec($ch);
             curl_close($ch);
@@ -1739,11 +1776,11 @@ Class General
             if ($f) {
                 fwrite($f, '<br/>');
                 fwrite($f, 'Date : ' . date('Y-m-d H:i:s') . '<br/>');
-                fwrite($f, print_r("Device Token : " . json_encode($registrationIDs), TRUE) . '<br/>');
-                fwrite($f, print_r("Payload : " . $this->_push_content, TRUE) . '<br/>');
-                fwrite($f, print_r("Response : " . $result, TRUE) . '<br/>');
-                fwrite($f, print_r("Status : " . $success, TRUE) . '<br/>');
-                fwrite($f, print_r("Message : " . $message, TRUE) . '<br/>');
+                fwrite($f, print_r("Device Token : " . json_encode($registrationIDs), true) . '<br/>');
+                fwrite($f, print_r("Payload : " . $this->_push_content, true) . '<br/>');
+                fwrite($f, print_r("Response : " . $result, true) . '<br/>');
+                fwrite($f, print_r("Status : " . $success, true) . '<br/>');
+                fwrite($f, print_r("Message : " . $message, true) . '<br/>');
                 fclose($f);
             }
         }
@@ -1774,7 +1811,7 @@ Class General
             $notify_arr['id'] = $unique_id;
             $vars_arr = $push_arr['variables'];
             if (!is_array($vars_arr) && is_string($vars_arr)) {
-                $vars_arr = json_decode($vars_arr, TRUE);
+                $vars_arr = json_decode($vars_arr, true);
             }
             if (is_array($vars_arr) && count($vars_arr) > 0) {
                 foreach ($vars_arr as $vk => $vv) {
@@ -1817,12 +1854,12 @@ Class General
         $pid = $this->CI->push->insertPushNotify($insert_arr);
         if ($send_type == "runtime") {
             if (!$success) {
-                return FALSE;
+                return false;
             }
             return $success;
         } else {
             if (!$pid) {
-                return FALSE;
+                return false;
             }
             return $pid;
         }
@@ -1835,7 +1872,7 @@ Class General
 //        while (in_array($unique_id, $db_unique_arr)) {
 //            $unique_id = substr(md5(uniqid(rand(), TRUE)), 0, 5);
 //        }
-        $unique_id = substr(md5(uniqid(rand(), TRUE)), 0, 5);
+        $unique_id = substr(md5(uniqid(rand(), true)), 0, 5);
         return $unique_id;
     }
 
@@ -1895,7 +1932,7 @@ Class General
             $success = $this->CISendMail($to, $subject, $body, $from, $from_name, $cc, $bcc, $attach, $params);
             return $success;
         } else {
-            return FALSE;
+            return false;
         }
     }
 
@@ -2000,7 +2037,7 @@ Class General
 
     public function CISendMail($to = '', $subject = '', $body = '', $from_email = '', $from_name = '', $cc = '', $bcc = '', $attach = array(), $params = array())
     {
-        $success = FALSE;
+        $success = false;
         try {
             if (empty($to)) {
                 throw new Exception("Receiver email address is missing..!");
@@ -2036,7 +2073,7 @@ Class General
             }
             $success = $this->CI->email->send();
             if (is_array($attach) && count($attach) > 0) {
-                $this->CI->email->clear(TRUE);
+                $this->CI->email->clear(true);
             }
             if (!$success) {
                 throw new Exception($this->CI->email->print_debugger(array("subject")));
@@ -2051,13 +2088,12 @@ Class General
 
     public function sendSMSNotification($to_no = '', $message = '')
     {
-
         $active_api = $this->CI->config->item("SMS_ACTIVE_API");
         if ($active_api == "") {
             $this->_notify_error = "SMS API is not activated. Please configure SMS settings.";
-            return FALSE;
+            return false;
         }
-        $response = FALSE;
+        $response = false;
         $active_api = strtolower($active_api);
         if ($active_api == "nexmo") {
             $auth['api_key'] = $this->CI->config->item("SMS_NX_API_KEY");
@@ -2073,7 +2109,6 @@ Class General
             $auth['token'] = $this->CI->config->item("SMS_TW_API_TOKEN");
             $auth['from_no'] = $this->CI->config->item("SMS_FROM_NUMBER");
             $response = $this->sendSMSTwilio($auth, $to_no, $message['message']);
-           
         }
        
         return $response;
@@ -2084,10 +2119,10 @@ Class General
         $this->CI->load->library('nexmo', $auth);
         $response = $this->CI->nexmo->sendMessage($to, $message);
         if ($response['success']) {
-            return TRUE;
+            return true;
         } else {
             $this->_notify_error = $response['message'] || "SMS sending failed.";
-            return FALSE;
+            return false;
         }
     }
 
@@ -2096,10 +2131,10 @@ Class General
         $this->CI->load->library('clickatel', $auth);
         $response = $this->CI->clickatel->sendMessage($to, $message);
         if ($response['success']) {
-            return TRUE;
+            return true;
         } else {
             $this->_notify_error = $response['message'] || "SMS sending failed.";
-            return FALSE;
+            return false;
         }
     }
 
@@ -2109,10 +2144,10 @@ Class General
         $response = $this->CI->twilio->sendMessage($to, $message);
      
         if ($response['success']) {
-            return TRUE;
+            return true;
         } else {
             $this->_notify_error = $response['message'] || "SMS sending failed.";
-            return FALSE;
+            return false;
         }
     }
 
@@ -2160,10 +2195,11 @@ Class General
                             continue;
                         }
                         $req_val = $this->parseConditionFieldValue($extra_var_type, $extra_var_val, $input_params);
-                        if ($extra_var != "" && in_array($extra_var, $decryptArr))
+                        if ($extra_var != "" && in_array($extra_var, $decryptArr)) {
                             $return_link .= "|" . $extra_var . "|" . $this->getAdminEncodeURL($req_val);
-                        else
+                        } else {
                             $return_link .= "|" . $extra_var . "|" . $req_val;
+                        }
                     }
                 }
                 if (is_array($input_params) && count($input_params) > 0) {
@@ -2194,15 +2230,14 @@ Class General
 
     public function checkConditionalBlock($condition_data_arr = array(), $input_params = array())
     {
-        $conditionflag = FALSE;
+        $conditionflag = false;
         $condition_type = $condition_data_arr['oper'];
         $conditions_array = $condition_data_arr['conditions'];
         if (is_array($conditions_array) && count($conditions_array) > 0) {
-
             if ($condition_type == "AND") {
-                $conditionflag = TRUE;
+                $conditionflag = true;
             } else {
-                $conditionflag = FALSE;
+                $conditionflag = false;
             }
             for ($i = 0; $i < count($conditions_array); $i++) {
                 $type = $conditions_array[$i]['type'];
@@ -2215,8 +2250,8 @@ Class General
                 $value_1 = $this->parseConditionFieldValue($operand_1, $value_passed_1, $input_params);
                 $value_2 = $this->parseConditionFieldValue($operand_2, $value_passed_2, $input_params);
 
-                $value_1 = $this->getDataTypeWiseResult($type, $value_1, TRUE);
-                $value_2 = $this->getDataTypeWiseResult($type, $value_2, FALSE);
+                $value_1 = $this->getDataTypeWiseResult($type, $value_1, true);
+                $value_2 = $this->getDataTypeWiseResult($type, $value_2, false);
                 $result = $this->compareDataValues($operator, $value_1, $value_2);
 
                 if ($condition_type == "OR") {
@@ -2235,11 +2270,11 @@ Class General
         return $conditionflag;
     }
 
-    public function getDataTypeWiseResult($type = '', $value = '', $lf = FALSE)
+    public function getDataTypeWiseResult($type = '', $value = '', $lf = false)
     {
         $value = is_null($value) ? "" : $value;
         if (is_array($value)) {
-            if ($type == "array_count" && $lf === TRUE) {
+            if ($type == "array_count" && $lf === true) {
                 return count($value);
             }
             return $value;
@@ -2272,7 +2307,7 @@ Class General
                     $result = "00:00:00";
                 }
                 break;
-            default :
+            default:
                 $result = (string) $value;
                 break;
         }
@@ -2281,25 +2316,25 @@ Class General
 
     public function compareDataValues($operator = '', $value_1 = '', $value_2 = '')
     {
-        $flag = FALSE;
+        $flag = false;
         switch ($operator) {
             case 'ne':
-                $flag = ($value_1 != $value_2) ? TRUE : FALSE;
+                $flag = ($value_1 != $value_2) ? true : false;
                 break;
             case 'nl'://old
-                $flag = (strtolower($value_1) != strtolower($value_2)) ? TRUE : FALSE;
+                $flag = (strtolower($value_1) != strtolower($value_2)) ? true : false;
                 break;
             case 'lt':
-                $flag = ($value_1 < $value_2) ? TRUE : FALSE;
+                $flag = ($value_1 < $value_2) ? true : false;
                 break;
             case 'le':
-                $flag = ($value_1 <= $value_2) ? TRUE : FALSE;
+                $flag = ($value_1 <= $value_2) ? true : false;
                 break;
             case 'gt':
-                $flag = ($value_1 > $value_2) ? TRUE : FALSE;
+                $flag = ($value_1 > $value_2) ? true : false;
                 break;
             case 'ge':
-                $flag = ($value_1 >= $value_2) ? TRUE : FALSE;
+                $flag = ($value_1 >= $value_2) ? true : false;
                 break;
             case "lis"://old
             case "bw"://new
@@ -2307,7 +2342,7 @@ Class General
                 $value_2 = strtolower($value_2);
                 $length_2 = strlen($value_2);
                 $string_2 = substr($value_1, 0, $length_2);
-                $flag = ($string_2 == $value_2) ? TRUE : FALSE;
+                $flag = ($string_2 == $value_2) ? true : false;
                 break;
             case "lie"://old
             case "ew"://new
@@ -2315,13 +2350,13 @@ Class General
                 $value_2 = strtolower($value_2);
                 $length_2 = strlen($value_2);
                 $string_2 = substr($value_1, -$length_2);
-                $flag = ($string_2 == $value_2) ? TRUE : FALSE;
+                $flag = ($string_2 == $value_2) ? true : false;
                 break;
             case "lib"://old
             case "cn"://new
                 $value_1 = strtolower($value_1);
                 $value_2 = strtolower($value_2);
-                $flag = (strpos($value_1, $value_2) !== FALSE) ? TRUE : FALSE;
+                $flag = (strpos($value_1, $value_2) !== false) ? true : false;
                 break;
             case "nle"://old
             case "bn"://new
@@ -2329,7 +2364,7 @@ Class General
                 $value_2 = strtolower($value_2);
                 $length_2 = strlen($value_2);
                 $string_2 = substr($value_1, 0, $length_2);
-                $flag = ($string_2 != $value_2) ? TRUE : FALSE;
+                $flag = ($string_2 != $value_2) ? true : false;
                 break;
             case "nls"://old
             case "en"://new
@@ -2337,31 +2372,31 @@ Class General
                 $value_2 = strtolower($value_2);
                 $length_2 = strlen($value_2);
                 $string_2 = substr($value_1, -$length_2);
-                $flag = ($string_2 != $value_2) ? TRUE : FALSE;
+                $flag = ($string_2 != $value_2) ? true : false;
                 break;
             case "nlb"://old
             case "nc"://new
                 $value_1 = strtolower($value_1);
                 $value_2 = strtolower($value_2);
-                $flag = (strpos($value_1, $value_2) === FALSE) ? TRUE : FALSE;
+                $flag = (strpos($value_1, $value_2) === false) ? true : false;
                 break;
             case 'in':
                 $value2 = (is_array($value_2)) ? $value_2 : explode(",", $value_2);
-                $flag = (in_array($value_1, $value2)) ? TRUE : FALSE;
+                $flag = (in_array($value_1, $value2)) ? true : false;
                 break;
             case 'ni':
                 $value2 = (is_array($value_2)) ? $value_2 : explode(",", $value_2);
-                $flag = (!(in_array($value_1, $value2))) ? TRUE : FALSE;
+                $flag = (!(in_array($value_1, $value2))) ? true : false;
                 break;
             case "nu":
             case "em":
                 $value_1 = trim($value_1);
-                $flag = (is_null($value_1) || empty($value_1) || $value_1 == '') ? TRUE : FALSE;
+                $flag = (is_null($value_1) || empty($value_1) || $value_1 == '') ? true : false;
                 break;
             case "nn":
             case "nem":
                 $value_1 = trim($value_1);
-                $flag = (!is_null($value_1) && !empty($value_1) && $value_1 != '') ? TRUE : FALSE;
+                $flag = (!is_null($value_1) && !empty($value_1) && $value_1 != '') ? true : false;
                 break;
             case 'ia':
                 $flag = (is_array($value_1)) ? true : false;
@@ -2370,10 +2405,10 @@ Class General
                 $flag = (!(is_array($value_1))) ? true : false;
                 break;
             case 'li'://old
-                $flag = (strtolower($value_1) == strtolower($value_2)) ? TRUE : FALSE;
+                $flag = (strtolower($value_1) == strtolower($value_2)) ? true : false;
                 break;
-            default :
-                $flag = ($value_1 == $value_2) ? TRUE : FALSE;
+            default:
+                $flag = ($value_1 == $value_2) ? true : false;
                 break;
         }
         return $flag;
@@ -2401,13 +2436,13 @@ Class General
             case "Function":
                 if (method_exists($this, $value)) {
                     $ret_val = $this->$value($data, $id);
-                } elseif (substr($value, 0, 12) == 'controller::' && substr($value, 12) !== FALSE) {
+                } elseif (substr($value, 0, 12) == 'controller::' && substr($value, 12) !== false) {
                     $value = substr($value, 12);
                     $ctrl_obj = $this->getControllerObject();
                     if (method_exists($ctrl_obj, $value)) {
                         $ret_val = $ctrl_obj->$value($data, $id);
                     }
-                } elseif (substr($value, 0, 7) == 'model::' && substr($value, 7) !== FALSE) {
+                } elseif (substr($value, 0, 7) == 'model::' && substr($value, 7) !== false) {
                     $value = substr($value, 7);
                     $model_obj = $this->getModelObject();
                     if (method_exists($model_obj, $value)) {
@@ -2415,7 +2450,7 @@ Class General
                     }
                 }
                 break;
-            default :
+            default:
                 $ret_val = $value;
                 break;
         }
@@ -2442,14 +2477,14 @@ Class General
     public function processRequestPregMatch($param = '', $input_params = array())
     {
         if ($param != "") {
-            if (strstr($param, '{%REQUEST') !== FALSE) {
+            if (strstr($param, '{%REQUEST') !== false) {
                 preg_match_all("/{%REQUEST\.([a-zA-Z0-9_-]{1,})/i", $param, $preg_all_arr);
                 if (isset($preg_all_arr[1]) && is_array($preg_all_arr[1]) && count($preg_all_arr[1]) > 0) {
                     foreach ((array) $preg_all_arr[1] as $key => $value) {
                         if (is_array($input_params[$value])) {
                             continue;
                         }
-                        if (strstr($param, '{%REQUEST') !== FALSE) {
+                        if (strstr($param, '{%REQUEST') !== false) {
                             $param = str_replace("{%REQUEST." . $value . "%}", $input_params[$value], $param);
                         }
                     }
@@ -2462,11 +2497,11 @@ Class General
     public function processServerPregMatch($param = '', $input_params = array())
     {
         if ($param != "") {
-            if (strstr($param, '{%SERVER') !== FALSE) {
+            if (strstr($param, '{%SERVER') !== false) {
                 preg_match_all("/{%SERVER\.([a-zA-Z0-9_-]{1,})/i", $param, $preg_all_arr);
                 if (isset($preg_all_arr[1]) && is_array($preg_all_arr[1]) && count($preg_all_arr[1]) > 0) {
                     foreach ((array) $preg_all_arr[1] as $key => $value) {
-                        if (strstr($param, '{%SERVER') !== FALSE) {
+                        if (strstr($param, '{%SERVER') !== false) {
                             $param = str_replace('{%SERVER.' . $value . '%}', $_SERVER[$value], $param);
                         }
                     }
@@ -2479,11 +2514,11 @@ Class General
     public function processSessionPregMatch($param = '', $input_params = array())
     {
         if ($param != "") {
-            if (strstr($param, '{%SESSION') !== FALSE) {
+            if (strstr($param, '{%SESSION') !== false) {
                 preg_match_all("/{%SESSION\.([a-zA-Z0-9_-]{1,})/i", $param, $preg_all_arr);
                 if (isset($preg_all_arr[1]) && is_array($preg_all_arr[1]) && count($preg_all_arr[1]) > 0) {
                     foreach ((array) $preg_all_arr[1] as $key => $value) {
-                        if (strstr($param, '{%SESSION') !== FALSE) {
+                        if (strstr($param, '{%SESSION') !== false) {
                             $param = str_replace('{%SESSION.' . $value . '%}', $this->CI->session->userdata($value), $param);
                         }
                     }
@@ -2496,11 +2531,11 @@ Class General
     public function processSystemPregMatch($param = '', $input_params = array())
     {
         if ($param != "") {
-            if (strstr($param, '{%SYSTEM') !== FALSE) {
+            if (strstr($param, '{%SYSTEM') !== false) {
                 preg_match_all("/{%SYSTEM\.([a-zA-Z0-9_-]{1,})/i", $param, $preg_all_arr);
                 if (isset($preg_all_arr[1]) && is_array($preg_all_arr[1]) && count($preg_all_arr[1]) > 0) {
                     foreach ((array) $preg_all_arr[1] as $key => $value) {
-                        if (strstr($param, '{%SYSTEM') !== FALSE) {
+                        if (strstr($param, '{%SYSTEM') !== false) {
                             $param = str_replace('{%SYSTEM.' . $value . '%}', $this->CI->config->item($value), $param);
                         }
                     }
@@ -2514,10 +2549,10 @@ Class General
     {
         if ($param != "") {
             preg_match_all("/#SYSTEM\.([a-zA-Z0-9_-]{1,})/i", $param, $preg_all_arr);
-            if (strstr($param, '#SYSTEM') !== FALSE) {
+            if (strstr($param, '#SYSTEM') !== false) {
                 if (isset($preg_all_arr[1]) && is_array($preg_all_arr[1]) && count($preg_all_arr[1]) > 0) {
                     foreach ((array) $preg_all_arr[1] as $key => $value) {
-                        if (strstr($param, '#SYSTEM') !== FALSE) {
+                        if (strstr($param, '#SYSTEM') !== false) {
                             $param = str_replace('#SYSTEM.' . $value . '#', $input_params[$value], $param);
                         }
                     }
@@ -2655,10 +2690,10 @@ Class General
     public function deleteReferenceModules($del_modules = array(), $main_data = array(), $physical_data_remove = "")
     {
         if (!is_array($del_modules) || count($del_modules) == 0) {
-            return FALSE;
+            return false;
         }
         if (!is_array($main_data) || count($main_data) == 0) {
-            return FALSE;
+            return false;
         }
         $PHYSICAL_REC_DELETE = $this->CI->config->item('PHYSICAL_RECORD_DELETE');
         foreach ($main_data as $mKey => $mVal) {
@@ -2705,13 +2740,13 @@ Class General
     public function deleteMediaFiles($config_arr = array(), $data_arr = array(), $physical_data_remove = "")
     {
         if (!is_array($config_arr) || count($config_arr) == 0) {
-            return FALSE;
+            return false;
         }
         if (!is_array($data_arr) || count($data_arr) == 0) {
-            return FALSE;
+            return false;
         }
         if ($this->CI->config->item('PHYSICAL_RECORD_DELETE') && $physical_data_remove == "No") {
-            return FALSE;
+            return false;
         }
         foreach ($data_arr as $dKey => $dVal) {
             foreach ($config_arr as $cKey => $cVal) {
@@ -2757,7 +2792,7 @@ Class General
         }
         if ($mode == "AR") {
             if ($extra_cond != "") {
-                $this->CI->db->where($extra_cond, FALSE, FALSE);
+                $this->CI->db->where($extra_cond, false, false);
             }
         } else {
             return $extra_cond;
@@ -2831,7 +2866,7 @@ Class General
     public function trackModuleNavigation($type = "", $navigType = '', $navigAction = 'Viewed', $entityURL = '', $entityName = '', $recName = '', $extra_attr = '')
     {
         $NAVIGATION_LOG_REQ = $this->CI->config->item('NAVIGATION_LOG_REQ');
-        $LogNavOn = (strtolower($NAVIGATION_LOG_REQ) == "y") ? TRUE : FALSE;
+        $LogNavOn = (strtolower($NAVIGATION_LOG_REQ) == "y") ? true : false;
         $iAdminId = $this->CI->session->userdata('iAdminId');
         $query_str = '';
         if ($_REQUEST['hashValue'] != "") {
@@ -2844,8 +2879,8 @@ Class General
             if ($type == "Dashboard") {
                 $this->CI->db->select("m.vMenuDisplay AS subMenu");
                 $this->CI->db->select("m.vURL AS subURL");
-                $this->CI->db->select("(SELECT " . $this->CI->db->protect("s.vMenuDisplay") . " FROM " . $this->CI->db->protect("mod_admin_menu") . " AS " . $this->CI->db->protect("s1") . " WHERE " . $this->CI->db->protect("s2.iAdminMenuId") . " = " . $this->CI->db->protect("m.iParentId") . ") AS " . $this->CI->db->protect("mainMenu"), FALSE);
-                $this->CI->db->select("(SELECT " . $this->CI->db->protect("s.vURL") . " FROM " . $this->CI->db->protect("mod_admin_menu") . " AS " . $this->CI->db->protect("s2") . " WHERE " . $this->CI->db->protect("s2.iAdminMenuId") . " = " . $this->CI->db->protect("m.iParentId") . ") AS " . $this->CI->db->protect("mainURL"), FALSE);
+                $this->CI->db->select("(SELECT " . $this->CI->db->protect("s.vMenuDisplay") . " FROM " . $this->CI->db->protect("mod_admin_menu") . " AS " . $this->CI->db->protect("s1") . " WHERE " . $this->CI->db->protect("s2.iAdminMenuId") . " = " . $this->CI->db->protect("m.iParentId") . ") AS " . $this->CI->db->protect("mainMenu"), false);
+                $this->CI->db->select("(SELECT " . $this->CI->db->protect("s.vURL") . " FROM " . $this->CI->db->protect("mod_admin_menu") . " AS " . $this->CI->db->protect("s2") . " WHERE " . $this->CI->db->protect("s2.iAdminMenuId") . " = " . $this->CI->db->protect("m.iParentId") . ") AS " . $this->CI->db->protect("mainURL"), false);
                 $this->CI->db->where("m.vDashBoardPage", $entityName);
                 $this->CI->db->order_by("mainMenu", "DESC");
                 $this->CI->db->limit(1);
@@ -2866,7 +2901,6 @@ Class General
                 $this->CI->db->order_by("mainMenu", "DESC");
                 $this->CI->db->limit(1);
                 $db_data_obj = $this->CI->db->get("mod_admin_menu AS m");
-                #echo $this->CI->db->last_query();exit;
                 $db_data = is_object($db_data_obj) ? $db_data_obj->result_array() : array();
 
                 $main_menu = $db_data[0]['mainMenu'];
@@ -2898,14 +2932,14 @@ Class General
             $iNavigationId = $this->CI->navigation_model->insert($insert_navig_arr);
             return $iNavigationId;
         } else {
-            return FALSE;
+            return false;
         }
     }
 
     public function trackCustomNavigation($navigType = "List", $navigAction = "Viewed", $entityURL = '', $menuCond = '', $recName = '', $extra_attr = '')
     {
         $NAVIGATION_LOG_REQ = $this->CI->config->item('NAVIGATION_LOG_REQ');
-        $LogNavOn = (strtolower($NAVIGATION_LOG_REQ) == "y") ? TRUE : FALSE;
+        $LogNavOn = (strtolower($NAVIGATION_LOG_REQ) == "y") ? true : false;
         $iAdminId = $this->CI->session->userdata('iAdminId');
         $query_str = '';
         if ($_REQUEST['hashValue'] != "") {
@@ -2921,7 +2955,7 @@ Class General
             $this->CI->db->select("s.vMenuDisplay AS mainMenu");
             $this->CI->db->select("s.vURL AS mainURL");
             $this->CI->db->join('mod_admin_menu AS s', 's.iAdminMenuId = m.iParentId', 'left');
-            $this->CI->db->where($menuCond, FALSE, FALSE);
+            $this->CI->db->where($menuCond, false, false);
 
             $this->CI->db->order_by("mainMenu", "DESC");
             $this->CI->db->limit(2);
@@ -2959,11 +2993,11 @@ Class General
             $iNavigationId = $this->CI->navigation_model->insert($insert_navig_arr);
             return $iNavigationId;
         } else {
-            return FALSE;
+            return false;
         }
     }
 
-    public function converNavigationVars($navig_str = '', $flag = FALSE)
+    public function converNavigationVars($navig_str = '', $flag = false)
     {
         $navig_str = trim($navig_str, "|");
         $navig_arr = explode("|", $navig_str);
@@ -2986,7 +3020,7 @@ Class General
                 $format_url[$i + 1] = $param;
             }
         }
-        if ($flag === TRUE) {
+        if ($flag === true) {
             $final_str['module'] = $navig_arr[0];
             $final_str['params'] = implode("|", $format_url);
         } else {
@@ -2998,16 +3032,16 @@ Class General
     public function allowStripSlashes()
     {
         if ((version_compare(PHP_VERSION, '5.3.0') >= 0)) {
-            return TRUE;
+            return true;
         } elseif ((version_compare(PHP_VERSION, '5.3.0') < 0)) {
             if (!get_magic_quotes_gpc()) {
-                return TRUE;
+                return true;
             }
         }
-        return FALSE;
+        return false;
     }
 
-    public function getRequestURLParams($omit_flag = FALSE)
+    public function getRequestURLParams($omit_flag = false)
     {
         $FRAMEWORK_VARS = $this->CI->config->item('FRAMEWORK_VARS');
         $FRAMEWORK_OMITS = $this->CI->config->item('FRAMEWORK_OMITS');
@@ -3088,10 +3122,10 @@ Class General
         return $request_hash_str;
     }
 
-    public function displayKeyValueData($selected_val = "", $combo_arr = array(), $is_optgroup = FALSE)
+    public function displayKeyValueData($selected_val = "", $combo_arr = array(), $is_optgroup = false)
     {
         $retStr = "";
-        if ($is_optgroup == FALSE) {
+        if ($is_optgroup == false) {
             if (is_array($combo_arr) && count($combo_arr) > 0) {
                 $str = "";
                 foreach ($combo_arr as $key => $val) {
@@ -3215,7 +3249,7 @@ Class General
     /**
      * logExecutedEmails method is used to make an record of notification emails sent.
      */
-    public function logExecutedEmails($type = 'Admin', $email_vars = array(), $success = FALSE)
+    public function logExecutedEmails($type = 'Admin', $email_vars = array(), $success = false)
     {
         $log_arr = array();
         $log_arr['eEntityType'] = $type;
@@ -3230,13 +3264,13 @@ Class General
         $log_arr['dtSendDateTime'] = date('Y-m-d H:i:s');
         $log_arr['eStatus'] = ($success) ? "Executed" : "Failed";
         $this->insertExecutedNotify($log_arr);
-        return TRUE;
+        return true;
     }
 
     /**
      * logExecutedSMS method is used to make an record of SMS's sent.
      */
-    public function logExecutedSMS($type = 'Admin', $sms_vars = array(), $success = FALSE)
+    public function logExecutedSMS($type = 'Admin', $sms_vars = array(), $success = false)
     {
         $log_arr = array();
         $log_arr['eEntityType'] = $type;
@@ -3249,7 +3283,7 @@ Class General
         $log_arr['dtSendDateTime'] = date('Y-m-d H:i:s');
         $log_arr['eStatus'] = ($success) ? "Executed" : "Failed";
         $this->insertExecutedNotify($log_arr);
-        return TRUE;
+        return true;
     }
 
     public function insertExecutedNotify($insert_arr = array())
@@ -3298,7 +3332,7 @@ Class General
         $log_files = array();
         if (is_dir($admin_log_path)) {
             $handle = opendir($admin_log_path);
-            while (FALSE !== ($file = readdir($handle))) {
+            while (false !== ($file = readdir($handle))) {
                 if (in_array($file, array(".", "..", ".svn"))) {
                     continue;
                 }
@@ -3375,7 +3409,7 @@ Class General
 
     public function renderMessageLabel($message = '', $data_arr = array())
     {
-        if (!$message || !is_array($data_arr) || count($data_arr) == 0 || (strstr($message, '#') !== FALSE)) {
+        if (!$message || !is_array($data_arr) || count($data_arr) == 0 || (strstr($message, '#') !== false)) {
             return $message;
         }
         foreach ($data_arr as $key => $value) {
@@ -3420,9 +3454,9 @@ Class General
     {
         $upload_size_kb = ceil($upload_size / 1024);
         if ($permitted_file_size >= $upload_size_kb) {
-            return TRUE;
+            return true;
         } else {
-            return FALSE;
+            return false;
         }
     }
 
@@ -3430,24 +3464,24 @@ Class General
     {
         $ext_arr = explode('.', $upload_file);
         if (count($ext_arr) === 1) {
-            return FALSE;
+            return false;
         }
         if (!is_array($permitted_file_ext) && trim($permitted_file_ext) == '*') {
-            return TRUE;
+            return true;
         }
         if (!is_array($permitted_file_ext)) {
             $permitted_file_ext = explode(",", $permitted_file_ext);
         }
         $ext = strtolower(end($ext_arr));
         if (!in_array($ext, $permitted_file_ext)) {
-            return FALSE;
+            return false;
         }
-        return TRUE;
+        return true;
     }
 
     public function loadEncryptLibrary()
     {
-        if (class_exists("Ci_encrypt", FALSE)) {
+        if (class_exists("Ci_encrypt", false)) {
             $this->CI->ci_encrypt = new Ci_encrypt();
         } else {
             $this->CI->load->library("ci_encrypt");
@@ -3465,14 +3499,14 @@ Class General
                 break;
             case 'password_hash':
                 if ($data == "*****" || trim($data) == "") {
-                    $enc_data = FALSE;
+                    $enc_data = false;
                 } else {
                     $enc_data = password_hash($data, PASSWORD_DEFAULT);
                 }
                 break;
             case 'bcrypt':
                 if ($data == "*****" || trim($data) == "") {
-                    $enc_data = FALSE;
+                    $enc_data = false;
                 } else {
                     $enc_data = password_hash($data, PASSWORD_BCRYPT);
                 }
@@ -3482,7 +3516,7 @@ Class General
             case 'sha256':
             case 'sha512':
                 if ($data == "*****" || trim($data) == "") {
-                    $enc_data = FALSE;
+                    $enc_data = false;
                 } else {
                     $enc_data = hash($method, $data);
                 }
@@ -3526,23 +3560,23 @@ Class General
         return $dec_data;
     }
 
-     public function verifyEncryptData($data = '', $enc_data = '', $method = 'cit')
+    public function verifyEncryptData($data = '', $enc_data = '', $method = 'cit')
     {
         switch ($method) {
             case 'base64':
                 $dec_data = base64_decode($enc_data);
                 if ($data == $dec_data) {
-                    return TRUE;
+                    return true;
                 }
                 break;
             case 'password_hash':
                 if (password_verify($data, $enc_data)) {
-                    return TRUE;
+                    return true;
                 }
                 break;
             case 'bcrypt':
                 if (password_verify($data, $enc_data)) {
-                    return TRUE;
+                    return true;
                 }
                 break;
             case 'md5':
@@ -3550,7 +3584,7 @@ Class General
             case 'sha256':
             case 'sha512':
                 if (hash($method, $data) == $enc_data) {
-                    return TRUE;
+                    return true;
                 }
                 break;
             default:
@@ -3558,12 +3592,12 @@ Class General
                 if (trim($data) != "" && trim($enc_data) != "") {
                     $dec_data = $this->CI->ci_encrypt->dataDecrypt($enc_data);
                     if ($data == $dec_data) {
-                        return TRUE;
+                        return true;
                     }
                 }
                 break;
         }
-        return FALSE;
+        return false;
     }
 
     public function isAdminEncodeActive()
@@ -3573,7 +3607,7 @@ Class General
         return $is_active;
     }
 
-    public function getAdminEncodeURL($url = '', $ret_whole_url = 0, $is_url = FALSE)
+    public function getAdminEncodeURL($url = '', $ret_whole_url = 0, $is_url = false)
     {
         $this->loadEncryptLibrary();
         $url = str_replace("\/", "/", $url);
@@ -3595,7 +3629,7 @@ Class General
         return $tURL;
     }
 
-    public function getAdminDecodeURL($url = '', $ret_whole_url = 0, $is_url = FALSE)
+    public function getAdminDecodeURL($url = '', $ret_whole_url = 0, $is_url = false)
     {
         $this->loadEncryptLibrary();
         $url_t = $tURL = $url;
@@ -3616,13 +3650,13 @@ Class General
         return $tURL;
     }
 
-    public function getCustomEncryptMode($ret = FALSE)
+    public function getCustomEncryptMode($ret = false)
     {
         $ret_arr['Add'] = $this->getAdminEncodeURL("Add");
         $ret_arr['View'] = $this->getAdminEncodeURL("View");
         $ret_arr['Update'] = $this->getAdminEncodeURL("Update");
         $ret_arr['Search'] = $this->getAdminEncodeURL("Search");
-        if ($ret === TRUE) {
+        if ($ret === true) {
             $ret_arr_enc = $ret_arr;
         } else {
             $ret_arr_enc = json_encode($ret_arr);
@@ -3630,7 +3664,7 @@ Class General
         return $ret_arr_enc;
     }
 
-    public function getCustomEncryptURL($code = '', $ret = FALSE)
+    public function getCustomEncryptURL($code = '', $ret = false)
     {
         $general_url = array();
 
@@ -3681,7 +3715,7 @@ Class General
         $general_url['desktop_notifications_add'] = "notifications/notifications/viewContent";
         $general_url['desktop_notifications_list'] = "notifications/notifications/index";
 
-        if ($ret === TRUE) {
+        if ($ret === true) {
             $general_url['otp_authentication'] = "user/login/otp_authentication";
             $general_url['google_verification'] = "user/login/google_verification";
             $general_url['otp_verification'] = "user/login/otp_verification";
@@ -3755,17 +3789,17 @@ Class General
         foreach ($general_url as $key => $val) {
             if (is_array($code) && count($code) > 0) {
                 if (in_array($key, $code)) {
-                    $ret_arr[$key] = $this->getAdminEncodeURL($val, 0, TRUE);
+                    $ret_arr[$key] = $this->getAdminEncodeURL($val, 0, true);
                 }
             } elseif ($code != "") {
                 if ($code == $key) {
-                    $ret_arr[$key] = $this->getAdminEncodeURL($val, 0, TRUE);
+                    $ret_arr[$key] = $this->getAdminEncodeURL($val, 0, true);
                 }
             } else {
-                $ret_arr[$key] = $this->getAdminEncodeURL($val, 0, TRUE);
+                $ret_arr[$key] = $this->getAdminEncodeURL($val, 0, true);
             }
         }
-        if ($ret === TRUE) {
+        if ($ret === true) {
             $ret_arr_enc = $ret_arr;
         } else {
             $ret_arr_enc = json_encode($ret_arr);
@@ -3850,10 +3884,10 @@ Class General
                 }
             }
         }
-        return TRUE;
+        return true;
     }
 
-    public function writeStaticPageContent($page_code = '', $lang_code = '', $data = '', $binary = FALSE)
+    public function writeStaticPageContent($page_code = '', $lang_code = '', $data = '', $binary = false)
     {
         $page_name = $page_code . '_' . strtolower($lang_code) . '.tpl';
         $file_path = $this->CI->config->item('static_pages_path') . $page_name;
@@ -3864,7 +3898,7 @@ Class General
             fputs($handle, $data);
         }
         fclose($handle);
-        return TRUE;
+        return true;
     }
 
     public function getCustomAddEditPageURL($module_name = '', $normal_url = '', $custom_url = '')
@@ -3872,7 +3906,7 @@ Class General
         if (trim($custom_url) == "") {
             return $normal_url;
         } else {
-            $return_arr = $this->converNavigationVars($custom_url, TRUE);
+            $return_arr = $this->converNavigationVars($custom_url, true);
             if (trim($return_arr['module']) == "") {
                 return $normal_url;
             }
@@ -3918,7 +3952,7 @@ Class General
         if ($this->CI->config->item('ACCOUNT_CHECK_ENABLE')) {
             $user_acc_status = $this->CI->config->item('USER_ACC_STATUS_INFO');
             if (in_array($user_acc_status, array("Expired", "Closed"))) {
-                $login_arr = $this->getCustomEncryptURL("user_login_entry", TRUE);
+                $login_arr = $this->getCustomEncryptURL("user_login_entry", true);
                 $redir_uri = $this->CI->config->item("admin_url") . $login_arr["user_login_entry"] . "?_=" . time();
                 if ($user_acc_status == "Closed") {
                     $err_msg = $this->processMessageLabel('ACTION_YOUR_ACCOUNT_CLOSED_PLEASE_TRY_AGAIN_OR_CONTACT_ADMINISTRATOR');
@@ -4011,8 +4045,9 @@ Class General
         return $ret_arr;
     }
     
-    public function accessKeyGenerator($mode = '', $value = '', $data = array(), $id = '',$field_name = '', $field_id = ''){
-        if($mode == "Add"){
+    public function accessKeyGenerator($mode = '', $value = '', $data = array(), $id = '', $field_name = '', $field_id = '')
+    {
+        if ($mode == "Add") {
             $alphabet = time();
             $alphabet .= 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890';
             $key = array();
@@ -4022,7 +4057,7 @@ Class General
                 $key[] = $alphabet[$n];
                 $ret_val = implode($key);
             }
-        }else{
+        } else {
             $ret_val = $value;
         }
 
@@ -4061,12 +4096,12 @@ Class General
         return $theme_settings_arr;
     }
 
-    public function getClientThemeJSON($flag = FALSE)
+    public function getClientThemeJSON($flag = false)
     {
         $this->CI->load->library("ci_theme");
         $this->CI->ci_theme->setClientThemeSettings();
         $theme_settings_arr = $this->CI->ci_theme->getClientThemeSettings();
-        if ($flag === TRUE) {
+        if ($flag === true) {
             return $theme_settings_arr;
         } else {
             return json_encode($theme_settings_arr);
@@ -4152,7 +4187,7 @@ Class General
         return $fmt;
     }
 
-    public function getAdminTPLFormats($flag = FALSE)
+    public function getAdminTPLFormats($flag = false)
     {
         $this->CI->load->library('filter');
         $phone_format = $this->CI->config->item('ADMIN_PHONE_FORMAT');
@@ -4182,7 +4217,7 @@ Class General
         $ret_arr['currency_suffix'] = $currency_suf != '' ? $currency_suf : '';
         $ret_arr['image_extensions'] = is_array($image_extensions) ? implode(",", $image_extensions) : $image_extensions;
 
-        if ($flag === TRUE) {
+        if ($flag === true) {
             return $ret_arr;
         } else {
             return json_encode($ret_arr);
@@ -4218,7 +4253,7 @@ Class General
     public function getResizedLogoImage($path = '', $url = '')
     {
         if (!is_file($path) && !filter_var($path, FILTER_VALIDATE_URL)) {
-            return FALSE;
+            return false;
         }
         $logo_max_width = 220;
         $logo_max_height = 57;
@@ -4242,7 +4277,7 @@ Class General
     {
         $config_lang = $this->CI->config->item("SYSTEM_LANG_PARAM");
         $config_lang = ($config_lang != "") ? $config_lang : "lang_id";
-        $lang_id = $this->CI->input->get_post($config_lang, TRUE);
+        $lang_id = $this->CI->input->get_post($config_lang, true);
         $lang_code = ($lang_id != "") ? $lang_id : "EN";
         return $lang_code;
     }
@@ -4251,7 +4286,7 @@ Class General
     {
         for ($i = 0; $i < count($fields); $i++) {
             if (is_array($fields[$i])) {
-                $escape = (isset($fields[$i]['escape']) && $fields[$i]['escape'] === TRUE) ? FALSE : NULL;
+                $escape = (isset($fields[$i]['escape']) && $fields[$i]['escape'] === true) ? false : null;
                 $this->CI->db->select($fields[$i]['field'], $escape);
             } else {
                 $this->CI->db->select($fields[$i]);
@@ -4283,14 +4318,14 @@ Class General
                 }
             } else {
                 $field = $val['field'];
-                $data = isset($val['value']) ? $val['value'] : FALSE;
+                $data = isset($val['value']) ? $val['value'] : false;
                 $oper = (isset($val['oper'])) ? $val['oper'] : "eq";
-                $escape = (isset($val['escape']) && $val['escape'] === TRUE) ? FALSE : NULL;
-                if ($data === FALSE) {
+                $escape = (isset($val['escape']) && $val['escape'] === true) ? false : null;
+                if ($data === false) {
                     if ($group == 'OR') {
-                        $this->CI->db->or_where($field, FALSE, FALSE);
+                        $this->CI->db->or_where($field, false, false);
                     } else {
-                        $this->CI->db->where($field, FALSE, FALSE);
+                        $this->CI->db->where($field, false, false);
                     }
                 } else {
                     switch ($oper) {
@@ -4389,9 +4424,9 @@ Class General
                                 $this->CI->db->where_not_in($field, $data, $escape);
                             }
                             break;
-                        case "bt" :
+                        case "bt":
                             $data_arr = array_filter(explode(" to ", $data));
-                            if ($escape === NULL) {
+                            if ($escape === null) {
                                 $field = $this->CI->db->protect($field);
                             }
                             if ($val['type'] == "date_and_time") {
@@ -4405,9 +4440,9 @@ Class General
                             }
                             if (is_array($data_arr) && count($data_arr) > 1) {
                                 if ($group == 'OR') {
-                                    $this->CI->db->or_where($field . " BETWEEN " . $this->CI->db->escape($date_1) . " AND " . $this->CI->db->escape($date_2), FALSE, FALSE);
+                                    $this->CI->db->or_where($field . " BETWEEN " . $this->CI->db->escape($date_1) . " AND " . $this->CI->db->escape($date_2), false, false);
                                 } else {
-                                    $this->CI->db->where($field . " BETWEEN " . $this->CI->db->escape($date_1) . " AND " . $this->CI->db->escape($date_2), FALSE, FALSE);
+                                    $this->CI->db->where($field . " BETWEEN " . $this->CI->db->escape($date_1) . " AND " . $this->CI->db->escape($date_2), false, false);
                                 }
                             } else {
                                 if ($group == 'OR') {
@@ -4417,9 +4452,9 @@ Class General
                                 }
                             }
                             break;
-                        case "nb" :
+                        case "nb":
                             $data_arr = array_filter(explode(" to ", $data));
-                            if ($escape === NULL) {
+                            if ($escape === null) {
                                 $field = $this->CI->db->protect($field);
                             }
                             if ($val['type'] == "date_and_time") {
@@ -4433,9 +4468,9 @@ Class General
                             }
                             if (is_array($data_arr) && count($data_arr) > 1) {
                                 if ($group == 'OR') {
-                                    $this->CI->db->or_where($field . " NOT BETWEEN " . $this->CI->db->escape($date_1) . " AND " . $this->CI->db->escape($date_2), FALSE, FALSE);
+                                    $this->CI->db->or_where($field . " NOT BETWEEN " . $this->CI->db->escape($date_1) . " AND " . $this->CI->db->escape($date_2), false, false);
                                 } else {
-                                    $this->CI->db->where($field . " NOT BETWEEN " . $this->CI->db->escape($date_1) . " AND " . $this->CI->db->escape($date_2), FALSE, FALSE);
+                                    $this->CI->db->where($field . " NOT BETWEEN " . $this->CI->db->escape($date_1) . " AND " . $this->CI->db->escape($date_2), false, false);
                                 }
                             } else {
                                 if ($group == 'OR') {
@@ -4512,10 +4547,10 @@ Class General
                 $join_type = (in_array($join_type, array("left", "right"))) ? strtolower($join_type) : "inner";
                 if ($extra_where != "") {
                     $join_condition = $join_table_alias_pro . "." . $join_field_name_pro . " = " . $main_table_alias_pro . "." . $main_field_name_pro . $extra_where;
-                    $escape = TRUE;
+                    $escape = true;
                 } else {
                     $join_condition = $join_table_alias . "." . $join_field_name . " = " . $main_table_alias . "." . $main_field_name;
-                    $escape = NULL;
+                    $escape = null;
                 }
                 if (is_array($in_tables)) {
                     if (in_array($join_table_alias, $in_tables)) {
@@ -4541,9 +4576,9 @@ Class General
                 APPPATH . 'admin/' => '../admin/'
             );
             Modules::$locations = $narr;
-            return TRUE;
+            return true;
         } else {
-            return FALSE;
+            return false;
         }
     }
 
@@ -4553,9 +4588,9 @@ Class General
         if (is_array($marr) && array_key_exists(APPPATH . 'admin/', $marr)) {
             $narr = end($this->_hmvc_module_paths);
             Modules::$locations = $narr;
-            return TRUE;
+            return true;
         } else {
-            return FALSE;
+            return false;
         }
     }
 
@@ -4568,9 +4603,9 @@ Class General
                 APPPATH . 'front/' => '../front/'
             );
             Modules::$locations = $narr;
-            return TRUE;
+            return true;
         } else {
-            return FALSE;
+            return false;
         }
     }
 
@@ -4580,9 +4615,9 @@ Class General
         if (is_array($marr) && array_key_exists(APPPATH . 'front/', $marr)) {
             $narr = end($this->_hmvc_module_paths);
             Modules::$locations = $narr;
-            return TRUE;
+            return true;
         } else {
-            return FALSE;
+            return false;
         }
     }
 
@@ -4595,9 +4630,9 @@ Class General
                 APPPATH . 'webservice/' => '../webservice/'
             );
             Modules::$locations = $narr;
-            return TRUE;
+            return true;
         } else {
-            return FALSE;
+            return false;
         }
     }
 
@@ -4607,9 +4642,9 @@ Class General
         if (is_array($marr) && array_key_exists(APPPATH . 'webservice/', $marr)) {
             $narr = end($this->_hmvc_module_paths);
             Modules::$locations = $narr;
-            return TRUE;
+            return true;
         } else {
-            return FALSE;
+            return false;
         }
     }
 
@@ -4622,9 +4657,9 @@ Class General
                 APPPATH . 'notification/' => '../notification/'
             );
             Modules::$locations = $narr;
-            return TRUE;
+            return true;
         } else {
-            return FALSE;
+            return false;
         }
     }
 
@@ -4634,9 +4669,9 @@ Class General
         if (is_array($marr) && array_key_exists(APPPATH . 'notification/', $marr)) {
             $narr = end($this->_hmvc_module_paths);
             Modules::$locations = $narr;
-            return TRUE;
+            return true;
         } else {
-            return FALSE;
+            return false;
         }
     }
 
@@ -4733,15 +4768,13 @@ Class General
             }
             $data = $this->CI->$widget->$method();
         } catch (Exception $e) {
-            log_message('error', $e->getMessage());
-            
         }
         return $data;
     }
 
     public function getPagingBlock($api_settings = array(), $pg_crumbs = 5, $pg_ajax = 'Yes')
     {
-        require_once ($this->CI->config->item('third_party') . "pagination/Pagination.class.php");
+        require_once($this->CI->config->item('third_party') . "pagination/Pagination.class.php");
         try {
             $page = isset($api_settings['curr_page']) ? ((int) $api_settings['curr_page']) : 1;
             if ($page < 1) {
@@ -4761,7 +4794,7 @@ Class General
                 $pagination->setCrumbs($pg_crumbs);
             }
             if ($pg_ajax == "Yes") {
-                $pagination->setAjax(TRUE);
+                $pagination->setAjax(true);
             }
             $pagination->setPrevious("&laquo;");
             $pagination->setNext("&raquo;");
@@ -4769,8 +4802,6 @@ Class General
             $markup = $pagination->parse();
             return $markup;
         } catch (Exception $e) {
-            log_message('error', $e->getMessage());
-            
         }
     }
 
@@ -4810,8 +4841,6 @@ Class General
             $info = str_replace(array("{from}", "{to}", "{total}"), array($from, $to, $total), $text);
             return $info;
         } catch (Exception $e) {
-            log_message('error', $e->getMessage());
-            
         }
     }
 
@@ -4849,7 +4878,7 @@ Class General
     public function getTempSessionData($key = '')
     {
         $ret_val = '';
-        if (stristr($key, ".") !== FALSE) {
+        if (stristr($key, ".") !== false) {
             $arr = explode(".", $key);
             $data = $this->CI->session->tempdata($arr[0]);
             if (is_valid_array($data)) {
@@ -4873,7 +4902,7 @@ Class General
     public function getFlashSessionData($key = '')
     {
         $ret_val = '';
-        if (stristr($key, ".") !== FALSE) {
+        if (stristr($key, ".") !== false) {
             $arr = explode(".", $key);
             $data = $this->CI->session->flashdata($arr[0]);
             if (is_valid_array($data)) {
@@ -4915,7 +4944,7 @@ Class General
                         'id' => $val['iAdminPreferencesId'],
                         'name' => $val['vName'],
                         'slug' => $val['vSlug'],
-                        'value' => json_decode($val['tValue'], TRUE),
+                        'value' => json_decode($val['tValue'], true),
                         'default' => $val['eDefault'],
                         'comment' => $val['tComment'],
                     );
@@ -4947,7 +4976,7 @@ Class General
             $form_data_set = $this->CI->form_drafts_model->getData($where_cond, $fields_arr, $order_cond, '', 1);
 
             if (is_array($form_data_set) && !empty($form_data_set[0]['tFormData'])) {
-                $form_data_arr = json_decode($form_data_set[0]['tFormData'], TRUE);
+                $form_data_arr = json_decode($form_data_set[0]['tFormData'], true);
                 if (is_array($form_data_arr) && count($form_data_arr) > 0) {
                     $render_data['data'] = array_merge($render_data['data'], $form_data_arr);
                     $render_data['draft_uniq_id'] = $form_data_set[0]['iFormDraftsId'];
@@ -5037,7 +5066,6 @@ Class General
 
     public function getNotifications($type = '')
     {
-
         $admin_id = $this->CI->session->userdata('iAdminId');
         $group_id = $this->CI->session->userdata('iGroupId');
         $limit = $this->CI->config->item('ADMIN_NOTIFICATIONS_LIMIT');
@@ -5049,7 +5077,7 @@ Class General
             "desktop_notifications_add",
             "desktop_notifications_list"
         );
-        $enc_urls = $this->getCustomEncryptURL($urls, TRUE);
+        $enc_urls = $this->getCustomEncryptURL($urls, true);
         $listing_url = $enc_urls['admin_notifications_list'];
         $notify_url = $enc_urls['admin_notifications_add'];
         $desktop_url = $enc_urls['desktop_notifications_add'];
@@ -5060,7 +5088,6 @@ Class General
         $notifications = array();
 
         if ($this->CI->config->item('ADMIN_NOTIFICATIONS_ACTIVATE') == 'Y') {
-
             $this->CI->db->select("iNotificationId as id, tMessage AS message, dAddedDate as date, eIsRead as is_read, eStatus as status");
             $this->CI->db->where('iAdminId', $admin_id);
             if ($type == 'Notify') {
@@ -5081,7 +5108,6 @@ Class General
             $total_messages = is_object($messages) ? $messages->num_rows() : 0;
 
             foreach ($result as $key => $value) {
-
                 $value['time'] = $this->getTimeDiff($value['date']);
                 $value['icon'] = "fa fa-bullhorn";
                 $enc_id = $this->getAdminEncodeURL($value['id']);
@@ -5105,7 +5131,6 @@ Class General
             $notifications_active = "Y";
         }
         if ($this->CI->config->item('ADMIN_DESKTOP_NOTIFICATIONS') == 'Y') {
-
             $this->CI->db->select("iExecutedNotificationId as id, vSubject AS subject, tContent as content, dtSendDateTime as date, eStatus as status");
             $this->CI->db->where('iEntityId', $admin_id);
             $this->CI->db->where('eNotificationType', 'DesktopNotify');
@@ -5137,9 +5162,9 @@ Class General
             $notifications['desktop_notifications_active'] = $this->CI->config->item('ADMIN_DESKTOP_NOTIFICATIONS');
             $notifications_active = "Y";
         }
-        if($notifications['admin_notifications_active'] == 'Y' && $notifications['desktop_notifications_active'] == 'Y'){
+        if ($notifications['admin_notifications_active'] == 'Y' && $notifications['desktop_notifications_active'] == 'Y') {
             $notifications['notifications_count'] = 2;
-        }else{
+        } else {
             $notifications['notifications_count'] = 1;
         }
         $notifications['notifications_active'] = $notifications_active;
@@ -5149,12 +5174,10 @@ Class General
     
     public function getTasks()
     {
-
         $admin_id = $this->CI->session->userdata('iAdminId');
         $admin_url = $this->CI->config->item("admin_url");
 
         if ($this->CI->config->item('ADMIN_NOTIFICATIONS_ACTIVATE') == 'Y' || 1) {
-
             $this->CI->db->select("*");
             $this->CI->db->where('iAssignedTo', $admin_id);
             $this->CI->db->limit(10);
@@ -5162,8 +5185,8 @@ Class General
             $result_arr = $this->CI->db->get('mod_admin_tasks');
             $result = is_object($result_arr) ? $result_arr->result_array() : array();
             
-            if(is_array($result) && count($result) > 0 ){
-                foreach($result as $key => $val){
+            if (is_array($result) && count($result) > 0) {
+                foreach ($result as $key => $val) {
                     $value['msg'] = $val['vSubject'];
                     $value['time'] = $this->getTimeDiff($val['dAddedDate']);
                     $value['icon'] = "fa fa-tasks";
@@ -5171,20 +5194,21 @@ Class General
 
                     $tasks[] = $value;
                 }
-            }else{
+            } else {
                 $value['msg'] = "No Tasks assigned to you";
                 $value['icon'] = "fa fa-tasks";
                 $value['no_tasks'] = 1;
                 $tasks[] = $value;
-        }
+            }
         }
         return $tasks;
     }
     
-    public function getNotificationTime($value = '',$id = '',$data = array()){
-        if($value == '' || $value == '0000-00-00 00:00:00'){
+    public function getNotificationTime($value = '', $id = '', $data = array())
+    {
+        if ($value == '' || $value == '0000-00-00 00:00:00') {
             $value = "No Date";
-        }else{
+        } else {
             $value = $this->getTimeDiff($value);
         }
         
@@ -5296,7 +5320,7 @@ Class General
             $query = $db_queries[$i];
             $query = str_replace(array("\n", "\r"), " ", $query);
             foreach ($skip_arr as $needle) {
-                if (strpos($query, $needle) === FALSE) {
+                if (strpos($query, $needle) === false) {
                     continue 1;
                 } else {
                     continue 2;
@@ -5318,7 +5342,7 @@ Class General
     public function logDBQueriesList()
     {
         if (!is_object($this->CI->db)) {
-            return FALSE;
+            return false;
         }
         $queries = $this->CI->db->queries;
         $times = $this->CI->db->query_times;
@@ -5349,7 +5373,7 @@ Class General
                 $query_str = $queries[$i];
                 $query_str = str_replace(array("\n", "\r"), " ", $query_str);
                 foreach ($skip_arr as $needle) {
-                    if (strpos($query_str, $needle) === FALSE) {
+                    if (strpos($query_str, $needle) === false) {
                         continue 1;
                     } else {
                         continue 2;
@@ -5396,38 +5420,260 @@ EOD;
         $fp = fopen($log_file_path, 'w');
         fwrite($fp, $file_data);
         fclose($fp);
-        return TRUE;
+        return true;
     }
 
-    public function getFileFromAWS($bucket_name='', $folder_name = '', $file_name = '')
+    public function insertApiLogger($input_params = array())
     {
-        $bucket_name = $this->CI->config->item('AWS_BUCKET_NAME');
-        try {
-            $s3 = $this->getAWSConnectionObject();
-            if (version_compare(PHP_VERSION, '5.5', '>=')) {
-                try {
-                    $object_config = array(
-                        'Bucket' => $bucket_name,
-                        'Key' => $folder_name . "/" . $file_name
-                    );
-                    $res = $s3->getObject($object_config);
-                    //$res = $s3->headObject($object_config);
-                } catch (\Aws\S3\Exception\S3Exception $e) {
-                    $res = FALSE;
-                     log_message('error', $e->getMessage());
-                } catch (Exception $e) {
-                     log_message('error', $e->getMessage());
-                    
-                }
-            } else {
-                $object_fodler = $bucket_name . "/" . $folder_name;
-                $res = $s3->getObjectInfo($object_fodler, $file_name);
-            }
-        } catch (Exception $e) {
-             log_message('error', $e->getMessage());
-            
+        $this->CI = &get_instance();
+
+        $ip_addr = $this->getHTTPRealIPAddr();
+        $user_agent = $_SERVER['HTTP_USER_AGENT'];
+        $plat_form = $this->get_platform($user_agent);
+        
+        $browser = $this->get_browser($user_agent);
+
+        $request_func = $this->CI->uri->segments[2];
+        $request_url = !empty($input_params['request_url']) ? $input_params['request_url'] : "";
+        $file_name_func = !empty($input_params['file_name_func']) ? $input_params['file_name_func'] : "";
+        $input_array = !empty($input_params['input_params']) ? $input_params['input_params'] : "";
+        $output_response = !empty($input_params['output_response']) ? $input_params['output_response'] : "";
+        $accessed_time = !empty($input_params['accessed_time']) ? $input_params['accessed_time'] : "";
+        $executed_time = !empty($input_params['executed_time']) ? $input_params['executed_time'] : "";
+
+        // Input Params and Output Response file creation => start
+        list($start_micro, $start_date) = explode(" ", $accessed_time);
+        list($executed_micro, $execute_date) = explode(" ", $executed_time);
+
+        $access_date = date("Y-m-d H:i:s", $start_date);
+        $executed_date = date("Y-m-d H:i:s", $execute_date);
+
+        $access_log_folder = $this->CI->config->item('admin_access_log_path');
+        if (!is_dir($access_log_folder)) {
+            $this->createFolder($access_log_folder);
         }
-        return $res;
+
+        $log_folder_path = $access_log_folder."api_logs".DS;
+        if (!is_dir($log_folder_path)) {
+            $this->createFolder($log_folder_path);
+        }
+        $log_file_ext = 'json';
+
+        $file_name = $file_name_func."-".$start_date."-".mt_rand(1, 1000).".".$log_file_ext;
+
+        $log_file_path = $log_folder_path.$file_name;
+
+        $fileContents['input_params'] = $input_array;
+        $fileContents['output_response'] = $output_response;
+
+        $fp = fopen($log_file_path, 'a+');
+        fwrite($fp, json_encode($fileContents));
+        fclose($fp);
+
+        // Input Params and Output Response file creation => end
+        if (file_exists($log_file_path)) {
+            $data_array = array();
+            $data_array['vIPAddress'] = $ip_addr;
+            $data_array['vAPIName'] = $request_func;
+            $data_array['vAPIURL'] = $request_url;
+            $data_array['dAccessDate'] = $access_date;
+            $data_array['vPlatform'] = $plat_form;
+            $data_array['vBrowser'] = $browser;
+            $data_array['vFileName'] = $file_name;
+            $data_array['iPerformedBy'] = '0';
+            $data_array['dtExecutedDate'] = $executed_date;
+            $result = $this->CI->db->insert('api_accesslogs', $data_array);
+            if (!empty($result)) {
+                $return_arr['success'] = true;
+            } else {
+                $return_arr['success'] = false;
+            }
+            return $return_arr;
+        }
+        //pr($return_arr,1);
+    // Access Logs insertion => end
+    }
+
+    public function get_platform($user_agent = '')
+    {
+        $os_platform = "Unknown OS Platform";
+
+        $os_array = array(
+            '/windows nt 6.3/i' => 'Windows 8.1',
+            '/windows nt 6.2/i' => 'Windows 8',
+            '/windows nt 6.1/i' => 'Windows 7',
+            '/windows nt 6.0/i' => 'Windows Vista',
+            '/windows nt 5.2/i' => 'Windows Server 2003/XP x64',
+            '/windows nt 5.1/i' => 'Windows XP',
+            '/windows xp/i' => 'Windows XP',
+            '/windows nt 5.0/i' => 'Windows 2000',
+            '/windows me/i' => 'Windows ME',
+            '/win98/i' => 'Windows 98',
+            '/win95/i' => 'Windows 95',
+            '/win16/i' => 'Windows 3.11',
+            '/macintosh|mac os x/i' => 'Mac OS X',
+            '/mac_powerpc/i' => 'Mac OS 9',
+            '/linux/i' => 'Linux',
+            '/ubuntu/i' => 'Ubuntu',
+            '/iphone/i' => 'iPhone',
+            '/ipod/i' => 'iPod',
+            '/ipad/i' => 'iPad',
+            '/android/i' => 'Android',
+            '/blackberry/i' => 'BlackBerry',
+            '/webos/i' => 'Mobile',
+        );
+
+        foreach ($os_array as $regex => $value) {
+            if (preg_match($regex, $user_agent)) {
+                $os_platform = $value;
+            }
+        }
+        return $os_platform;
+    }
+
+    public function get_browser($user_agent = '')
+    {
+        $browser = "Unknown Browser";
+
+        $browser_array = array(
+            '/msie/i' => 'Internet Explorer',
+            '/firefox/i' => 'Firefox',
+            '/safari/i' => 'Safari',
+            '/chrome/i' => 'Chrome',
+            '/opera/i' => 'Opera',
+            '/netscape/i' => 'Netscape',
+            '/maxthon/i' => 'Maxthon',
+            '/konqueror/i' => 'Konqueror',
+            '/mobile/i' => 'Handheld Browser',
+        );
+
+        foreach ($browser_array as $regex => $value) {
+            if (preg_match($regex, $user_agent)) {
+                $browser = $value;
+            }
+        }
+
+        return $browser;
+    }
+
+    public function fcmNotification($device_id = '', $sound='', $message = '', $extra = array())
+    {
+        $result = '';
+        try {
+            if (empty($device_id)) {
+                throw new Exception("Device token not found..!");
+            }
+            $cache_temp_path = $this->CI->config->item('admin_upload_cache_path');
+            $apiType = $this->CI->config->item('PUSH_NOTIFY_ANDROID_TYPE');
+            $apiKey = $this->CI->config->item('PUSH_NOTIFY_ANDROID_KEY');
+            if (empty($apiKey)) {
+                throw new Exception("Push notification authorization key not found.");
+            }
+            if ($apiType == "fcm") {
+                // Set POST variables
+                $url = 'https://fcm.googleapis.com/fcm/send';
+                // Replace with real client registration IDs
+                if (is_array($device_id)) {
+                    $registrationIDs = $device_id;
+                } elseif (strstr($device_id, ",")) {
+                    $registrationIDs = explode(",", $device_id);
+                } else {
+                    $registrationIDs = array($device_id);
+                }
+
+                $message_arr = array("message" => $message);
+                $data = array_merge($message_arr, $extra);
+
+                /*$fields = array(
+                    'registration_ids' => $registrationIDs,
+                    'data' => $data
+                );*/
+                $fields = array(
+                    'registration_ids' => $registrationIDs,
+                   'notification' => array(
+                        "body" => $message,
+                        "sound" => $extra['sound']
+                    ),
+                    'priority' => 10,
+                    'type' => $extra['type']
+                );
+                if (!empty($extra)) {
+                    $fields['data'] = $extra;
+                }
+                $headers = array(
+                    'Authorization: key=' . $apiKey,
+                    'Content-Type: application/json'
+                );
+                $this->_push_content = json_encode($fields);
+            } else {
+                // Set POST variables
+                $url = 'https://android.googleapis.com/gcm/send';
+                // Replace with real client registration IDs
+                if (is_array($device_id)) {
+                    $registrationIDs = $device_id;
+                } elseif (strstr($device_id, ",")) {
+                    $registrationIDs = explode(",", $device_id);
+                } else {
+                    $registrationIDs = array($device_id);
+                }
+
+                $message_arr = array("message" => $message);
+                $data = array_merge($message_arr, $extra);
+
+                $fields = array(
+                    'registration_ids' => $registrationIDs,
+                    'data' => $data,
+                );
+                $headers = array(
+                    'Authorization: key=' . $apiKey,
+                    'Content-Type: application/json'
+                );
+                $this->_push_content = json_encode($fields);
+            }
+
+            if (!function_exists('curl_version')) {
+                throw new Exception("CURL is not installed in this server..!");
+            }
+
+            $ch = curl_init();
+            if (!$ch) {
+                throw new Exception("CURL intialization fails..!");
+            }
+            curl_setopt($ch, CURLOPT_URL, $url);
+            curl_setopt($ch, CURLOPT_POST, true);
+            curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+            curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($fields));
+            $result = curl_exec($ch);
+            curl_close($ch);
+
+            if (!$result) {
+                $error = curl_error($ch) || "CURL execution fails..!";
+                throw new Exception($error);
+            }
+
+            $success = 1;
+            $message = "Push notification send successfully..!";
+        } catch (Exception $e) {
+            $success = 0;
+            $message = $e->getMessage();
+            $this->_notify_error = $message;
+        }
+        if ($_ENV['debug_action']) {
+            $f = fopen($cache_temp_path . 'android_notification.html', 'a+');
+            if ($f) {
+                fwrite($f, '<br/>');
+                fwrite($f, 'Date : ' . date('Y-m-d H:i:s') . '<br/>');
+                fwrite($f, print_r("Device Token : " . json_encode($registrationIDs), true) . '<br/>');
+                fwrite($f, print_r("Payload : " . $this->_push_content, true) . '<br/>');
+                fwrite($f, print_r("Response : " . $result, true) . '<br/>');
+                fwrite($f, print_r("Status : " . $success, true) . '<br/>');
+                fwrite($f, print_r("Message : " . $message, true) . '<br/>');
+                fclose($f);
+            }
+        }
+        return $success;
     }
 }
 

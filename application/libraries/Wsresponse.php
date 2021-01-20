@@ -5,24 +5,23 @@ defined('BASEPATH') || exit('No direct script access allowed');
  * Description of API Response Library
  *
  * @category libraries
- * 
+ *
  * @package libraries
  *
  * @module APIResponse
- * 
+ *
  * @class Wsresponse.php
- * 
+ *
  * @path application\libraries\Wsresponse.php
- * 
+ *
  * @version 4.0
- * 
+ *
  * @author CIT Dev Team
- * 
+ *
  * @since 01.08.2016
  */
 class Wsresponse
 {
-
     protected $CI;
     protected $_res_format = array(
         'json' => 'application/json',
@@ -60,7 +59,7 @@ class Wsresponse
         $output_keys = is_array($output_keys) ? $output_keys : array();
         $output_alias = is_array($output_alias) ? $output_alias : array();
         $inner_keys = is_array($inner_keys) ? $inner_keys : array();
-        
+
         $array_data = $this->getFilteredArray($data_array, $ouput_fields, $output_keys, $inner_keys, $custom_keys);
         $array_data = $this->makeAliasArray($array_data, $output_alias, $custom_keys, $output_objects);
         $output_data = $this->finalResponseArray($array_data, $output_objects, $output_alias, $single_keys, $multiple_keys, $custom_keys);
@@ -97,7 +96,6 @@ class Wsresponse
                 }
             }
         }
-
         return $output_array;
     }
 
@@ -575,7 +573,7 @@ class Wsresponse
 
     public function setOptionsResponse()
     {
-        $method = $this->CI->input->method(TRUE);
+        $method = $this->CI->input->method(true);
         if ($method == "OPTIONS") {
             $api_key_name = $this->CI->config->item('REST_KEY_NAME');
             $api_version_name = $this->CI->config->item('REST_VERSION_NAME');
@@ -612,13 +610,13 @@ class Wsresponse
 
     public function sendWSResponse($arr = array(), $debug = array(), $res_format = 'json', $token = "")
     {
-       //1153
+        //1153
         $header_code = $arr['settings']['success'];
         $set_header_flag = false;
-        if($header_code > 99){
+        if ($header_code > 99) {
             $set_header_flag = true;
         }
-       //1153
+        //1153
 
         $ws_debug = $this->CI->input->get_post("ws_debug", true);
         $arr = $this->filterNullValues($arr);
@@ -676,12 +674,62 @@ class Wsresponse
             }
         }
         //1153
+
+
+        // insert API accesslog response => Start
+        if (is_array($exec_data) && count($exec_data) > 0) {
+            $this->CI->db->select('vFileName');
+            $this->CI->db->where('iAccessLogId', $exec_data['api_log_id']);
+            $db_rec_obj = $this->CI->db->from('api_accesslogs')->get();
+            $result = is_object($db_rec_obj) ? $db_rec_obj->row_array() : array();
+            
+            if (!empty($result)) {
+                $access_log_folder = $this->CI->config->item('admin_access_log_path');
+                $log_folder_path = $access_log_folder . "api_logs" . DS ;
+                $log_file_path = $log_folder_path . $result['vFileName'];
+
+                $json_data = file_get_contents($log_file_path);
+                $input_params = json_decode($json_data, true);
+                
+                $fileContents['input_params'] = $input_params['input_params'];
+                if (empty($arr['queries'])) {
+                    $arr['queries'] = $this->CI->general->getDBQueriesList();
+                }
+                $fileContents['output_response'] = $arr;
+
+                $fp = fopen($log_file_path, 'w');
+                fwrite($fp, json_encode($fileContents));
+                fclose($fp);
+            }
+            if ($exec_data['api_log_id'] > 0) {
+                $updateArr = array();
+                if ($this->CI->session->userdata('iUserId')) {
+                    $updateArr['iPerformedBy'] = $this->CI->session->userdata('iUserId');
+                } else {
+                    $updateArr['iPerformedBy'] = null;
+                }
+                $updateArr['dtExecutedDate'] = date('Y-m-d H:i:s');
+                $this->CI->db->where('iAccessLogId', $exec_data['api_log_id']);
+                $this->CI->db->update('api_accesslogs', $updateArr);
+            }
+        }
+        // insert API accesslog response => End
+        
         $this->CI->general->logDBQueriesList();
         $this->CI->output->set_header('Access-Control-Allow-Origin: *');
         $this->CI->output->set_output($output);
-        if($set_header_flag){
-              $this->CI->output->set_status_header($header_code);
-            }
+        $this->CI->output->_display();
+        exit;
+
+
+
+        
+        $this->CI->general->logDBQueriesList();
+        $this->CI->output->set_header('Access-Control-Allow-Origin: *');
+        $this->CI->output->set_output($output);
+        if ($set_header_flag) {
+            $this->CI->output->set_status_header($header_code);
+        }
 
         $this->CI->output->_display();
         exit;

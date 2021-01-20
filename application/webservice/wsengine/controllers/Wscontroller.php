@@ -91,7 +91,7 @@ class Wscontroller extends Cit_Controller
         //request params
         $request_arr = $this->WSRequestData($all_methods[$func_name]['method'], $id_arg);
         //HB-1153
-;
+
         $SERVER_MAINTENANCE = $this->config->item('SERVER_MAINTENANCE');
   
          $appFailled = "No";
@@ -170,6 +170,8 @@ class Wscontroller extends Cit_Controller
 
         //HB-1153
 
+        $this->session->set_userdata("iUserId", $request_arr['user_id']);
+        
         //data encryption process
         if ($this->config->item('WS_RESPONSE_ENCRYPTION') == "Y") {
             $request_arr = $this->wschecker->decrypt_params($request_arr);

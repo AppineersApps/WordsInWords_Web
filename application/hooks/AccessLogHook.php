@@ -8,7 +8,6 @@ defined('BASEPATH') || exit('No direct script access allowed');
  */
 class AccessLogHook
 {
-
     public function __construct()
     {
         $this->CI = & get_instance();
@@ -18,21 +17,20 @@ class AccessLogHook
 
     public function http_request_log($params = array())
     {
-
         $this->params = $params;
 
         if ($this->CI->config->item("is_admin") == 1) {
             if (!$this->params['admin']) {
-                return FALSE;
+                return false;
             }
             if (!$this->CI->uri->segments[2]) {
-                return FALSE;
+                return false;
             }
             if (is_array($this->params['admin_system_calls'])) {
                 $system_calls = $this->params['admin_system_calls'];
                 $ctrl_arr = $system_calls[$this->CI->uri->segments[2]][$this->CI->uri->segments[3]];
                 if (is_array($ctrl_arr) && in_array($this->CI->uri->segments[4], $ctrl_arr)) {
-                    return FALSE;
+                    return false;
                 }
             }
             $type = "Admin";
@@ -43,10 +41,10 @@ class AccessLogHook
             $file_suffix = "admin";
         } elseif ($this->CI->uri->segments[1] && in_array($this->CI->uri->segments[1], array("PS"))) {
             if (!$this->params['parseapi']) {
-                return FALSE;
+                return false;
             }
             if (!$this->CI->uri->segments[2]) {
-                return FALSE;
+                return false;
             }
             $type = "ParseAPI";
             $uris = $this->CI->uri->segments;
@@ -55,30 +53,30 @@ class AccessLogHook
             $file_suffix = "ps";
         } elseif ($this->CI->uri->segments[1] && in_array($this->CI->uri->segments[1], array("WS"))) {
             if (!$this->CI->uri->segments[2]) {
-                return FALSE;
+                return false;
             }
             if ($this->CI->uri->segments[2] == "image_resize") {
-                return FALSE;
+                return false;
             }
             if (!$this->params['webservice']) {
-                return FALSE;
+                return false;
             }
             $type = "Webservice";
             $request_func = $this->CI->uri->segments[2];
             $file_suffix = "ws";
         } elseif ($this->CI->uri->segments[1] && in_array($this->CI->uri->segments[1], array("NS"))) {
             if (!$this->params['notification']) {
-                return FALSE;
+                return false;
             }
             if (!$this->CI->uri->segments[2]) {
-                return FALSE;
+                return false;
             }
             $type = "Notification";
             $request_func = $this->CI->uri->segments[2];
             $file_suffix = "ns";
         } else {
             if (!$this->params['front']) {
-                return FALSE;
+                return false;
             }
             $type = "Front";
             $request_func = ($this->CI->uri->segments[1]) ? "" : $this->CI->uri->segments[1];
@@ -176,6 +174,59 @@ EOD;
             "start" => $start_time
         );
 
+        // Access Logs insertion => start
+        if (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on') {
+            $request_url = "https://";
+        } else {
+            $request_url = "http://";
+        }
+        // Append the host(domain name, ip) to the URL.
+        $request_url.= $_SERVER['HTTP_HOST'];
+        
+        // Append the requested resource location to the URL
+        $request_url.= $_SERVER['REQUEST_URI'];
+
+        list($start_micro, $start_date) = explode(" ", $start_time);
+        $access_date = date("Y-m-d H:i:s", $start_date);
+
+        $access_log_folder = $this->CI->config->item('admin_access_log_path');
+        if (!is_dir($access_log_folder)) {
+            $this->CI->general->createFolder($access_log_folder);
+        }
+
+        $log_folder_path = $access_log_folder . "api_logs" . DS;
+        //echo $log_folder_path;die;
+        if (!is_dir($log_folder_path)) {
+            $this->CI->general->createFolder($log_folder_path);
+        }
+        $log_file_ext = 'json';
+
+        $file_name = $request_func . "-" . $start_date . "." . $log_file_ext;
+
+        $log_file_path = $log_folder_path . $file_name;
+        
+        $fileContents['input_params'] = $input_params_arr;
+
+        $fp = fopen($log_file_path, 'a+');
+        fwrite($fp, json_encode($fileContents));
+        fclose($fp);
+
+        if (file_exists($log_file_path)) {
+            $data_array = array();
+            $data_array['vIPAddress']  = $ip_addr;
+            $data_array['vAPIName']    = $request_func;
+            $data_array['vAPIURL']     = $request_url;
+            $data_array['dAccessDate'] = $access_date;
+            $data_array['vPlatform']   = $plat_form;
+            $data_array['vBrowser']    = $bowser;
+            $data_array['vFileName']   = $file_name;
+            $result = $this->CI->db->insert('api_accesslogs', $data_array);
+            if ($result > 0) {
+                $exe_arr['api_log_id']  = $result;
+            }
+        }
+        // Access Logs insertion => end
+
         return array($log_str, $exe_arr);
     }
 
@@ -193,7 +244,6 @@ EOD;
 
     public function get_platform($user_agent = '')
     {
-
         $os_platform = "Unknown OS Platform";
 
         $os_array = array(
@@ -222,7 +272,6 @@ EOD;
         );
 
         foreach ($os_array as $regex => $value) {
-
             if (preg_match($regex, $user_agent)) {
                 $os_platform = $value;
             }
@@ -232,7 +281,6 @@ EOD;
 
     public function get_browser($user_agent = '')
     {
-
         $browser = "Unknown Browser";
 
         $browser_array = array(
@@ -248,7 +296,6 @@ EOD;
         );
 
         foreach ($browser_array as $regex => $value) {
-
             if (preg_match($regex, $user_agent)) {
                 $browser = $value;
             }
@@ -259,9 +306,9 @@ EOD;
 
     public function get_http_request_params()
     {
-        $get_arr = $this->CI->input->get(NULL);
-        $post_arr = $this->CI->input->post(NULL);
-        $stream_arr = $this->CI->input->input_stream(NULL);
+        $get_arr = $this->CI->input->get(null);
+        $post_arr = $this->CI->input->post(null);
+        $stream_arr = $this->CI->input->input_stream(null);
         $headers_arr = $this->CI->input->request_headers();
         $get_arr = is_array($get_arr) ? $get_arr : array();
         $post_arr = is_array($post_arr) ? $post_arr : array();
@@ -295,9 +342,9 @@ EOD;
     public function is_data_exceeds_limit($data = '')
     {
         if (strlen($data) > $this->_data_max_size) {
-            return TRUE;
+            return true;
         }
-        return FALSE;
+        return false;
     }
 }
 
