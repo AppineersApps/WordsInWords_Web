@@ -285,3 +285,20 @@
     
     //delete_api_log Messages
     $lang["delete_api_log"]["api_accesslogs_finish_success"] = "Success" ;
+
+//Notification Messages
+    $lang["game_level_master_list"]["get_game_level_master_finish_success"] = "Game configurations get successfully" ;
+    $lang["game_level_master_list"]["get_game_level_master_finish_success_1"] = "Unable to get game configurations" ;
+
+//Player activity Messages
+   $lang["player_activity_add"]["finish_player_activity_add_success"] = "Player activity added successfully" ;
+   $lang["player_activity_add"]["finish_player_activity_add_failure"] = "Unable to add player activity" ;
+
+   $lang["delete_player_activity"]["delete_player_activity_finish_success"] = "Player activity deleted successfully" ;
+   $lang["delete_player_activity"]["delete_player_activity_finish_success_1"] = "Unable to delete player activity" ;
+
+   $lang["player_activity_list"]["get_player_activity_finish_success"] = "Player activities get successfully" ;
+   $lang["player_activity_list"]["get_player_activity_finish_success_1"] = "Unable to get player activities" ;
+
+   $lang["player_activity_list"]["get_sync_level_round_finish_success"] = "Game level round sync successfully" ;
+   $lang["player_activity_list"]["get_sync_level_round_finish_success_1"] = "Unable to sync game level round" ;
