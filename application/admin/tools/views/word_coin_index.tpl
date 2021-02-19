@@ -131,6 +131,10 @@
         "label": "<%$list_config['wcm_hint_coin']['label_lang']%>"
     },
     {
+        "name": "wcm_buy_coin",
+        "label": "<%$list_config['wcm_buy_coin']['label_lang']%>"
+    },
+    {
         "name": "sys_custom_field_1",
         "label": "<%$list_config['sys_custom_field_1']['label_lang']%>"
     }];
@@ -291,6 +295,63 @@
         },
         "ctrl_type": "dropdown",
         "default_value": "<%$list_config['wcm_hint_coin']['default']%>",
+        "filterSopt": "in",
+        "stype": "select"
+    },
+     {
+        "name": "wcm_buy_coin",
+        "index": "wcm_buy_coin",
+        "label": "<%$list_config['wcm_buy_coin']['label_lang']%>",
+        "labelClass": "header-align-center",
+        "resizable": true,
+        "width": "<%$list_config['wcm_buy_coin']['width']%>",
+        "search": <%if $list_config['wcm_buy_coin']['search'] eq 'No' %>false<%else%>true<%/if%>,
+        "export": <%if $list_config['wcm_buy_coin']['export'] eq 'No' %>false<%else%>true<%/if%>,
+        "sortable": <%if $list_config['wcm_buy_coin']['sortable'] eq 'No' %>false<%else%>true<%/if%>,
+        "hidden": <%if $list_config['wcm_buy_coin']['hidden'] eq 'Yes' %>true<%else%>false<%/if%>,
+        "hideme": <%if $list_config['wcm_buy_coin']['hideme'] eq 'Yes' %>true<%else%>false<%/if%>,
+        "addable": <%if $list_config['wcm_buy_coin']['addable'] eq 'Yes' %>true<%else%>false<%/if%>,
+        "editable": <%if $list_config['wcm_buy_coin']['editable'] eq 'Yes' %>true<%else%>false<%/if%>,
+        "align": "center",
+        "edittype": "select",
+        "editrules": {
+            "required": true,
+            "infoArr": {
+                "required": {
+                    "message": ci_js_validation_message(js_lang_label.GENERIC_PLEASE_ENTER_A_VALUE_FOR_THE__C35FIELD_C35_FIELD_C46 ,"#FIELD#",js_lang_label.WORD_COIN_BUY_COIN)
+                }
+            }
+        },
+        "searchoptions": {
+            "attr": {
+                "aria-grid-id": el_tpl_settings.main_grid_id,
+                "aria-module-name": "word_coin",
+                "aria-unique-name": "wcm_buy_coin",
+                "autocomplete": "off",
+                "data-placeholder": " ",
+                "class": "search-chosen-select",
+                "multiple": "multiple"
+            },
+            "sopt": intSearchOpts,
+            "searchhidden": <%if $list_config['wcm_buy_coin']['search'] eq 'Yes' %>true<%else%>false<%/if%>,
+            "dataUrl": <%if $count_arr["wcm_buy_coin"]["json"] eq "Yes" %>false<%else%>'<%$admin_url%><%$mod_enc_url["get_list_options"]%>?alias_name=wcm_buy_coin&mode=<%$mod_enc_mode["Search"]%>&rformat=html<%$extra_qstr%>'<%/if%>,
+            "value": <%if $count_arr["wcm_buy_coin"]["json"] eq "Yes" %>$.parseJSON('<%$count_arr["wcm_buy_coin"]["data"]|@addslashes%>')<%else%>null<%/if%>,
+            "dataInit": <%if $count_arr['wcm_buy_coin']['ajax'] eq 'Yes' %>initSearchGridAjaxChosenEvent<%else%>initGridChosenEvent<%/if%>,
+            "ajaxCall": '<%if $count_arr["wcm_buy_coin"]["ajax"] eq "Yes" %>ajax-call<%/if%>',
+            "multiple": true
+        },
+        "editoptions": {
+            "aria-grid-id": el_tpl_settings.main_grid_id,
+            "aria-module-name": "word_coin",
+            "aria-unique-name": "wcm_buy_coin",
+            "dataUrl": '<%$admin_url%><%$mod_enc_url["get_list_options"]%>?alias_name=wcm_buy_coin&mode=<%$mod_enc_mode["Update"]%>&rformat=html<%$extra_qstr%>',
+            "dataInit": <%if $count_arr['wcm_buy_coin']['ajax'] eq 'Yes' %>initEditGridAjaxChosenEvent<%else%>initGridChosenEvent<%/if%>,
+            "ajaxCall": '<%if $count_arr["wcm_buy_coin"] eq "Yes" %>ajax-call<%/if%>',
+            "data-placeholder": "<%$this->general->parseLabelMessage('GENERIC_PLEASE_SELECT__C35FIELD_C35' ,'#FIELD#', 'WORD_COIN_BUY_COIN')%>",
+            "class": "inline-edit-row chosen-select"
+        },
+        "ctrl_type": "dropdown",
+        "default_value": "<%$list_config['wcm_buy_coin']['default']%>",
         "filterSopt": "in",
         "stype": "select"
     },

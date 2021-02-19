@@ -282,9 +282,12 @@
 
 //Go Ad Free Messages
     $lang["go_ad_free"]["users_finish_success"] = "Ads are removed successfully." ;
-    
-    //delete_api_log Messages
+
+//delete_api_log Messages
     $lang["delete_api_log"]["api_accesslogs_finish_success"] = "Success" ;
+
+//User_guest Messages
+    $lang["user_guest"]["users_finish_success_3"] = "You have successfully registered." ;
 
 //Notification Messages
     $lang["game_level_master_list"]["get_game_level_master_finish_success"] = "Game configurations get successfully" ;
@@ -302,3 +305,14 @@
 
    $lang["player_activity_list"]["get_sync_level_round_finish_success"] = "Game level round sync successfully" ;
    $lang["player_activity_list"]["get_sync_level_round_finish_success_1"] = "Unable to sync game level round" ;
+
+//purchase_coin Messages
+    $lang["purchase_coin_add"]["finish_purchase_coin_add_success"] = "Coin Purchased added successfully" ;
+    $lang["purchase_coin_add"]["finish_purchase_coin_add_failure"] = "Unable to add Purchase coin " ;
+
+    $lang["hint_coin_add"]["finish_hint_coin_add_success"] = "You have used coins for hint successfully" ;
+    $lang["buy_word_add"]["finish_buy_word_add_success"] = "You have used coins to buy word" ;
+//purchase_coin Messages
+    $lang["check_player_sufficent"]["finish_check_player_sufficent_coins_failure"] = "You have insufficient coins, Please purchase more coins." ;
+//Connect guest user Messages  
+    $lang["connect_guest_user"]["users_finish_success"] = "You have successfully registered. Please check your email and confirm your registration." ;

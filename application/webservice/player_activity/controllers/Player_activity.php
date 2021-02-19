@@ -65,11 +65,11 @@ class Player_activity extends Cit_Controller
                     "message" => "level_id_required",
                 )
             ),
-            "round_id" => array(
+            "round_no" => array(
                 array(
                     "rule" => "required",
                     "value" => true,
-                    "message" => "round_id_required",
+                    "message" => "round_no_required",
                 ),
             )
         );
@@ -165,6 +165,7 @@ class Player_activity extends Cit_Controller
             // $input_params = $this->set_helper($input_params);
 
             // $condition_res = $this->is_posted($input_params);
+            $input_params['round_no'] = $input_params['round_no'] + 1;
 
             $input_params = $this->insert_player_activity_data($input_params);
 
@@ -423,7 +424,7 @@ class Player_activity extends Cit_Controller
         $ouput_aliases = array(
             "iActivityId" => "activity_id",
             "iLevelId" => "level_id",
-            "iRoundId" => "round_id",
+            "iRoundId" => "round_no",
             "iCreditCoin "=> "credit_coin",
             "iDebitCoin" => "debit_coin",
             "iUnlockStatus" => "unlock_status",

@@ -13,9 +13,9 @@ defined('BASEPATH') || exit('No direct script access allowed');
  *  
  * @module Users Management
  * 
- * @class Users_management_model.php
+ * @class Guest_users_management_model.php
  * 
- * @path application\admin\basic_appineers_master\models\Users_management_model.php
+ * @path application\admin\basic_appineers_master\models\Guest_users_management_model.php
  * 
  * @version 4.4
  *
@@ -24,7 +24,7 @@ defined('BASEPATH') || exit('No direct script access allowed');
  * @date 07.02.2020
  */
  
-class Users_management_model extends CI_Model 
+class Guest_users_management_model extends CI_Model 
 {
     public $table_name;
     public $table_alias;
@@ -71,7 +71,7 @@ class Users_management_model extends CI_Model
         $this->primary_key = "iUserId";
         $this->primary_alias = "u_user_id";
         $this->physical_data_remove = "Yes";
-        $this->grid_fields = array("u_profile_image", "u_first_name", "u_user_name", "u_guest_id", "u_email", "u_mobile_no", "u_guest_user", "u_added_at", "u_status", "u_updated_at");
+        $this->grid_fields = array("u_profile_image", "u_first_name", "u_user_name", "u_email", "u_mobile_no", "u_added_at", "u_status", "u_updated_at");
         $this->join_tables = array();
         $this->extra_cond = "";
         $this->groupby_cond = array();
@@ -276,10 +276,8 @@ class Users_management_model extends CI_Model
             $this->db->select("u.vProfileImage AS u_profile_image");
         $this->db->select("concat(u.vFirstName,\"\",u.vLastName) AS u_first_name");
         $this->db->select("u.vUserName AS u_user_name");
-        $this->db->select("u.iGuestUserId AS u_guest_id");
         $this->db->select("u.vEmail AS u_email");
         $this->db->select("u.vMobileNo AS u_mobile_no");
-        $this->db->select("u.eGuestUser AS u_guest_user");
         $this->db->select("u.dtAddedAt AS u_added_at");
         $this->db->select("u.eStatus AS u_status");
         $this->db->select("u.dtUpdatedAt AS u_updated_at");
@@ -297,8 +295,6 @@ class Users_management_model extends CI_Model
             $this->db->select("u.tAddress AS u_address");
             $this->db->select("u.vCity AS u_city");
             $this->db->select("u.vStateName AS u_state_name");
-            $this->db->select("u.iGuestUserId AS u_guest_id");
-            $this->db->select("u.eGuestUser AS u_guest_user");
             $this->db->select("u.vZipCode AS u_zip_code");
             $this->db->select("u.vTermsConditionsVersion AS u_terms_conditions_version");
             $this->db->select("u.vPrivacyPolicyVersion AS u_privacy_policy_version");
@@ -447,10 +443,8 @@ class Users_management_model extends CI_Model
         $this->db->select("u.vProfileImage AS u_profile_image");
         $this->db->select("concat(u.vFirstName,\"\",u.vLastName) AS u_first_name");
         $this->db->select("u.vUserName AS u_user_name");
-        $this->db->select("u.iGuestUserId AS u_guest_id");
         $this->db->select("u.vEmail AS u_email");
         $this->db->select("u.vMobileNo AS u_mobile_no");
-        $this->db->select("u.eGuestUser AS u_guest_user");
         $this->db->select("u.dtAddedAt AS u_added_at");
         $this->db->select("u.eStatus AS u_status");
         $this->db->select("u.dtUpdatedAt AS u_updated_at");
@@ -687,30 +681,6 @@ class Users_management_model extends CI_Model
                 "viewedit" => "No",
                 "edit_link" => "Yes"
             ),
-            "u_guest_id" => array(
-                "name" => "u_guest_id",
-                "table_name" => "users",
-                "table_alias" => "u",
-                "field_name" => "iGuestUserId",
-                "source_field" => "u_guest_id",
-                "display_query" => "u.iGuestUserId",
-                "entry_type" => "Table",
-                "data_type" => "varchar",
-                "show_in" => "Both",
-                "type" => "textbox",
-                "align" => "left",
-                "label" => "Username",
-                "lang_code" => "USERS_MANAGEMENT_GUEST_ID",
-                "label_lang" => $this->lang->line('USERS_MANAGEMENT_GUEST_ID'),
-                "width" => 100,
-                "search" => "Yes",
-                "export" => "Yes",
-                "sortable" => "Yes",
-                "addable" => "No",
-                "editable" => "No",
-                "viewedit" => "No",
-                "edit_link" => "Yes"
-            ),
                 "u_email" => array(
                 "name" => "u_email",
                 "table_name" => "users",
@@ -756,30 +726,6 @@ class Users_management_model extends CI_Model
                 "addable" => "No",
                 "editable" => "No",
                 "viewedit" => "No"
-            ),
-            "u_guest_user" => array(
-                "name" => "u_guest_user",
-                "table_name" => "users",
-                "table_alias" => "u",
-                "field_name" => "eGuestUser",
-                "source_field" => "u_guest_user",
-                "display_query" => "u.eGuestUser",
-                "entry_type" => "Table",
-                "data_type" => "varchar",
-                "show_in" => "Both",
-                "type" => "textbox",
-                "align" => "left",
-                "label" => "Username",
-                "lang_code" => "USERS_MANAGEMENT_GUEST_USER",
-                "label_lang" => $this->lang->line('USERS_MANAGEMENT_GUEST_USER'),
-                "width" => 60,
-                "search" => "Yes",
-                "export" => "Yes",
-                "sortable" => "Yes",
-                "addable" => "No",
-                "editable" => "No",
-                "viewedit" => "No",
-                "edit_link" => "Yes"
             ),
                 "u_added_at" => array(
                 "name" => "u_added_at",
@@ -893,7 +839,7 @@ class Users_management_model extends CI_Model
                 "label_lang" => $this->lang->line('USERS_MANAGEMENT_PROFILE_IMAGE'),
                 "file_upload" => "Yes",
                 "file_server" => "amazon",
-                "file_folder" => "wordsnwords/user_profile",
+                "file_folder" => "side_jobs/user_profile",
                 "file_width" => "80",
                 "file_height" => "80",
                 "file_format" => "gif,png,jpg,jpeg,jpe,bmp,ico",

@@ -75,6 +75,7 @@ class Word_coin_model extends CI_Model
             "wcm_word_length",
             "wcm_word_coin",
             "wcm_hint_coin",
+            "wcm_buy_coin",
             "sys_custom_field_1"
         );
         $this->join_tables = array();
@@ -283,11 +284,13 @@ class Word_coin_model extends CI_Model
             $this->db->select("wcm.iWordLength AS wcm_word_length");
             $this->db->select("wcm.iWordCoin AS wcm_word_coin");
             $this->db->select("wcm.iHintCoin AS wcm_hint_coin");
+            $this->db->select("wcm.iBuyCoin AS wcm_buy_coin");
             $this->db->select("('view') AS sys_custom_field_1", FALSE);
         } else {
             $this->db->select("wcm.iWordLength AS wcm_word_length");
             $this->db->select("wcm.iWordCoin AS wcm_word_coin");
             $this->db->select("wcm.iHintCoin AS wcm_hint_coin");
+            $this->db->select("wcm.iBuyCoin AS wcm_buy_coin");
             $this->db->select("wcm.dtAddedAt AS wcm_added_at");
             $this->db->select("wcm.dtUpdatedAt AS wcm_updated_at");
         }
@@ -406,6 +409,7 @@ class Word_coin_model extends CI_Model
         $this->db->select("wcm.iWordLength AS wcm_word_length");
         $this->db->select("wcm.iWordCoin AS wcm_word_coin");
         $this->db->select("wcm.iHintCoin AS wcm_hint_coin");
+        $this->db->select("wcm.iBuyCoin AS wcm_buy_coin");
         $this->db->select("('view') AS sys_custom_field_1", FALSE);
         if ($sdef == "Yes") {
             if (is_array($order_by) && count($order_by) > 0) {
@@ -503,6 +507,7 @@ class Word_coin_model extends CI_Model
         $this->db->select("wcm.iWordLength AS wcm_word_length");
         $this->db->select("wcm.iWordCoin AS wcm_word_coin");
         $this->db->select("wcm.iHintCoin AS wcm_hint_coin");
+        $this->db->select("wcm.iBuyCoin AS wcm_buy_coin");
         $this->db->select("('view') AS sys_custom_field_1", FALSE);
         if ($sdef == "Yes") {
             if (is_array($order_by) && count($order_by) > 0) {
@@ -622,6 +627,29 @@ class Word_coin_model extends CI_Model
                 "editable" => "No",
                 "viewedit" => "No",
             ),
+            "wcm_buy_coin" => array(
+                "name" => "wcm_buy_coin",
+                "table_name" => "word_coin_master",
+                "table_alias" => "wcm",
+                "field_name" => "iBuyCoin",
+                "source_field" => "wcm_buy_coin",
+                "display_query" => "wcm.iBuyCoin",
+                "entry_type" => "Table",
+                "data_type" => "enum",
+                "show_in" => "Both",
+                "type" => "dropdown",
+                "align" => "center",
+                "label" => "Coins for buy word",
+                "lang_code" => "WORD_COIN_BUY_COIN",
+                "label_lang" => $this->lang->line('WORD_COIN_BUY_COIN'),
+                "width" => 50,
+                "search" => "Yes",
+                "export" => "Yes",
+                "sortable" => "Yes",
+                "addable" => "No",
+                "editable" => "No",
+                "viewedit" => "No",
+            ),
             "sys_custom_field_1" => array(
                 "name" => "sys_custom_field_1",
                 "table_name" => "",
@@ -687,14 +715,14 @@ class Word_coin_model extends CI_Model
                 "name" => "wcm_word_coin",
                 "table_name" => "word_coin_master",
                 "table_alias" => "wcm",
-                "field_name" => "iMaxRound",
+                "field_name" => "iWordCoin",
                 "entry_type" => "Table",
                 "data_type" => "enum",
                 "show_input" => "Both",
                 "type" => "dropdown",
-                "label" => "Max Round",
-                "lang_code" => "WORD_COIN_HINT_COIN",
-                "label_lang" => $this->lang->line('WORD_COIN_HINT_COIN')
+                "label" => "Gain coins per words",
+                "lang_code" => "WORD_COIN_WORD_COIN",
+                "label_lang" => $this->lang->line('WORD_COIN_WORD_COIN')
             ),
             "wcm_hint_coin" => array(
                 "name" => "wcm_hint_coin",
@@ -705,9 +733,22 @@ class Word_coin_model extends CI_Model
                 "data_type" => "enum",
                 "show_input" => "Both",
                 "type" => "dropdown",
-                "label" => "Round To Unlock",
-                "lang_code" => "WORD_COIN_WORD_COIN",
-                "label_lang" => $this->lang->line('WORD_COIN_WORD_COIN')
+                "label" => "Coins for hint",
+                "lang_code" => "WORD_COIN_HINT_COIN",
+                "label_lang" => $this->lang->line('WORD_COIN_HINT_COIN')
+            ),
+            "wcm_buy_coin" => array(
+                "name" => "wcm_buy_coin",
+                "table_name" => "word_coin_master",
+                "table_alias" => "wcm",
+                "field_name" => "iBuyCoin",
+                "entry_type" => "Table",
+                "data_type" => "enum",
+                "show_input" => "Both",
+                "type" => "dropdown",
+                "label" => "Coins for buy word",
+                "lang_code" => "WORD_COIN_BUY_COIN",
+                "label_lang" => $this->lang->line('WORD_COIN_BUY_COIN')
             ),
             "wcm_added_at" => array(
                 "name" => "wcm_added_at",

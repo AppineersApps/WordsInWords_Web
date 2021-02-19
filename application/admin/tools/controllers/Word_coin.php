@@ -690,6 +690,7 @@ class Word_coin extends Cit_Controller
             $wcm_word_length = $params_arr["wcm_word_length"];
             $wcm_word_coin = $params_arr["wcm_word_coin"];
             $wcm_hint_coin = $params_arr["wcm_hint_coin"];
+            $wcm_buy_coin = $params_arr["wcm_buy_coin"];
             $wcm_added_at = $params_arr["wcm_added_at"];
             $wcm_updated_at = $params_arr["wcm_updated_at"];
 
@@ -708,12 +709,14 @@ class Word_coin extends Cit_Controller
             $data["iWordLength"] = $wcm_word_length;
             $data["iWordCoin"] = $wcm_word_coin;
             $data["iHintCoin"] = $wcm_hint_coin;
+            $data["iBuyCoin"] = $wcm_buy_coin;
             $data["dtAddedAt"] = $this->filter->formatActionData($wcm_added_at, $form_config["wcm_added_at"]);
             $data["dtUpdatedAt"] = $this->filter->formatActionData($wcm_updated_at, $form_config["wcm_updated_at"]);
 
             $save_data_arr["wcm_word_length"] = $data["iWordLength"];
             $save_data_arr["wcm_word_coin"] = $data["iWordCoin"];
             $save_data_arr["wcm_hint_coin"] = $data["iHintCoin"];
+            $save_data_arr["wcm_buy_coin"] = $data["iBuyCoin"];
             $save_data_arr["wcm_added_at"] = $data["dtAddedAt"];
             $save_data_arr["wcm_updated_at"] = $data["dtUpdatedAt"];
             if ($mode == 'Add') {

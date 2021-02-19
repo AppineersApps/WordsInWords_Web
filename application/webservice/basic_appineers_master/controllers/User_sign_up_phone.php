@@ -512,7 +512,7 @@ class User_sign_up_phone extends Cit_Controller
             if (!empty($images_arr["user_profile"]["name"]))
             {
 
-                 $folder_name = "monkey_sphere/user_profile";             
+                 $folder_name = "wordsnwords/user_profile";             
                 
                 $temp_file = $_FILES["user_profile"]["tmp_name"];
                 $res = $this->general->uploadAWSData($temp_file, $folder_name, $images_arr["user_profile"]["name"]);
@@ -605,7 +605,7 @@ class User_sign_up_phone extends Cit_Controller
                     $dest_path = "user_profile";
                    /* $image_arr["path"] = $this->general->getImageNestedFolders($dest_path);
                     $data = $this->general->get_image($image_arr);*/
-                    $image_arr["path"] ="monkey_sphere/user_profile";
+                    $image_arr["path"] ="wordsnwords/user_profile";
                     $data = $this->general->get_image_aws($image_arr);
 
                     $result_arr[$data_key]["u_profile_image"] = $data;

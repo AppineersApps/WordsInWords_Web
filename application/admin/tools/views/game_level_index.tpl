@@ -60,7 +60,7 @@
     el_grid_settings['status_arr'] = $.parseJSON('<%$status_array|@json_encode%>');
     el_grid_settings['status_lang_arr'] = $.parseJSON('<%$status_label|@json_encode%>');
                 
-    el_grid_settings['hide_add_btn'] = '1';
+    el_grid_settings['hide_add_btn'] = 'No';
     el_grid_settings['hide_del_btn'] = '';
     el_grid_settings['hide_status_btn'] = '1';
     el_grid_settings['hide_export_btn'] = '1';
@@ -142,10 +142,6 @@
     {
         "name": "glm_round_to_unlock",
         "label": "<%$list_config['glm_round_to_unlock']['label_lang']%>"
-    },
-    {
-        "name": "glm_status",
-        "label": "<%$list_config['glm_status']['label_lang']%>"
     },
     {
         "name": "sys_custom_field_1",
@@ -274,7 +270,7 @@
             "required": true,
             "infoArr": {
                 "required": {
-                    "message": ci_js_validation_message(js_lang_label.GENERIC_PLEASE_ENTER_A_VALUE_FOR_THE__C35FIELD_C35_FIELD_C46 ,"#FIELD#",js_lang_label.GAME_LEVEL_MIN_WORD_LENGTH)
+                    "message": ci_js_validation_message(js_lang_label.GENERIC_PLEASE_ENTER_A_VALUE_FOR_THE__C35FIELD_C35_FIELD_C46 ,"#FIELD#",js_lang_label.GAME_LEVEL_MIN_LENGTH)
                 }
             }
         },
@@ -303,7 +299,7 @@
             "dataUrl": '<%$admin_url%><%$mod_enc_url["get_list_options"]%>?alias_name=glm_min_word_length&mode=<%$mod_enc_mode["Update"]%>&rformat=html<%$extra_qstr%>',
             "dataInit": <%if $count_arr['glm_min_word_length']['ajax'] eq 'Yes' %>initEditGridAjaxChosenEvent<%else%>initGridChosenEvent<%/if%>,
             "ajaxCall": '<%if $count_arr["glm_min_word_length"] eq "Yes" %>ajax-call<%/if%>',
-            "data-placeholder": "<%$this->general->parseLabelMessage('GENERIC_PLEASE_SELECT__C35FIELD_C35' ,'#FIELD#', 'GAME_LEVEL_MIN_WORD_LENGTH')%>",
+            "data-placeholder": "<%$this->general->parseLabelMessage('GENERIC_PLEASE_SELECT__C35FIELD_C35' ,'#FIELD#', 'GAME_LEVEL_MIN_LENGTH')%>",
             "class": "inline-edit-row chosen-select"
         },
         "ctrl_type": "dropdown",
@@ -479,63 +475,6 @@
         },
         "ctrl_type": "dropdown",
         "default_value": "<%$list_config['glm_round_to_unlock']['default']%>",
-        "filterSopt": "in",
-        "stype": "select"
-    },
-    {
-        "name": "glm_status",
-        "index": "glm_status",
-        "label": "<%$list_config['glm_status']['label_lang']%>",
-        "labelClass": "header-align-center",
-        "resizable": true,
-        "width": "<%$list_config['glm_status']['width']%>",
-        "search": <%if $list_config['glm_status']['search'] eq 'No' %>false<%else%>true<%/if%>,
-        "export": <%if $list_config['glm_status']['export'] eq 'No' %>false<%else%>true<%/if%>,
-        "sortable": <%if $list_config['glm_status']['sortable'] eq 'No' %>false<%else%>true<%/if%>,
-        "hidden": <%if $list_config['glm_status']['hidden'] eq 'Yes' %>true<%else%>false<%/if%>,
-        "hideme": <%if $list_config['glm_status']['hideme'] eq 'Yes' %>true<%else%>false<%/if%>,
-        "addable": <%if $list_config['glm_status']['addable'] eq 'Yes' %>true<%else%>false<%/if%>,
-        "editable": <%if $list_config['glm_status']['editable'] eq 'Yes' %>true<%else%>false<%/if%>,
-        "align": "center",
-        "edittype": "select",
-        "editrules": {
-            "required": true,
-            "infoArr": {
-                "required": {
-                    "message": ci_js_validation_message(js_lang_label.GENERIC_PLEASE_ENTER_A_VALUE_FOR_THE__C35FIELD_C35_FIELD_C46 ,"#FIELD#",js_lang_label.GAME_LEVEL_STATUS)
-                }
-            }
-        },
-        "searchoptions": {
-            "attr": {
-                "aria-grid-id": el_tpl_settings.main_grid_id,
-                "aria-module-name": "game_level",
-                "aria-unique-name": "glm_status",
-                "autocomplete": "off",
-                "data-placeholder": " ",
-                "class": "search-chosen-select",
-                "multiple": "multiple"
-            },
-            "sopt": intSearchOpts,
-            "searchhidden": <%if $list_config['glm_status']['search'] eq 'Yes' %>true<%else%>false<%/if%>,
-            "dataUrl": <%if $count_arr["glm_status"]["json"] eq "Yes" %>false<%else%>'<%$admin_url%><%$mod_enc_url["get_list_options"]%>?alias_name=glm_status&mode=<%$mod_enc_mode["Search"]%>&rformat=html<%$extra_qstr%>'<%/if%>,
-            "value": <%if $count_arr["glm_status"]["json"] eq "Yes" %>$.parseJSON('<%$count_arr["glm_status"]["data"]|@addslashes%>')<%else%>null<%/if%>,
-            "dataInit": <%if $count_arr['glm_status']['ajax'] eq 'Yes' %>initSearchGridAjaxChosenEvent<%else%>initGridChosenEvent<%/if%>,
-            "ajaxCall": '<%if $count_arr["glm_status"]["ajax"] eq "Yes" %>ajax-call<%/if%>',
-            "multiple": true
-        },
-        "editoptions": {
-            "aria-grid-id": el_tpl_settings.main_grid_id,
-            "aria-module-name": "game_level",
-            "aria-unique-name": "glm_status",
-            "dataUrl": '<%$admin_url%><%$mod_enc_url["get_list_options"]%>?alias_name=glm_status&mode=<%$mod_enc_mode["Update"]%>&rformat=html<%$extra_qstr%>',
-            "dataInit": <%if $count_arr['glm_status']['ajax'] eq 'Yes' %>initEditGridAjaxChosenEvent<%else%>initGridChosenEvent<%/if%>,
-            "ajaxCall": '<%if $count_arr["glm_status"] eq "Yes" %>ajax-call<%/if%>',
-            "data-placeholder": "<%$this->general->parseLabelMessage('GENERIC_PLEASE_SELECT__C35FIELD_C35' ,'#FIELD#', 'GAME_LEVEL_STATUS')%>",
-            "class": "inline-edit-row chosen-select"
-        },
-        "ctrl_type": "dropdown",
-        "default_value": "<%$list_config['glm_status']['default']%>",
         "filterSopt": "in",
         "stype": "select"
     },

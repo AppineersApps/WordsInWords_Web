@@ -807,7 +807,7 @@ class Query_images_model extends CI_Model
                 "label_lang" => $this->lang->line('QUERY_IMAGES_IMAGE'),
                 "file_upload" => "Yes",
                 "file_server" => "amazon",
-                "file_folder" => "whitelable_v2/query_images",
+                "file_folder" => "wordsnwords/query_images",
                 "file_keep" => "uqi_user_query_id",
                 "file_width" => "50",
                 "file_height" => "50",

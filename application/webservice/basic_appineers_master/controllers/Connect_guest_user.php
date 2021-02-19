@@ -452,7 +452,7 @@ class Connect_guest_user extends Cit_Controller
             $data_arr = $this->block_result["array"];
             $upload_path = $this->config->item("upload_path");
             if (!empty($images_arr["user_profile"]["name"])) {
-                $folder_name = "words_n_Words/user_profile";
+                $folder_name = "wordsnwords/user_profile";
                 
                 $temp_file = $_FILES["user_profile"]["tmp_name"];
                 $res = $this->general->uploadAWSData($temp_file, $folder_name, $images_arr["user_profile"]["name"]);
@@ -527,7 +527,7 @@ class Connect_guest_user extends Cit_Controller
                     $image_arr["no_img"] = false;
                     $dest_path = "user_profile";
                     //$image_arr["path"] = $this->general->getImageNestedFolders($dest_path);
-                    $image_arr["path"] =" words_n_Words/user_profile";
+                    $image_arr["path"] =" wordsnwords/user_profile";
                     $data = $this->general->get_image_aws($image_arr);
 
                     $result_arr[$data_key]["u_profile_image"] = $data;
@@ -747,7 +747,7 @@ class Connect_guest_user extends Cit_Controller
         $output_array["settings"]["fields"] = $output_fields;
         $output_array["data"] = $input_params;
 
-        $func_array["function"]["name"] = "connect_guest_user";
+        $func_array["function"]["name"] = "user_sign_up_email";
         $func_array["function"]["single_keys"] = $this->single_keys;
         $func_array["function"]["multiple_keys"] = $this->multiple_keys;
 

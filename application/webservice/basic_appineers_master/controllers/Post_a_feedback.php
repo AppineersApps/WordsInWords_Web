@@ -364,7 +364,7 @@ class Post_a_feedback extends Cit_Controller
                     $dest_path = "query_images";
                    /* $image_arr["path"] = $this->general->getImageNestedFolders($dest_path);
                     $data = $this->general->get_image($image_arr);*/
-                    $image_arr["path"] ="monkey_sphere/query_images";
+                    $image_arr["path"] ="wordsnwords/query_images";
                     $data = $this->general->get_image_aws($image_arr);
 
 

@@ -636,6 +636,65 @@ $config["connect_guest_user"] = array(
     "target" => ""
 );
 
+$config["social_account_connect_guest_user"] = array(
+    "title" => "social account connect to guest user",
+    "folder" => "basic_appineers_master",
+    "method" => "GET_POST",
+    "params" => array(
+        "longitude",
+        "state_id",
+        "zipcode",
+        "device_type",
+        "device_model",
+        "device_os",
+        "device_token",
+        "social_login_type",
+        "social_login_id",
+        "first_name",
+        "last_name",
+        "user_name",
+        "email",
+        "mobile_number",
+        "user_profile",
+        "dob",
+        "address",
+        "city",
+        "latitude"
+    ),
+    "token" => "",
+    "payload" => array(
+    ),
+    "target" => ""
+);
+
+$config["hint_coin"] = array(
+    "title" => "Hint coin",
+    "folder" => "player_activity",
+    "method" => "POST",
+    "params" => array(
+        "user_access_token",
+        "hint_coins"
+    ),
+    "token" => "",
+    "payload" => array(
+    ),
+    "target" => ""
+);
+
+$config["buy_word"] = array(
+    "title" => "Buy word",
+    "folder" => "player_activity",
+    "method" => "POST",
+    "params" => array(
+        "user_access_token",
+        "buy_word_coins"
+    ),
+    "token" => "",
+    "payload" => array(
+    ),
+    "target" => ""
+);
+
 #####GENERATED_CONFIG_SETTINGS_END#####
 
 /* End of file cit_webservices.php */

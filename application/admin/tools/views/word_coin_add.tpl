@@ -37,7 +37,7 @@
                                                 <%$form_config['wcm_word_length']['label_lang']%> <em>*</em> 
                                             </label> 
                                             <div class="form-right-div  ">
-                                                <input type="text" placeholder="" value="<%$data['wcm_word_length']|@htmlentities%>" name="wcm_word_length" id="wcm_word_length" title="<%$this->lang->line('GAME_LEVEL_MAX_WORD_LENGTH')%>"  data-ctrl-type='textbox'  class='frm-size-medium'  />
+                                                <input type="number" placeholder="" value="<%$data['wcm_word_length']|@htmlentities%>" name="wcm_word_length" id="wcm_word_length" title="<%$this->lang->line('GAME_LEVEL_MAX_WORD_LENGTH')%>"  data-ctrl-type='textbox'  class='frm-size-medium'  />
                                             </div>
                                             <div class="error-msg-form "><label class='error' id='wcm_word_lengthErr'></label></div>
                                         </div>
@@ -46,7 +46,7 @@
                                                 <%$form_config['wcm_word_coin']['label_lang']%> <em>*</em> 
                                             </label> 
                                             <div class="form-right-div  ">
-                                                <input type="text" placeholder="" value="<%$data['wcm_word_coin']|@htmlentities%>" name="wcm_word_coin" id="wcm_word_coin" title="<%$this->lang->line('GAME_LEVEL_MAX_WORD_LENGTH')%>"  data-ctrl-type='textbox'  class='frm-size-medium'  />
+                                                <input type="number" placeholder="" value="<%$data['wcm_word_coin']|@htmlentities%>" name="wcm_word_coin" id="wcm_word_coin" title="<%$this->lang->line('GAME_LEVEL_MAX_WORD_LENGTH')%>"  data-ctrl-type='textbox'  class='frm-size-medium'  />
                                             </div>
                                             <div class="error-msg-form "><label class='error' id='wcm_word_coinErr'></label></div>
                                         </div>
@@ -55,9 +55,18 @@
                                                 <%$form_config['wcm_hint_coin']['label_lang']%> <em>*</em> 
                                             </label> 
                                             <div class="form-right-div  ">
-                                                <input type="text" placeholder="" value="<%$data['wcm_hint_coin']|@htmlentities%>" name="wcm_hint_coin" id="wcm_hint_coin" title="<%$this->lang->line('GAME_LEVEL_MAX_WORD_LENGTH')%>"  data-ctrl-type='textbox'  class='frm-size-medium'  />
+                                                <input type="number" placeholder="" value="<%$data['wcm_hint_coin']|@htmlentities%>" name="wcm_hint_coin" id="wcm_hint_coin" title="<%$this->lang->line('GAME_LEVEL_MAX_WORD_LENGTH')%>"  data-ctrl-type='textbox'  class='frm-size-medium'  />
                                             </div>
                                             <div class="error-msg-form "><label class='error' id='wcm_hint_coinErr'></label></div>
+                                        </div>
+                                        <div class="form-row row-fluid " id="cc_sh_wcm_buy_coin">
+                                            <label class="form-label span3 ">
+                                                <%$form_config['wcm_buy_coin']['label_lang']%> <em>*</em> 
+                                            </label> 
+                                            <div class="form-right-div  ">
+                                                <input type="number" placeholder="" value="<%$data['wcm_buy_coin']|@htmlentities%>" name="wcm_buy_coin" id="wcm_buy_coin" title="<%$this->lang->line('WORD_COIN_BUY_COIN')%>"  data-ctrl-type='textbox'  class='frm-size-medium'  />
+                                            </div>
+                                            <div class="error-msg-form "><label class='error' id='wcm_buy_coinErr'></label></div>
                                         </div>
                                     </div>
                                 </div>

@@ -129,31 +129,31 @@ class Sync_level_round extends Cit_Controller
                     $gameLevelInfo[$newKey]['level_name'] = $configValue["vLevelName"];
                     $gameLevelInfo[$newKey]['level_id'] = $configValue["iGameLevelId"];
                     $gameLevelInfo[$newKey]['round_no'] = 0;
-                    $gameLevelInfo[$newKey]['gain_coins'] = 0;
-                    $gameLevelInfo[$newKey]['loss_coins'] = 0;
-                    $gameLevelInfo[$newKey]['unlock_status'] = (bool)0;
+                    $gameLevelInfo[$newKey]['unlock_status'] = 0;
                     ++$newKey;
                 }
             } else {
                 foreach ($this->block_result0['data'] as $configKey => $configValue) {
+                    $flag = false;
                     foreach ($this->block_result['data'] as $activityKey => $activityValue) {
                         if ($configValue['iGameLevelId'] == $activityValue['iLevelId']) {
-                            $gameLevelInfo[$newKey]['level_name'] = $configValue["vLevelName"];
-                            $gameLevelInfo[$newKey]['level_id'] = $activityValue["iLevelId"];
-                            $gameLevelInfo[$newKey]['round_no'] = $activityValue["iRoundId"];
-                            $gameLevelInfo[$newKey]['gain_coins'] = $activityValue["iCreditCoin"];
-                            $gameLevelInfo[$newKey]['loss_coins'] = $activityValue["iDebitCoin"];
-                            $gameLevelInfo[$newKey]['unlock_status'] = $activityValue["iUnlockStatus"];
-                            ++$newKey;
-                        } else {
-                            $gameLevelInfo[$newKey]['level_name'] = $configValue["vLevelName"];
-                            $gameLevelInfo[$newKey]['level_id'] = $configValue["iGameLevelId"];
-                            $gameLevelInfo[$newKey]['round_no'] = 0;
-                            $gameLevelInfo[$newKey]['gain_coins'] = 0;
-                            $gameLevelInfo[$newKey]['loss_coins'] = 0;
-                            $gameLevelInfo[$newKey]['unlock_status'] = (bool)0;
-                            ++$newKey;
+                            $flag = true;
+                            break; 
                         }
+                    }
+
+                    if ($flag) {
+                        $gameLevelInfo[$newKey]['level_name'] = $configValue["vLevelName"];
+                        $gameLevelInfo[$newKey]['level_id'] = $activityValue["iLevelId"];
+                        $gameLevelInfo[$newKey]['round_no'] = $activityValue["iRoundId"];
+                        $gameLevelInfo[$newKey]['unlock_status'] = $activityValue["iUnlockStatus"];
+                        ++$newKey;
+                    } else {
+                        $gameLevelInfo[$newKey]['level_name'] = $configValue["vLevelName"];
+                        $gameLevelInfo[$newKey]['level_id'] = $configValue["iGameLevelId"];
+                        $gameLevelInfo[$newKey]['round_no'] = 0;
+                        $gameLevelInfo[$newKey]['unlock_status'] = 0;
+                        ++$newKey;
                     }
                 }
             }

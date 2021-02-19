@@ -321,7 +321,7 @@ class Social_login extends Cit_Controller
                     $dest_path = "user_profile";
                     /*$image_arr["path"] = $this->general->getImageNestedFolders($dest_path);
                     $data = $this->general->get_image($image_arr);*/
-                    $image_arr["path"] ="monkey_sphere/user_profile";
+                    $image_arr["path"] ="wordsnwords/user_profile";
                     $data = $this->general->get_image_aws($image_arr);
 
                     $result_arr[$data_key]["u_profile_image"] = $data;

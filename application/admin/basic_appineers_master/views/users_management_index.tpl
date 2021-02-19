@@ -168,12 +168,20 @@
         "label": "<%$list_config['u_user_name']['label_lang']%>"
     },
     {
+        "name": "u_guest_id",
+        "label": "<%$list_config['u_guest_id']['label_lang']%>"
+    },
+    {
         "name": "u_email",
         "label": "<%$list_config['u_email']['label_lang']%>"
     },
     {
         "name": "u_mobile_no",
         "label": "<%$list_config['u_mobile_no']['label_lang']%>"
+    },
+    {
+        "name": "u_guest_user",
+        "label": "<%$list_config['u_guest_user']['label_lang']%>"
     },
     {
         "name": "u_added_at",
@@ -312,6 +320,48 @@
         "unformat": unformatAdminModuleEditLink
     },
     {
+        "name": "u_guest_id",
+        "index": "u_guest_id",
+        "label": "<%$list_config['u_guest_id']['label_lang']%>",
+        "labelClass": "header-align-left",
+        "resizable": true,
+        "width": "<%$list_config['u_guest_id']['width']%>",
+        "search": <%if $list_config['u_guest_id']['search'] eq 'No' %>false<%else%>true<%/if%>,
+        "export": <%if $list_config['u_guest_id']['export'] eq 'No' %>false<%else%>true<%/if%>,
+        "sortable": <%if $list_config['u_guest_id']['sortable'] eq 'No' %>false<%else%>true<%/if%>,
+        "hidden": <%if $list_config['u_guest_id']['hidden'] eq 'Yes' %>true<%else%>false<%/if%>,
+        "hideme": <%if $list_config['u_guest_id']['hideme'] eq 'Yes' %>true<%else%>false<%/if%>,
+        "addable": <%if $list_config['u_guest_id']['addable'] eq 'Yes' %>true<%else%>false<%/if%>,
+        "editable": <%if $list_config['u_guest_id']['editable'] eq 'Yes' %>true<%else%>false<%/if%>,
+        "align": "left",
+        "edittype": "text",
+        "editrules": {
+            "infoArr": []
+        },
+        "searchoptions": {
+            "attr": {
+                "aria-grid-id": el_tpl_settings.main_grid_id,
+                "aria-module-name": "users_management",
+                "aria-unique-name": "u_guest_id",
+                "autocomplete": "off"
+            },
+            "sopt": strSearchOpts,
+            "searchhidden": <%if $list_config['u_guest_id']['search'] eq 'Yes' %>true<%else%>false<%/if%>
+        },
+        "editoptions": {
+            "aria-grid-id": el_tpl_settings.main_grid_id,
+            "aria-module-name": "users_management",
+            "aria-unique-name": "u_guest_id",
+            "placeholder": "",
+            "class": "inline-edit-row "
+        },
+        "ctrl_type": "textbox",
+        "default_value": "<%$list_config['u_guest_id']['default']%>",
+        "filterSopt": "bw",
+        "formatter": formatAdminModuleEditLink,
+        "unformat": unformatAdminModuleEditLink
+    },
+    {
         "name": "u_email",
         "index": "u_email",
         "label": "<%$list_config['u_email']['label_lang']%>",
@@ -389,6 +439,46 @@
         },
         "ctrl_type": "textbox",
         "default_value": "<%$list_config['u_mobile_no']['default']%>",
+        "filterSopt": "bw"
+    },
+    {
+        "name": "u_guest_user",
+        "index": "u_guest_user",
+        "label": "<%$list_config['u_guest_user']['label_lang']%>",
+        "labelClass": "header-align-left",
+        "resizable": true,
+        "width": "<%$list_config['u_guest_user']['width']%>",
+        "search": <%if $list_config['u_guest_user']['search'] eq 'No' %>false<%else%>true<%/if%>,
+        "export": <%if $list_config['u_guest_user']['export'] eq 'No' %>false<%else%>true<%/if%>,
+        "sortable": <%if $list_config['u_guest_user']['sortable'] eq 'No' %>false<%else%>true<%/if%>,
+        "hidden": <%if $list_config['u_guest_user']['hidden'] eq 'Yes' %>true<%else%>false<%/if%>,
+        "hideme": <%if $list_config['u_guest_user']['hideme'] eq 'Yes' %>true<%else%>false<%/if%>,
+        "addable": <%if $list_config['u_guest_user']['addable'] eq 'Yes' %>true<%else%>false<%/if%>,
+        "editable": <%if $list_config['u_guest_user']['editable'] eq 'Yes' %>true<%else%>false<%/if%>,
+        "align": "left",
+        "edittype": "text",
+        "editrules": {
+            "infoArr": []
+        },
+        "searchoptions": {
+            "attr": {
+                "aria-grid-id": el_tpl_settings.main_grid_id,
+                "aria-module-name": "users_management",
+                "aria-unique-name": "u_guest_user",
+                "autocomplete": "off"
+            },
+            "sopt": strSearchOpts,
+            "searchhidden": <%if $list_config['u_guest_user']['search'] eq 'Yes' %>true<%else%>false<%/if%>
+        },
+        "editoptions": {
+            "aria-grid-id": el_tpl_settings.main_grid_id,
+            "aria-module-name": "users_management",
+            "aria-unique-name": "u_guest_user",
+            "placeholder": "",
+            "class": "inline-edit-row "
+        },
+        "ctrl_type": "textbox",
+        "default_value": "<%$list_config['u_guest_user']['default']%>",
         "filterSopt": "bw"
     },
     {

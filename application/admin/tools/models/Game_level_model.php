@@ -77,7 +77,6 @@ class Game_level_model extends CI_Model
             "glm_max_word_length",
             "glm_max_round",
             "glm_round_to_unlock",
-            "glm_status",
             "sys_custom_field_1"
         );
         $this->join_tables = array();
@@ -290,7 +289,6 @@ class Game_level_model extends CI_Model
             $this->db->select("glm.iMaxWordLength AS glm_max_word_length");
             $this->db->select("glm.iMaxRound AS glm_max_round");
             $this->db->select("glm.iRoundToUnlock AS glm_round_to_unlock");
-            $this->db->select("glm.eStatus AS glm_status");
             $this->db->select("('view') AS sys_custom_field_1", FALSE);
         } else {
             $this->db->select("glm.iGameLevelId AS iGameLevelId");
@@ -301,7 +299,6 @@ class Game_level_model extends CI_Model
             $this->db->select("glm.iMaxWordLength AS glm_max_word_length");
             $this->db->select("glm.iMaxRound AS glm_max_round");
             $this->db->select("glm.iRoundToUnlock AS glm_round_to_unlock");
-            $this->db->select("glm.eStatus AS glm_status");
             $this->db->select("glm.dtAddedAt AS glm_added_at");
             $this->db->select("glm.dtUpdatedAt AS glm_updated_at");
         }
@@ -422,7 +419,6 @@ class Game_level_model extends CI_Model
         $this->db->select("glm.iMaxWordLength AS glm_max_word_length");
         $this->db->select("glm.iMaxRound AS glm_max_round");
         $this->db->select("glm.iRoundToUnlock AS glm_round_to_unlock");
-        $this->db->select("glm.eStatus AS glm_status");
         $this->db->select("('view') AS sys_custom_field_1", FALSE);
         if ($sdef == "Yes") {
             if (is_array($order_by) && count($order_by) > 0) {
@@ -522,7 +518,6 @@ class Game_level_model extends CI_Model
         $this->db->select("glm.iMaxWordLength AS glm_max_word_length");
         $this->db->select("glm.iMaxRound AS glm_max_round");
         $this->db->select("glm.iRoundToUnlock AS glm_round_to_unlock");
-        $this->db->select("glm.eStatus AS glm_status");
         $this->db->select("('view') AS sys_custom_field_1", FALSE);
         if ($sdef == "Yes") {
             if (is_array($order_by) && count($order_by) > 0) {
@@ -632,8 +627,8 @@ class Game_level_model extends CI_Model
                 "type" => "dropdown",
                 "align" => "center",
                 "label" => "Min Word Length",
-                "lang_code" => "GAME_LEVEL_MAX_WORD_LENGTH",
-                "label_lang" => $this->lang->line('GAME_LEVEL_MAX_WORD_LENGTH'),
+                "lang_code" => "GAME_LEVEL_MIN_WORD_LENGTH",
+                "label_lang" => $this->lang->line('GAME_LEVEL_MIN_WORD_LENGTH'),
                 "width" => 50,
                 "search" => "Yes",
                 "export" => "Yes",
@@ -710,34 +705,6 @@ class Game_level_model extends CI_Model
                 "addable" => "No",
                 "editable" => "No",
                 "viewedit" => "No",
-            ),
-            "glm_status" => array(
-                "name" => "glm_status",
-                "table_name" => "game_level_master",
-                "table_alias" => "glm",
-                "field_name" => "eStatus",
-                "source_field" => "glm_status",
-                "display_query" => "glm.eStatus",
-                "entry_type" => "Table",
-                "data_type" => "enum",
-                "show_in" => "Both",
-                "type" => "dropdown",
-                "align" => "center",
-                "label" => "Status",
-                "lang_code" => "GAME_LEVEL_STATUS",
-                "label_lang" => $this->lang->line('GAME_LEVEL_STATUS'),
-                "width" => 50,
-                "search" => "Yes",
-                "export" => "Yes",
-                "sortable" => "Yes",
-                "addable" => "No",
-                "editable" => "No",
-                "viewedit" => "No",
-                "default" => $this->filter->getDefaultValue(
-                    "glm_status",
-                    "Text",
-                    "Active"
-                )
             ),
             "sys_custom_field_1" => array(
                 "name" => "sys_custom_field_1",
@@ -849,8 +816,8 @@ class Game_level_model extends CI_Model
                 "show_input" => "Both",
                 "type" => "dropdown",
                 "label" => "Max Round",
-                "lang_code" => "GAME_LEVEL_ROUND_TO_UNLOCK",
-                "label_lang" => $this->lang->line('GAME_LEVEL_ROUND_TO_UNLOCK')
+                "lang_code" => "GAME_LEVEL_MAX_ROUND",
+                "label_lang" => $this->lang->line('GAME_LEVEL_MAX_ROUND')
             ),
             "glm_round_to_unlock" => array(
                 "name" => "glm_round_to_unlock",
@@ -862,27 +829,8 @@ class Game_level_model extends CI_Model
                 "show_input" => "Both",
                 "type" => "dropdown",
                 "label" => "Round To Unlock",
-                "lang_code" => "GAME_LEVEL_MAX_ROUND",
-                "label_lang" => $this->lang->line('GAME_LEVEL_MAX_ROUND')
-            ),
-            "glm_status" => array(
-                "name" => "glm_status",
-                "table_name" => "game_level_master",
-                "table_alias" => "glm",
-                "field_name" => "eStatus",
-                "entry_type" => "Table",
-                "data_type" => "enum",
-                "show_input" => "Both",
-                "type" => "dropdown",
-                "label" => "Status",
-                "lang_code" => "GAME_LEVEL_STATUS",
-                "label_lang" => $this->lang->line('GAME_LEVEL_STATUS'),
-                "default" => $this->filter->getDefaultValue(
-                    "glm_status",
-                    "Text",
-                    "Active"
-                ),
-                "dfapply" => "addOnly",
+                "lang_code" => "GAME_LEVEL_ROUND_TO_UNLOCK",
+                "label_lang" => $this->lang->line('GAME_LEVEL_ROUND_TO_UNLOCK')
             ),
             "glm_added_at" => array(
                 "name" => "glm_added_at",

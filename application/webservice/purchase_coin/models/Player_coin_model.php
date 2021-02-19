@@ -72,6 +72,42 @@ class Player_coin_model extends CI_Model
         return $return_arr;
     }
 
+     /**
+     * get_player_coins method is used to execute database queries for States List API.
+     * @created priyanka chillakuru | 18.09.2019
+     * @modified priyanka chillakuru | 18.09.2019
+     * @param string $STATES_LIST_COUNTRY_ID STATES_LIST_COUNTRY_ID is used to process query block.
+     * @param string $STATES_LIST_COUNTRY_CODE STATES_LIST_COUNTRY_CODE is used to process query block.
+     * @return array $return_arr returns response of query block.
+     */
+    public function check_player_sufficent_coins($params_arr = array())
+    {
+        try {
+            $result_arr = array();
+            $this->db->from("player_coins");
+            $this->db->select("*");
+            $this->db->where("iUserId=", $params_arr["user_id"]);
+            $result_obj = $this->db->get();
+            $result_arr = is_object($result_obj) ? $result_obj->result_array() : array();
+            
+            if (!is_array($result_arr) || count($result_arr) == 0) {
+                throw new Exception('No records found.');
+            }
+            
+            $success = 1;
+        } catch (Exception $e) {
+            $success = 0;
+            $message = $e->getMessage();
+        }
+        
+        $this->db->_reset_all();
+        $return_arr["success"] = $success;
+        $return_arr["message"] = $message;
+        $return_arr["data"] = $result_arr;
+
+        return $return_arr;
+    }
+
     /**
     * insert_player_coins_data method is used to execute database queries for player_coins Add API.
     * @created  | 28.01.2016
@@ -133,12 +169,11 @@ class Player_coin_model extends CI_Model
             if (isset($where_arr["player_coin_id"]) && $where_arr["player_coin_id"] != "") {
                 $this->db->where("iPlayerCoinId=", $where_arr["player_coin_id"]);
             }
-
-            $this->db->stop_cache();
             if (isset($params_arr["user_id"])) {
-                $this->db->set("iUserId", $params_arr["user_id"]);
+                $this->db->where("iUserId", $params_arr["user_id"]);
             }
             
+            $this->db->stop_cache();
             if (isset($params_arr["total_coin"])) {
                 $this->db->set("iTotalCoin", $params_arr["total_coin"]);
             }

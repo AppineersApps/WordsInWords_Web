@@ -57,20 +57,6 @@ class Game_level extends Cit_Controller
             "list_record_callback" => "",
         );
         $this->dropdown_arr = array(
-            "glm_status" => array(
-                "type" => "enum",
-                "default" => "Yes",
-                "values" => array(
-                    array(
-                        'id' => 'Active',
-                        'val' => $this->lang->line('GAME_LEVEL_ACTIVE')
-                    ),
-                    array(
-                        'id' => 'Inactive',
-                        'val' => $this->lang->line('GAME_LEVEL_INACTIVE')
-                    )
-                )
-            )
         );
         $this->parMod = $this->params_arr["parMod"];
         $this->parID = $this->params_arr["parID"];
@@ -133,12 +119,8 @@ class Game_level extends Cit_Controller
             $enc_loc_module = $this->general->getMD5EncryptString("ListPrefer", "game_level");
 
             $status_array = array(
-                'Active',
-                'Inactive',
             );
             $status_label = array(
-                'js_lang_label.GAME_LEVEL_ACTIVE',
-                'js_lang_label.GAME_LEVEL_INACTIVE',
             );
 
             $list_config = $this->game_level_model->getListConfiguration();
@@ -155,8 +137,6 @@ class Game_level extends Cit_Controller
                 'list_config' => $list_config,
                 'count_arr' => $this->count_arr,
                 'enc_loc_module' => $enc_loc_module,
-                'status_array' => $status_array,
-                'status_label' => $status_label,
                 'view_access' => $view_access,
                 'add_access' => $add_access,
                 'edit_access' => $edit_access,
@@ -713,7 +693,6 @@ class Game_level extends Cit_Controller
             $glm_max_word_length = $params_arr["glm_max_word_length"];
             $glm_max_round = $params_arr["glm_max_round"];
             $glm_round_to_unlock = $params_arr["glm_round_to_unlock"];
-            $glm_status = $params_arr["glm_status"];
             $glm_added_at = $params_arr["glm_added_at"];
             $glm_updated_at = $params_arr["glm_updated_at"];
 
@@ -735,7 +714,6 @@ class Game_level extends Cit_Controller
             $data["iMaxWordLength"] = $glm_max_word_length;
             $data["iMaxRound"] = $glm_max_round;
             $data["iRoundToUnlock"] = $glm_round_to_unlock;
-            $data["eStatus"] = $glm_status;
             $data["dtAddedAt"] = $this->filter->formatActionData($glm_added_at, $form_config["glm_added_at"]);
             $data["dtUpdatedAt"] = $this->filter->formatActionData($glm_updated_at, $form_config["glm_updated_at"]);
 
@@ -745,7 +723,6 @@ class Game_level extends Cit_Controller
             $save_data_arr["glm_max_word_length"] = $data["iMaxWordLength"];
             $save_data_arr["glm_max_round"] = $data["iMaxRound"];
             $save_data_arr["glm_round_to_unlock"] = $data["iRoundToUnlock"];
-            $save_data_arr["glm_status"] = $data["eStatus"];
             $save_data_arr["glm_added_at"] = $data["dtAddedAt"];
             $save_data_arr["glm_updated_at"] = $data["dtUpdatedAt"];
             if ($mode == 'Add') {

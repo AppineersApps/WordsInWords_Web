@@ -55,7 +55,7 @@
                                                 <%$form_config['glm_min_word_length']['label_lang']%> <em>*</em> 
                                             </label> 
                                             <div class="form-right-div  ">
-                                                <input type="text" placeholder="" value="<%$data['glm_min_word_length']|@htmlentities%>" name="glm_min_word_length" id="glm_min_word_length" title="<%$this->lang->line('GAME_LEVEL_MIN_WORD_LENGTH')%>"  data-ctrl-type='textbox'  class='frm-size-medium'  />
+                                                <input type="number" min="3" max="10" placeholder="" value="<%$data['glm_min_word_length']|@htmlentities%>" name="glm_min_word_length" id="glm_min_word_length" title="<%$this->lang->line('GAME_LEVEL_MIN_WORD_LENGTH')%>"  data-ctrl-type='textbox'  class='frm-size-medium'  />
                                             </div>
                                             <div class="error-msg-form "><label class='error' id='glm_min_word_lengthErr'></label></div>
                                         </div>                                                                                      
@@ -64,7 +64,7 @@
                                                 <%$form_config['glm_max_word_length']['label_lang']%> <em>*</em> 
                                             </label> 
                                             <div class="form-right-div  ">
-                                                <input type="text" placeholder="" value="<%$data['glm_max_word_length']|@htmlentities%>" name="glm_max_word_length" id="glm_max_word_length" title="<%$this->lang->line('GAME_LEVEL_MAX_WORD_LENGTH')%>"  data-ctrl-type='textbox'  class='frm-size-medium'  />
+                                                <input type="number" min="3" max="10" placeholder="" value="<%$data['glm_max_word_length']|@htmlentities%>" name="glm_max_word_length" id="glm_max_word_length" title="<%$this->lang->line('GAME_LEVEL_MAX_WORD_LENGTH')%>"  data-ctrl-type='textbox'  class='frm-size-medium'  />
                                             </div>
                                             <div class="error-msg-form "><label class='error' id='glm_max_word_lengthErr'></label></div>
                                         </div>
@@ -73,7 +73,7 @@
                                                 <%$form_config['glm_max_round']['label_lang']%> <em>*</em> 
                                             </label> 
                                             <div class="form-right-div  ">
-                                                <input type="text" placeholder="" value="<%$data['glm_max_round']|@htmlentities%>" name="glm_max_round" id="glm_max_round" title="<%$this->lang->line('GAME_LEVEL_MAX_WORD_LENGTH')%>"  data-ctrl-type='textbox'  class='frm-size-medium'  />
+                                                <input type="number" placeholder="" value="<%$data['glm_max_round']|@htmlentities%>" name="glm_max_round" id="glm_max_round" title="<%$this->lang->line('GAME_LEVEL_MAX_ROUND')%>"  data-ctrl-type='textbox'  class='frm-size-medium'  />
                                             </div>
                                             <div class="error-msg-form "><label class='error' id='glm_max_roundErr'></label></div>
                                         </div>
@@ -82,19 +82,9 @@
                                                 <%$form_config['glm_round_to_unlock']['label_lang']%> <em>*</em> 
                                             </label> 
                                             <div class="form-right-div  ">
-                                                <input type="text" placeholder="" value="<%$data['glm_round_to_unlock']|@htmlentities%>" name="glm_round_to_unlock" id="glm_round_to_unlock" title="<%$this->lang->line('GAME_LEVEL_MAX_WORD_LENGTH')%>"  data-ctrl-type='textbox'  class='frm-size-medium'  />
+                                                <input type="number" placeholder="" value="<%$data['glm_round_to_unlock']|@htmlentities%>" name="glm_round_to_unlock" id="glm_round_to_unlock" title="<%$this->lang->line('GAME_LEVEL_ROUND_TO_UNLOCK')%>"  data-ctrl-type='textbox'  class='frm-size-medium'  />
                                             </div>
                                             <div class="error-msg-form "><label class='error' id='glm_round_to_unlockErr'></label></div>
-                                        </div>
-                                        <div class="form-row row-fluid " id="cc_sh_glm_status">
-                                            <label class="form-label span3 ">
-                                                <%$form_config['glm_status']['label_lang']%> <em>*</em> 
-                                            </label> 
-                                            <div class="form-right-div  ">
-                                                <%assign var="opt_selected" value=$data['glm_status']%>
-                                                <%$this->dropdown->display("glm_status","glm_status","  title='<%$this->lang->line('GAME_LEVEL_STATUS')%>'  aria-chosen-valid='Yes'  class='chosen-select frm-size-medium'  data-placeholder='<%$this->general->parseLabelMessage('GENERIC_PLEASE_SELECT__C35FIELD_C35' ,'#FIELD#', 'GAME_LEVEL_STATUS')%>'  ", "|||", "", $opt_selected,"glm_status")%>
-                                            </div>
-                                            <div class="error-msg-form "><label class='error' id='glm_statusErr'></label></div>
                                         </div>
                                     </div>
                                 </div>

@@ -149,6 +149,7 @@ class Game_level_config extends Cit_Controller
                 $wordCoinInfo[$newUpKey]['word_length'] = $configValue["iWordLength"];
                 $wordCoinInfo[$newUpKey]['coins_per_word'] = $configValue["iWordCoin"];
                 $wordCoinInfo[$newUpKey]['coins_for_hint'] = $configValue["iHintCoin"];
+                $wordCoinInfo[$newUpKey]['coins_for_buy'] = $configValue["iBuyCoin"];
                 ++$newUpKey;
             }
  

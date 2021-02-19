@@ -10,11 +10,11 @@ defined('BASEPATH') || exit('No direct script access allowed');
  *
  * @subpackage controllers
  *
- * @module Purchase_coin Add
+ * @module Buy_word Add
  *
- * @class Purchase_coin.php
+ * @class Buy_word.php
  *
- * @path application\webservice\purchase_coin\controllers\Purchase_coin.php
+ * @path application\webservice\player_activity\controllers\Buy_word.php
  *
  * @version 4.4
  *
@@ -22,7 +22,7 @@ defined('BASEPATH') || exit('No direct script access allowed');
  *
  * @since 06.09.2019
  */
-class Purchase_coin extends Cit_Controller
+class Buy_word extends Cit_Controller
 {
     public $settings_params;
     public $output_params;
@@ -38,14 +38,11 @@ class Purchase_coin extends Cit_Controller
         parent::__construct();
         $this->settings_params = array();
         $this->output_params = array();
-        $this->single_keys = array(
-            "get_purchase_coin"
-        );
-        
+       
         $this->block_result = array();
 
         $this->load->library('wsresponse');
-        $this->load->model('purchase_coin_model');
+        $this->load->model('player_activity_model');
     }
 
     /**
@@ -55,45 +52,45 @@ class Purchase_coin extends Cit_Controller
      * @param array $request_arr request_arr array is used for api input.
      * @return array $valid_res returns output response of API.
      */
-    public function rules_purchase_coin($request_arr = array())
+    public function rules_buy_word($request_arr = array())
     {
         $valid_arr = array(
-            "purchased_coin" => array(
+            "buy_word_coins" => array(
                 array(
                     "rule" => "required",
                     "value" => true,
-                    "message" => "purchased_coin_required",
+                    "message" => "buy_word_coins_required",
                 )
             )
         );
         $this->wsresponse->setResponseStatus(422);
-        $valid_res = $this->wsresponse->validateInputParams($valid_arr, $request_arr, "calllog_add");
+        $valid_res = $this->wsresponse->validateInputParams($valid_arr, $request_arr, "add_buy_word");
         
         return $valid_res;
     }
 
     /**
-     * start_purchase_coin_add method is used to initiate api execution flow.
+     * start_buy_word_add method is used to initiate api execution flow.
      * @created  | 28.01.2016
      * @modified ---
      * @param array $request_arr request_arr array is used for api input.
      * @param bool $inner_api inner_api flag is used to idetify whether it is inner api request or general request.
      * @return array $output_response returns output response of API.
      */
-    public function start_purchase_coin($request_arr = array(), $inner_api = false)
+    public function start_buy_word($request_arr = array(), $inner_api = false)
     {
         $method = $_SERVER['REQUEST_METHOD'];
         $output_response = array();
 
-        $output_response =  $this->addPurchaseCoin($request_arr);
+        $output_response =  $this->addBuyWord($request_arr);
 
         return  $output_response;
     }
 
-    public function addPurchaseCoin($input_params)
+    public function addBuyWord($input_params)
     {
         try {
-            $validation_res = $this->rules_purchase_coin($input_params);
+            $validation_res = $this->rules_buy_word($input_params);
             if ($validation_res["success"] == "-5") {
                 if ($inner_api === true) {
                     return $validation_res;
@@ -101,27 +98,28 @@ class Purchase_coin extends Cit_Controller
                     $this->wsresponse->sendValidationResponse($validation_res);
                 }
             }
-            
-            $input_params = $validation_res['input_params'];
             $output_response = array();
-           
-            //$input_params = $validation_res['input_params'];
-            // $output_array = $func_array = array();
+            $input_params = $validation_res['input_params'];
+            $input_params = $this->check_player_sufficent_coins($input_params);
 
-            // $input_params = $this->set_helper($input_params);
-
-            // $condition_res = $this->is_posted($input_params);
-
-            $input_params = $this->insert_purchase_coin_data($input_params);
-
-            $key = "insert_purchase_coin_data"; 
+            $key = "check_player_sufficent_coins";
             $condition_res = $this->condition($input_params, $key);
-
+            ;
             if ($condition_res["success"]) {
-                $output_response = $this->finish_purchase_coin_add_success($input_params);
-                return $output_response;
+                $input_params = $this->insert_buy_word_data($input_params);
+
+                $key = "insert_buy_word_data";
+                $condition_res = $this->condition($input_params, $key);
+
+                if ($condition_res["success"]) {
+                    $output_response = $this->finish_buy_word_add_success($input_params);
+                    return $output_response;
+                } else {
+                    $output_response = $this->finish_buy_word_add_failure($input_params);
+                    return $output_response;
+                }
             } else {
-                $output_response = $this->finish_purchase_coin_add_failure($input_params);
+                $output_response = $this->finish_check_player_sufficent_coins_failure($input_params);
                 return $output_response;
             }
         } catch (Exception $e) {
@@ -131,57 +129,61 @@ class Purchase_coin extends Cit_Controller
     }
 
     /**
-     * insert_purchase_coin_data method is used to process query block.
-     * @created  | 28.01.2016
+     * check_player_sufficent_coins method is used to process query block.
+     * @created  | 29.01.2016
      * @modified ---
      * @param array $input_params input_params array to process loop flow.
      * @return array $input_params returns modfied input_params array.
      */
-    public function insert_purchase_coin_data($input_params = array())
+    public function check_player_sufficent_coins($input_params = array())
     {
         $this->block_result = array();
         try {
-            $params_arr = array();
-
-            $this->block_result = $this->purchase_coin_model->insert_purchase_coin_data($input_params);
-            if (!$this->block_result["success"]) {
-                throw new Exception("Insertion failed.");
-            }
-            $data_arr = $this->block_result["array"];
-
-        } catch (Exception $e) {
-            $success = 0;
-            $this->block_result["data"] = array();
-        }
-        $input_params["insert_purchase_coin_data"] = $this->block_result["data"];
-        $input_params = $this->wsresponse->assignSingleRecord($input_params, $this->block_result["data"]);
-
-        return $input_params;
-    }
-
-    /**
-     * get_purchase_coin method is used to process query block.
-     * @created priyanka chillakuru | 18.09.2019
-     * @modified priyanka chillakuru | 18.09.2019
-     * @param array $input_params input_params array to process loop flow.
-     * @return array $input_params returns modfied input_params array.
-     */
-    public function get_purchase_coin($input_params = array())
-    {
-        $this->block_result = array();
-        try {
-            $this->block_result = $this->purchase_coin_model->get_purchase_coin($input_params);
+            $this->block_result = $this->player_coin_model->check_player_sufficent_coins($input_params);
             if (!$this->block_result["success"]) {
                 throw new Exception("No records found.");
+            }
+            if (isset($input_params["buy_word_coins"])) {
+                if ($this->block_result['data'][0]['iTotalCoin'] < $input_params["buy_word_coins"]) {
+                    throw new Exception("You have insufficient coins, Please purchase more coins.");
+                }
             }
         } catch (Exception $e) {
             $success = 0;
             $this->block_result["data"] = array();
         }
         
-        $input_params["get_purchase_coin"] = $this->block_result["data"];
+        $input_params["check_player_sufficent_coins"] = $this->block_result["data"];
         $input_params = $this->wsresponse->assignSingleRecord($input_params, $this->block_result["data"]);
-       
+
+        return $input_params;
+    }
+
+    /**
+     * insert_buy_word_data method is used to process query block.
+     * @created  | 28.01.2016
+     * @modified ---
+     * @param array $input_params input_params array to process loop flow.
+     * @return array $input_params returns modfied input_params array.
+     */
+    public function insert_buy_word_data($input_params = array())
+    {
+        $this->block_result = array();
+        try {
+            $params_arr = array();
+
+            $this->block_result = $this->player_activity_model->insert_buy_word_data($input_params);
+            if (!$this->block_result["success"]) {
+                throw new Exception("Insertion failed.");
+            }
+            $data_arr = $this->block_result["array"];
+        } catch (Exception $e) {
+            $success = 0;
+            $this->block_result["data"] = array();
+        }
+        $input_params["insert_buy_word_data"] = $this->block_result["data"];
+        $input_params = $this->wsresponse->assignSingleRecord($input_params, $this->block_result["data"]);
+
         return $input_params;
     }
 
@@ -215,34 +217,34 @@ class Purchase_coin extends Cit_Controller
     }
 
     /**
-     * finish_purchase_coin_add_success method is used to process finish flow.
+     * finish_buy_word_add_success method is used to process finish flow.
      * @created  | 28.01.2016
      * @modified ---
      * @param array $input_params input_params array to process loop flow.
      * @return array $responce_arr returns responce array of api.
      */
-    public function finish_purchase_coin_add_success($input_params = array())
+    public function finish_buy_word_add_success($input_params = array())
     {
         $setting_fields = array(
             "success" => "1",
-            "message" => "finish_purchase_coin_add_success",
+            "message" => "finish_buy_word_add_success",
         );
         $output_fields = array(
-            'iPurchaseCoinId',
+            'iTotalCoin'
         );
         $output_keys = array(
-            'insert_purchase_coin_data',
+            'insert_buy_word_data',
         );
 
         $ouput_aliases = array(
-            "iPurchaseCoinId" => "purchase_coin_id",
+            "iTotalCoin" => "total_coins",
         );
 
         $output_array["settings"] = $setting_fields;
         $output_array["settings"]["fields"] = $output_fields;
         $output_array["data"] = $input_params;
 
-        $func_array["function"]["name"] = "purchase_coin_add";
+        $func_array["function"]["name"] = "buy_word_add";
         $func_array["function"]["output_keys"] = $output_keys;
         $func_array["function"]["output_alias"] = $ouput_aliases;
         $func_array["function"]["multiple_keys"] = $this->multiple_keys;
@@ -255,17 +257,17 @@ class Purchase_coin extends Cit_Controller
     }
 
     /**
-     * finish_purchase_coin_add_failure method is used to process finish flow.
+     * finish_buy_word_add_failure method is used to process finish flow.
      * @created  | 28.01.2016
      * @modified ---
      * @param array $input_params input_params array to process loop flow.
      * @return array $responce_arr returns responce array of api.
      */
-    public function finish_purchase_coin_add_failure($input_params = array())
+    public function finish_buy_word_add_failure($input_params = array())
     {
         $setting_fields = array(
             "success" => "0",
-            "message" => "finish_purchase_coin_add_failure",
+            "message" => "finish_buy_word_add_failure",
         );
         $output_fields = array();
 
@@ -273,7 +275,7 @@ class Purchase_coin extends Cit_Controller
         $output_array["settings"]["fields"] = $output_fields;
         $output_array["data"] = $input_params;
 
-        $func_array["function"]["name"] = "purchase_coin_add";
+        $func_array["function"]["name"] = "buy_word_add";
         $func_array["function"]["single_keys"] = $this->single_keys;
 
         $this->wsresponse->setResponseStatus(0);
@@ -283,4 +285,33 @@ class Purchase_coin extends Cit_Controller
         return $responce_arr;
     }
 
+    /**
+    * finish_check_player_sufficent_coins_failure method is used to process finish flow.
+    * @created priyanka chillakuru | 12.09.2019
+    * @modified priyanka chillakuru | 13.09.2019
+    * @param array $input_params input_params array to process loop flow.
+    * @return array $responce_arr returns responce array of api.
+    */
+    public function finish_check_player_sufficent_coins_failure($input_params = array())
+    {
+        $setting_fields = array(
+            "success" => "0",
+            "message" => "finish_check_player_sufficent_coins_failure",
+        );
+        $output_fields = array();
+
+        $output_array["settings"] = $setting_fields;
+        $output_array["settings"]["fields"] = $output_fields;
+        $output_array["data"] = $input_params;
+
+        $func_array["function"]["name"] = "check_player_sufficent";
+        $func_array["function"]["single_keys"] = $this->single_keys;
+        $func_array["function"]["multiple_keys"] = $this->multiple_keys;
+
+        $this->wsresponse->setResponseStatus(200);
+
+        $responce_arr = $this->wsresponse->outputResponse($output_array, $func_array);
+
+        return $responce_arr;
+    }
 }
