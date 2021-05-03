@@ -1206,3 +1206,5 @@ $lang["GAME_LEVEL_EDIT"] = "Edit" ;
 
 $lang["USERS_MANAGEMENT_GUEST_ID"] = "Guest ID" ;
 $lang["USERS_MANAGEMENT_GUEST_USER"] = "Guest User" ;
+$lang["GENERIC_PLEASE_ENTER_A_VALUE_FOR_THE_GAME_LEVEL_MIN_WORD_LENGTH"] = "Must be less than the #FIELD# field." ;
+$lang["GENERIC_PLEASE_ENTER_A_VALUE_FOR_THE_GAME_LEVEL_MAX_WORD_LENGTH"] = "Must be greater than the #FIELD# field." ;

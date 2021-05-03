@@ -37,7 +37,7 @@
                                                 <%$form_config['wcm_word_length']['label_lang']%> <em>*</em> 
                                             </label> 
                                             <div class="form-right-div  ">
-                                                <input type="number" placeholder="" value="<%$data['wcm_word_length']|@htmlentities%>" name="wcm_word_length" id="wcm_word_length" title="<%$this->lang->line('GAME_LEVEL_MAX_WORD_LENGTH')%>"  data-ctrl-type='textbox'  class='frm-size-medium'  />
+                                                <input type="number" placeholder="" value="<%$data['wcm_word_length']|@htmlentities%>" name="wcm_word_length" id="wcm_word_length" title="<%$this->lang->line('GAME_LEVEL_MAX_WORD_LENGTH')%>"  data-ctrl-type='textbox'  class='frm-size-medium' readonly />
                                             </div>
                                             <div class="error-msg-form "><label class='error' id='wcm_word_lengthErr'></label></div>
                                         </div>
